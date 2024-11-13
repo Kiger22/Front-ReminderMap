@@ -1,6 +1,6 @@
 import { reminderPage } from "../../pages/AddReminder/reminder";
 import { todayPage } from "../../pages/TodayList/today";
-import { buttonPlus } from "../buttonPlus/buttonPlus";
+import { buttonPlus } from "../ButtonPlus/buttonPlus";
 import { insertMap } from "../Map/insertMap";
 
 import("./hero.css");
