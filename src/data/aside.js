@@ -47,7 +47,7 @@ export const menuAsideI = [
 export const menuAsideII = [
   {
     title: 'Mis Lugares',
-    icon: './public/assets/home-svgrepo-com.svg',
+    icon: './assets/home-svgrepo-com.svg',
     link: 'myPlacesList',
     action: () => {
       const hero = document.querySelector('.hero-container');
