@@ -1,5 +1,5 @@
 import { createButton } from "../Button/button";
-import { createSvgButton } from "../iconButton/iconButton";
+import { createSvgButton } from "../IconButton/iconButton";
 import { createLoginForm } from "../LoginForm/login";
 import { createRegisterForm } from "../RegisterForm/register";
 import { NotificationReminder } from "../ReminderNotification/reminderNotification";
