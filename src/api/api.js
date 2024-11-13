@@ -1,3 +1,5 @@
-export const api = () => {
+url = ''
 
+export const api = () => {
+  fetch()
 }
