@@ -1,0 +1,15 @@
+.calendar-container{
+  justify-self: center;
+  width: 80%;
+  height: 85%;
+  margin: var(--kg-margin-md) ;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  gap: var(--kg-gap-md);
+  color: var(--kg-text-primary);
+}
+
+.calendar-container > p{
+  text-align: start;
+}

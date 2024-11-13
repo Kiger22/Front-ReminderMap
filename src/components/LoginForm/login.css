@@ -1,0 +1,129 @@
+.login-container{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: var(--kg-color-dark);
+  opacity: 95%;
+  z-index: 10;
+}
+
+.form {
+  position: absolute;
+  width: 35%;
+  left: 30%;
+  top:10%;
+  background-color: var(--kg-color-tertiary);
+  border: 1px solid var(--kg-color-secondary);
+  border-radius: var(--kg-radius-md);
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  padding: 6rem 0;
+  gap: 2rem;
+}
+
+.form-title{
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.form .input-span {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form input[type="email"],
+.form input[type="password"] {
+  border-radius: var(--kg-radius-sd);
+  padding: var(--kg-padding-sm) var(--kg-padding-sm);
+  width: 100%;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: var(--kg-gap-md);
+  background-color: var(--kg-color-dark);
+  color: var(--kg-color-tertiary);
+  outline: 2px solid var(--kg-color-dark);
+}
+
+.form input[type="email"]:focus,
+.form input[type="password"]:focus {
+  outline: 2px solid var(--kg-color-grey);
+}
+
+.label {
+  align-self: flex-start;
+  color: var(--kg-color-dark);
+  font-weight: 600;
+}
+
+.form .submit {
+  padding: var(--kg-padding-sm) var(--kg-padding-xl);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: var(--kg-radius-md);
+  background-color: var(--kg-color-dark);
+  color: var(--kg-color-secondary);
+  border:2px solid var(--kg-color-dark);
+  cursor: pointer;
+  transition: all 300ms;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.form .submit:hover {
+  background-color: transparent;
+  color: var(--kg-color-dark);
+  border: 3px solid var(--kg-color-dark);
+}
+
+.span {
+  text-decoration: none;
+  color: var(--kg-color-dark);
+  font-weight: 500;
+}
+
+.span a {
+  text-decoration:underline;
+  color: var(--kg-color-secondary);
+}
+
+.closeBtn {
+  color: var(--kg-color-dark);
+  position: absolute;
+  top: 0;
+  right: 0.5em;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 6;
+}
+
+.closeBtn:hover,
+.closeBtn:focus {
+  color: var(--kg-color-dark);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .form {
+    width: 70%;
+    left: 15%;
+    top: 5%;
+    gap: 1rem;
+  }
+} 
+
+@media (max-width: 500px) {
+  .form {
+    width: 80%;
+    left: 10%;
+    top: 5%;
+    gap: 1rem;
+  }
+} 

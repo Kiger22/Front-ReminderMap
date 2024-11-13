@@ -1,0 +1,155 @@
+.hero {
+  border-radius: var(--kg-radius-md);
+  position: relative; 
+  width: 100%;
+  height: 75vh;
+  top: 2.6rem;
+  left: -2.5%;
+  padding: var(--kg-padding-lg) var(--kg-padding-lg);
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  flex-direction: column;
+  gap: var(--kg-gap-md);
+  background-color: transparent;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--kg-color-primary);
+  opacity: 10%; 
+  border-radius: inherit;
+  z-index: -1;
+}
+
+.hero-container{
+  background-color: transparent;
+  border-radius: var(--kg-radius-md);
+  position: relative;
+  width: 95%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+}
+
+.hero-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--kg-color-primary);
+  opacity: 10%; 
+  border-radius: inherit;
+  z-index: -1;
+}
+
+.suggestions-divs{
+  background-color: var(--kg-color-tertiary);
+  color: var(--kg-color-primary);
+  border-radius: var(--kg-radius-md);
+  padding: var(--kg-padding-md);
+  width: 40%;
+  height: 90%;
+  position: absolute;
+  right: 2rem;
+  top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--kg-gap-xl);
+  transition: transform 1s ease; 
+  z-index: 5;
+}
+
+.suggestions-divs::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--kg-color-primary);
+  opacity: 9%; 
+  border-radius: inherit;
+  z-index: -1;
+}
+
+.toggle-arrow {
+  position: absolute;
+  top: 5%;
+  left: -15px;
+  background-color: var(--kg-color-tertiary);
+  padding: 5px;
+  border-radius: var(--kg-radius-sd);
+  cursor: pointer;
+  color: var(--kg-color-primary);
+  font-size: 2.2rem;
+  font-weight: 900;
+  transition: transform 1s ease; 
+}
+
+.hide {
+  width: 30px;
+  padding: 0; 
+  transition: transform 1s ease; 
+}
+
+.suggestions-divs > *:not(.toggle-arrow) {
+  opacity: 1;
+  max-height: 500px;
+  overflow: hidden;
+  transition: opacity 1s ease, max-height 1s ease;
+}
+
+.suggestions-divs.hide > *:not(.toggle-arrow) {
+  opacity: 0;
+  height: 0;
+  padding: 0;
+  margin: 0; 
+}
+
+.suggestions-divs.hide .toggle-arrow {
+  transform: rotate(180deg); 
+}
+
+.dark {
+  background-color: var(--kg-bg-tertiary);
+  color: var(--kg-text-dark);
+}
+
+
+@media (max-width: 900px) {
+  .hero {
+    width: 95%;
+    height: 75vh; 
+    top: 2.7rem;
+    left:3%;
+  }
+
+  .hero-container{
+    height: 85%;
+    top: 15%;
+  }
+} 
+
+@media (max-width: 500px) {
+  .hero {
+    width: 92%;
+    height: 75vh; 
+    left: 4%;
+  }
+  .suggestions-divs{
+    display: none;
+  }
+  .hero-container{
+    height: 85%;
+    top: 15%;
+  }
+} 

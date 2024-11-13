@@ -1,0 +1,15 @@
+.today-container{
+  justify-self: center;
+  width: 70%;
+  height: 80%;
+  margin: auto auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  gap: var(--kg-gap-xl);
+  color: var(--kg-text-primary);
+}
+
+.today-container > p{
+  text-align: start;
+}

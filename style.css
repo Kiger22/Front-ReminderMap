@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gugi&display=swap');
+
+
+:root {
+
+  /* Fonts */
+  --kg-font-family-primary: 'Ubuntu',sans-serif;
+  --kg-font-family-secondary: 'Gugi',sans-serif;
+
+  /* Colors */
+  --kg-color-white: #f6dcdc;
+  --kg-color-grey: #707a5b;
+  --kg-color-dark: #0c0e04;
+  --kg-color-primary: #fefee3;
+  --kg-color-secondary: #74ceb8bd ;
+  --kg-color-tertiary: #74ceb86e;
+
+  /* Backgrounds */
+  --kg-bg-primary: var(--kg-color-primary);
+  --kg-bg-secondary: var(--kg-color-secondary);
+  --kg-bg-tertiary:var( --kg-color-tertiary);
+  --kg-bg-grey:var( --kg-color-gray);
+  --kg-bg-dark:var( --kg-color-dark);
+  
+
+  /* Text Colors */
+  --kg-text-primary: var(--kg-color-primary);
+  --kg-text-secondary: var(--kg-color-secondary);
+  --kg-text-tertiary: var(--kg-color-tertiary);
+  --kg-text-dark: var(--kg-color-dark);
+  --kg-text-light: var(--kg-color-white);
+
+  /* Font Sizes */
+  --kg-font-size-h1: 1.5em;
+  --kg-font-size-h2: 1.3em;
+  --kg-font-size-h3: 1.1em;
+  --kg-font-size-p: 0.75em;
+  --kg-font-size-text: 0.84em;
+  --kg-font-size-link: 0.95em;
+
+  /* Gap */
+  --kg-gap-xl: 50px;
+  --kg-gap-lg: 30px;
+  --kg-gap-md: 20px;
+  --kg-gap-sm: 10px;
+
+  /* Padding */
+  --kg-padding-xl: 60px;
+  --kg-padding-lg: 30px;
+  --kg-padding-md: 20px;
+  --kg-padding-sm: 10px;
+
+  /* Margin */
+  --kg-margin-xl: 60px;
+  --kg-margin-lg: 30px;
+  --kg-margin-md: 20px;
+  --kg-margin-sm: 10px;
+
+  --kg-margin-section: 130px;
+
+  /* Borders */
+  --kg-radius-sd: 5px;
+  --kg-radius-md: 15px;
+  --kg-radius-lg: 40%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-decoration: none;
+  box-sizing: border-box;
+  font-family: var(--kg-font-family-primary);
+  font-style: normal;
+}
+
+body {
+  background-color: var(--kg-bg-dark);; 
+};
+
+main{
+  width: 100%;
+}
+
+ul,ol {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+body{
+  max-height: 90svh;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+}
+
+#app {
+  grid-column: 3/-1;
+  grid-row: 3/-1;
+  display: flex;
+  justify-content: start;
+  scroll-behavior: smooth;
+  width: 100%;
+  min-height: 90vh;
+  text-align: center;
+  background-color:transparent;
+}
+
+.dark {
+  background-color: var(--kg-bg-tertiary);
+  color: var(--kg-text-dark);
+}

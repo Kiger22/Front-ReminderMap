@@ -1,0 +1,12 @@
+.iframe_map {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  border: none;
+  pointer-events: none;
+  opacity: 20%;
+  z-index: -5;
+}
