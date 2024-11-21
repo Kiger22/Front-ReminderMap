@@ -1,8 +1,7 @@
-
-$color1: #74ceb8bd;
-$color2:#74ceb86e;
-$color3:#0c0e04;
-$color4:#f6dcdc;
+$color1: rgba(116, 206, 184, 0.74);
+$color2: rgba(116, 206, 184, 0.43);
+$color3: #0c0e04;
+$color4: #f6dcdc;
 
 .calendar-container{
   position: relative;
@@ -12,7 +11,7 @@ $color4:#f6dcdc;
 .calendar-content {
   width: 100%;
   margin: 0 auto;
-  background-color: lighten($color2,10%);
+  background-color: rgba(116, 206, 184, 0.53);
   font-weight: 500; 
   color: $color3; 
   border-radius: var(--kg-radius-md);
@@ -36,7 +35,7 @@ $color4:#f6dcdc;
       transition: color 0.3s ease;
 
       &:hover {
-        color: $color2;
+        color: rgba(116, 206, 184, 0.43);
       }
     }
   }
@@ -57,11 +56,11 @@ $color4:#f6dcdc;
       transition: background-color 0.3s ease;
 
       &:hover {
-        background-color: lighten($color1,20%);
+        background-color: rgba(116, 206, 184, 0.54);
       }
 
       &.today {
-        background-color:lighten($color1,10%); 
+        background-color: rgba(116, 206, 184, 0.84);
         color:$color3;
       }
 

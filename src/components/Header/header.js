@@ -21,11 +21,12 @@ export const createHeader = (node, logoSrc, menuItems, menuItemsII) => {
   logoSection.appendChild(logoImg);
   header.appendChild(logoSection);
 
-  //Titulo principal
+  // Titulo principal
   const titleSection = document.createElement("div");
   titleSection.className = "header-title";
   const title = document.createElement("h1");
-  title.innerText = "Hola ...";
+  title.id = "title-header"
+  title.innerText = "Hola ..."; // Texto inicial
   titleSection.appendChild(title);
   header.appendChild(titleSection);
 
@@ -36,13 +37,13 @@ export const createHeader = (node, logoSrc, menuItems, menuItemsII) => {
     const link = document.createElement("a");
     link.href = item.href;
     link.innerText = item.text;
-    link.addEventListener("click", item.page)
+    link.addEventListener("click", item.page);
     menuSection.appendChild(link);
   });
   header.appendChild(menuSection);
 
   // menuItemsII
-  if (!menuItemsII) {
+  if (menuItemsII) {
     const menuSectionII = document.createElement("nav");
     menuSectionII.className = "header-menu-login";
     menuItemsII.forEach(item => {
@@ -53,7 +54,6 @@ export const createHeader = (node, logoSrc, menuItems, menuItemsII) => {
     });
     header.appendChild(menuSectionII);
   }
-
 
   // loginSección
   const loginSection = document.createElement("div");

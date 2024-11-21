@@ -7,6 +7,4 @@ export const verifyLabels = () => {
     }
   });
 };
-
-// Llama a esta función después de renderizar el formulario
 verifyLabels();

@@ -9,6 +9,7 @@ import { toggletheme } from './src/functions/toggleTheme';
 import { heroPage } from './src/components/Hero/hero';
 import './style.css'
 import { NotificationReminder } from './src/components/ReminderNotification/reminderNotification';
+import { createLoader } from './src/components/Loader/loader';
 
 export const divApp = document.querySelector("#app");
 

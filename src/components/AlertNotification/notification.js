@@ -1,6 +1,6 @@
 import('./notification.css');
 
-export const AlertNotification = (title, text) => {
+export const AlertNotification = (title, text, callback) => {
   // Crear contenedor principal de notificación
   const notificationsContainer = document.createElement('div');
   notificationsContainer.classList.add('notifications-container');
@@ -40,13 +40,17 @@ export const AlertNotification = (title, text) => {
   viewStatusButton.type = 'button';
   viewStatusButton.classList.add('success-button-main-alert');
   viewStatusButton.textContent = 'ok';
+  viewStatusButton.addEventListener('click', () => {
+    notificationsContainer.remove();
+    if (callback) callback(); // Ejecutar el callback si está definido
+  });
 
   // Crear botón secundario
   const dismissButton = document.createElement('button');
   dismissButton.type = 'button';
   dismissButton.classList.add('success-button-secondary-alert');
   dismissButton.textContent = 'close';
-  viewStatusButton.addEventListener('click', () => {
+  dismissButton.addEventListener('click', () => {
     notificationsContainer.remove();
   });
 

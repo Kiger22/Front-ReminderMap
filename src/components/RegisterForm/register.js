@@ -26,7 +26,7 @@ export const createRegisterForm = () => {
   avatarContainer.classList.add('avatar-container');
 
   const avatarImg = document.createElement('img');
-  avatarImg.src = './public/assets/aboutMe.jpeg';
+  avatarImg.src = './assets/aboutMe.jpeg';
   avatarImg.alt = 'Avatar';
   avatarImg.classList.add('avatar-img');
 
@@ -130,7 +130,10 @@ export const createRegisterForm = () => {
   submitInput.classList.add('submit');
   submitInput.type = 'submit';
   submitInput.value = 'Registrar';
-  submitInput.onclick = () => registering();
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    await registering();
+  });
 
   // Enlace para iniciar sesión
   const loginSpan = document.createElement('span');
@@ -155,3 +158,9 @@ export const createRegisterForm = () => {
 
   document.body.appendChild(registerContent);
 }
+
+// Función para cerrar el formulario de registro
+export const closeRegistrationForm = () => {
+  const registrationForm = document.querySelector('.register-container');
+  registrationForm.remove();
+};

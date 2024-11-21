@@ -4,7 +4,7 @@ export const NotificationReminder = () => {
 
   // Crear contenedor principal de notificación
   const notificationsContainer = document.createElement('div');
-  notificationsContainer.classList.add('notifications-container');
+  notificationsContainer.classList.add('reminder-notifications-container');
 
   // Crear contenedor para el mensaje de recordatorio
   const reminderDiv = document.createElement('div');

@@ -26,22 +26,22 @@ export const createLoginForm = () => {
   h2.classList.add('form-title');
   h2.textContent = 'Login';
 
-  // Campo del email
-  const emailSpan = document.createElement('span');
-  emailSpan.classList.add('input-span');
+  // Campo del usuario
+  const userSpan = document.createElement('span');
+  userSpan.classList.add('input-span');
 
-  const emailLabel = document.createElement('label');
-  emailLabel.setAttribute('for', 'email');
-  emailLabel.classList.add('label');
-  emailLabel.textContent = 'Usuario';
+  const userLabel = document.createElement('label');
+  userLabel.setAttribute('for', 'user');
+  userLabel.classList.add('label');
+  userLabel.textContent = 'Usuario';
 
-  const emailInput = document.createElement('input');
-  emailInput.type = 'email';
-  emailInput.name = 'email';
-  emailInput.id = 'email';
+  const userInput = document.createElement('input');
+  userInput.type = 'text';
+  userInput.name = 'user';
+  userInput.id = 'user';
 
-  emailSpan.appendChild(emailLabel);
-  emailSpan.appendChild(emailInput);
+  userSpan.appendChild(userLabel);
+  userSpan.appendChild(userInput);
 
   // Campo de contraseña
   const passwordSpan = document.createElement('span');
@@ -75,12 +75,23 @@ export const createLoginForm = () => {
 
   forgotPasswordSpan.appendChild(forgotPasswordLink);
 
+  // Agregar el EventListener al formulario
+  form.addEventListener('submit', (event) => {
+    event.preventDefault(); // Prevenir el envío del formulario
+    loging(); // Llamar a la función loging
+  });
+
   // Botón de envío
   const submitInput = document.createElement('input');
   submitInput.classList.add('submit');
-  submitInput.type = 'submit';
+  submitInput.type = 'submit'; // Mantener como 'submit'
   submitInput.value = 'Log in';
-  submitInput.addEventListener('click', loging);
+
+  form.appendChild(h2);
+  form.appendChild(userSpan);
+  form.appendChild(passwordSpan);
+  form.appendChild(forgotPasswordSpan);
+  form.appendChild(submitInput);
 
   // Enlace para registrarse
   const signUpSpan = document.createElement('span');
@@ -93,13 +104,16 @@ export const createLoginForm = () => {
     createRegisterForm();
   };
 
-  form.appendChild(h2);
-  form.appendChild(emailSpan);
-  form.appendChild(passwordSpan);
-  form.appendChild(forgotPasswordSpan);
-  form.appendChild(submitInput);
   form.appendChild(signUpSpan);
   loginContent.appendChild(form);
 
   document.body.appendChild(loginContent);
 }
+
+// Función para cerrar el formulario de login
+export const closeLoginForm = () => {
+  const loginForm = document.querySelector('.login-container');
+  if (loginForm) {
+    loginForm.remove();
+  }
+};
