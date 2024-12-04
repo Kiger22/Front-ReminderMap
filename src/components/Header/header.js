@@ -58,13 +58,42 @@ export const createHeader = (node, logoSrc, menuItems, menuItemsII) => {
   // loginSección
   const loginSection = document.createElement("div");
   loginSection.className = "header-login";
-  createUserHeader(loginSection, './assets/aboutMe.jpeg', './assets/setting-1-svgrepo-com.svg', openProfileSettings);
-  createButton(loginSection, "Login", createLoginForm);
-  createSvgButton(loginSection, './assets/login-3-svgrepo-com.svg', createLoginForm, "Login");
-  createButton(loginSection, "Register", createRegisterForm);
-  createSvgButton(loginSection, './assets/add-square-svgrepo-com.svg', createRegisterForm, "Registro");
 
+  // Creamos un div para los botones de login/register
+  const authButtons = document.createElement("div");
+  authButtons.className = "auth-buttons";
+  authButtons.id = "auth-buttons";
+
+  createButton(authButtons, "Login", "login-button", createLoginForm);
+  createSvgButton(authButtons, './assets/login-3-svgrepo-com.svg', createLoginForm, "Login");
+  createButton(authButtons, "Register", "register-button", createRegisterForm);
+  createSvgButton(authButtons, './assets/add-square-svgrepo-com.svg', createRegisterForm, "Registro");
+
+  // Creamos un div para el header del usuario
+  const userHeaderContainer = document.createElement("div");
+  userHeaderContainer.className = "user-header-container";
+  userHeaderContainer.id = "user-header";
+  userHeaderContainer.style.display = "none"; // Inicialmente oculto
+
+  createUserHeader(userHeaderContainer, './assets/aboutMe.jpeg', './assets/setting-1-svgrepo-com.svg', openProfileSettings);
+
+  loginSection.appendChild(authButtons);
+  loginSection.appendChild(userHeaderContainer);
   header.appendChild(loginSection);
+};
+
+// Agregar esta función para cambiar la visibilidad
+export const toggleAuthDisplay = (isLoggedIn) => {
+  const authButtons = document.getElementById("auth-buttons");
+  const userHeader = document.getElementById("user-header");
+
+  if (isLoggedIn) {
+    authButtons.style.display = "none";
+    userHeader.style.display = "flex";
+  } else {
+    authButtons.style.display = "flex";
+    userHeader.style.display = "none";
+  }
 };
 
 

@@ -71,20 +71,18 @@ export const createLoginForm = () => {
     event.preventDefault();
     AlertNotification('Lo Siento', 'Este evento aun esta en desarrollo');
   });
-
-
   forgotPasswordSpan.appendChild(forgotPasswordLink);
 
   // Agregar el EventListener al formulario
   form.addEventListener('submit', (event) => {
-    event.preventDefault(); // Prevenir el envío del formulario
-    loging(); // Llamar a la función loging
+    event.preventDefault();
+    loging();
   });
 
   // Botón de envío
   const submitInput = document.createElement('input');
   submitInput.classList.add('submit');
-  submitInput.type = 'submit'; // Mantener como 'submit'
+  submitInput.type = 'submit';
   submitInput.value = 'Log in';
 
   form.appendChild(h2);

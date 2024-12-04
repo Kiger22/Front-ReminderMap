@@ -25,10 +25,32 @@ export const registering = async () => {
       console.log("El loader ha estado visible durante al menos 2 segundos.");
     }, minLoaderTime);
 
+    const avatarInput = document.getElementById('avatar');
+    const formData = new FormData();
+
+    formData.append('name', userData.name);
+    formData.append('username', userData.username);
+    formData.append('email', userData.email);
+    formData.append('password', userData.password);
+
+    // Verificar si avatarInput no es null antes de acceder a sus propiedades
+    if (avatarInput && avatarInput.files && avatarInput.files[0]) {
+      formData.append('avatar', avatarInput.files[0]);
+    }
+    else {
+      console.warn("No se seleccionó ninguna imagen de avatar.");
+    };
+
+    console.log("Form Data:");
+    // Mostrar los datos del formulario para depurar
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ':', pair[1]);
+    }
+
     const response = await api({
       endpoint: 'users/register',
       method: 'POST',
-      body: userData
+      body: formData
     });
 
     if (response && response.message === "Usuario registrado con éxito") {

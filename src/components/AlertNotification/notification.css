@@ -1,7 +1,9 @@
-.reminder-notifications-container {
+.notifications-container {
+  background-color: var(--kg-color-dark);
+  border-radius: var(--kg-radius-md);
   position: absolute;
-  left: 27%;
-  top: 25%;
+  left: 30em;
+  top: 10em;
   width: 40rem;
   height: auto;
   font-size: var(--kg-font-size-text);

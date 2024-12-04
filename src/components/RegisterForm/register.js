@@ -40,7 +40,13 @@ export const createRegisterForm = () => {
   changeAvatarBtn.onclick = () => {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
+    fileInput.id = "avatar";
     fileInput.accept = 'image/*';
+
+    // Agrega al DOM de forma invisible
+    fileInput.style.display = 'none';
+    document.body.appendChild(fileInput);
+
     fileInput.onchange = (event) => {
       const file = event.target.files[0];
       if (file) {

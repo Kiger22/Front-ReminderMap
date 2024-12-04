@@ -46,7 +46,7 @@
 }
 
 .header-title{
-  font-size: var(--kg-font-size-h3);
+  font-size: var(--kg-font-size-text);
   font-weight: bold;
   width: 100%;
   justify-content: center;
@@ -118,3 +118,13 @@
     width: 5rem;
   }
 } 
+
+.auth-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.user-header-container {
+  display: none;
+}
