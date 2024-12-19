@@ -82,17 +82,17 @@ export const createHeader = (node, logoSrc, menuItems, menuItemsII) => {
   header.appendChild(loginSection);
 };
 
-// Agregar esta función para cambiar la visibilidad
+// Agregamos esta función para cambiar la visibilidad
 export const toggleAuthDisplay = (isLoggedIn) => {
   const authButtons = document.getElementById("auth-buttons");
   const userHeader = document.getElementById("user-header");
 
   if (isLoggedIn) {
     authButtons.style.display = "none";
-    userHeader.style.display = "flex";
+    userHeader.style.display = "none";
   } else {
     authButtons.style.display = "flex";
-    userHeader.style.display = "none";
+    userHeader.style.display = "flex";
   }
 };
 

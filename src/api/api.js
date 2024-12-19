@@ -1,6 +1,6 @@
 export const api = async ({ endpoint, method, body, headers = {} }) => {
   try {
-    const API_URL = 'https://back-reminder-7hy48dwmr-guillermo-mendozas-projects.vercel.app/api/v1';
+    const API_URL = 'https://back-reminder-97iexh0hn-guillermo-mendozas-projects.vercel.app/api/v1';
     const cleanEndpoint = endpoint.replace(/^\/+/, '');
     const token = localStorage.getItem('authToken');
 
