@@ -1,7 +1,7 @@
 export const api = async ({ endpoint, method, body, headers = {} }) => {
   try {
     // URL de la API
-    const API_URL = 'https://back-reminder-97iexh0hn-guillermo-mendozas-projects.vercel.app/api/v1';
+    const API_URL = 'front-reminder-map-m1a1-7gfttyuwt-guillermo-mendozas-projects.vercel.app/api/v1';
     const cleanEndpoint = endpoint.replace(/^\/+/, '');
     console.log('Endpoint:', cleanEndpoint);
     // Obtenemos el token de autenticación del local storage
