@@ -5,30 +5,39 @@ import { createLoader } from "../components/Loader/loader";
 import { closeLoginForm } from "../components/LoginForm/login";
 import { toggleAuthDisplay } from '../components/Header/header';
 
+// Función principal de login
 export const loging = async () => {
+
+  // Crear y mostrar el loader
   createLoader(divApp);
 
+  // Tiempo mínimo que el loader debe estar visible 
   const minLoaderTime = 1000;
   let loaderTimeout;
 
   try {
+    // Obtenemos datos del usuario desde el formulario
     const userData = {
       username: document.getElementById('user')?.value?.trim(),
       password: document.getElementById('password')?.value?.trim()
     };
 
+    // Mostramos datos del usuario en la consola 
     console.log('Enviando datos:', userData);
 
+    // Establecemos timeout para asegurar que el loader esté visible al menos 1 segundo
     loaderTimeout = setTimeout(() => {
       console.log("El loader ha estado visible durante al menos 1 segundo.");
     }, minLoaderTime);
 
+    // Enviamos los datos del usuario al endpoint de login
     const response = await api({
       endpoint: 'users/login',
       method: 'POST',
       body: userData
     });
 
+    // Verificamos la respuesta del servidor
     if (response && response.message === "Acceso permitido") {
       const loader = divApp.querySelector('.loader');
       if (loader) {
@@ -42,13 +51,13 @@ export const loging = async () => {
           resolve();
         });
 
-        // Cambia el texto del h1 del header
+        // Cambiamos el texto del h1 del header
         const titleHeader = document.getElementById('title-header');
         if (titleHeader) {
           titleHeader.innerText = `Hola ${response.user.name}`;
         };
 
-        // Ocultar botones de registro e inicio de sesión
+        // Ocultamos botones de registro e inicio de sesión
         const registerButton = document.getElementById('register-button');
         const loginButton = document.getElementById('login-button');
         if (registerButton) {
@@ -68,41 +77,23 @@ export const loging = async () => {
         }
 
       });
-
-      // Guardar el token en localStorage
+      // Guardamos el token en localStorage
       localStorage.setItem('authToken', response.token);
       console.log('Token en localStorage', response.token);
 
-      // Actualizar el estado de autenticación
+      // Actualizamos el estado de autenticación
       toggleAuthDisplay(true);
-
-    } else {
+    }
+    else {
       throw new Error(response.message || "Respuesta no válida del servidor");
     }
-  } catch (error) {
-    console.error('Error durante el inicio de sesión:', error);
-    AlertNotification("Error en el inicio de sesión: " + error.message, "error");
-  } finally {
-    clearTimeout(loaderTimeout);
   }
-};
-
-const logout = async () => {
-  try {
-
-    localStorage.removeItem('authToken');
-
-    // Mostrar una notificación de cierre de sesión exitoso
-    const byeMessage = "Has cerrado sesión exitosamente";
-    await new Promise((resolve) => {
-      AlertNotification("LogOut", byeMessage, () => {
-        resolve();
-        // Redirigir al usuario a la página de inicio o de inicio de sesión
-        window.location.href = '/login';
-      });
-    });
-  } catch (error) {
-    console.error('Error durante el cierre de sesión:', error);
-    AlertNotification("Error al cerrar sesión: " + error.message, "error");
+  // Manejo de errores
+  catch (error) {
+    console.error('Error en el proceso de login:', error);
+  }
+  // Limpiar el timeout del loader si aún está activo
+  finally {
+    clearTimeout(loaderTimeout);
   }
 };
