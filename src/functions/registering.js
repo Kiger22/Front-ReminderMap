@@ -10,9 +10,9 @@ export const registering = async () => {
   // Creamos y mostramos un loader en la aplicación
   createLoader(divApp);
 
-  // Tiempo mínimo que el loader debe estar visible
-  const minLoaderTime = 1000;
-  let loaderTimeout;
+  /*   // Tiempo mínimo que el loader debe estar visible
+    const minLoaderTime = 1000;
+    let loaderTimeout; */
 
   try {
     // Obtenemos los datos del usuario desde el formulario  
@@ -26,10 +26,6 @@ export const registering = async () => {
     // Mostramos los datos del usuario en la consola
     console.log('Enviando datos:', userData);
 
-    // Establecemos un timeout para asegurar que el loader esté visible al menos 1 segundos
-    loaderTimeout = setTimeout(() => {
-      console.log("El loader ha estado visible durante al menos 1 segundos.");
-    }, minLoaderTime);
 
     // Obtenemos el input de avatar
     const avatarInput = document.getElementById('avatar');
@@ -88,7 +84,5 @@ export const registering = async () => {
     AlertNotification("Error en el registro: " + error.message, "error");
   }
   // Limpiamos el timeout del loader si aún está activo
-  finally {
-    clearTimeout(loaderTimeout);
-  }
+
 }

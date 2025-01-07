@@ -10,5 +10,10 @@ export const createLoader = (node) => {
   innerDiv.className = 'primary-loading';
   loaderDiv.appendChild(innerDiv);
 
+  // Establecemos un timeout para asegurar que el loader esté visible al menos 1 segundos
+  setTimeout(() => {
+    loaderDiv.remove();
+  }, 1000);
+
   node.appendChild(loaderDiv);
 };
