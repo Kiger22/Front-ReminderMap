@@ -1,7 +1,7 @@
 .switch-container{
   position: fixed;
-  bottom: 1.3rem;
-  left: 1.5rem;
+  bottom: 2.5rem;
+  left: 0.5%;
   z-index: 14;
 }
 
@@ -43,18 +43,12 @@
 
 @media (max-width: 900px) {
   .switch-container{
-    position: fixed;
-    bottom: 1.3rem;
-    right: 1.5rem;
-    z-index: 4;
+    bottom: 3.5rem;
   }
 } 
 
 @media (max-width: 500px) {
   .switch-container{
-    position: fixed;
-    bottom: 1rem;
-    right: 1rem;
-    z-index: 4;
+    bottom: 2rem;
   }
 } 

@@ -1,14 +1,13 @@
 import('./reminderNotification.css');
 
-export const NotificationReminder = () => {
-
+export const NotificationReminder = (reminder) => {
   // Crear contenedor principal de notificación
   const notificationsContainer = document.createElement('div');
   notificationsContainer.classList.add('reminder-notifications-container');
 
   // Crear contenedor para el mensaje de recordatorio
   const reminderDiv = document.createElement('div');
-  reminderDiv.classList.add('success'); // Reutilizamos la clase 'success' para estilo
+  reminderDiv.classList.add('success');
 
   // Crear contenedor flex para alinear elementos
   const flexDiv = document.createElement('div');
@@ -20,15 +19,20 @@ export const NotificationReminder = () => {
 
   // Crear encabezado del recordatorio (título)
   const reminderTitle = document.createElement('p');
-  reminderTitle.classList.add('success-prompt-heading'); // Reutiliza la clase del título
-  reminderTitle.textContent = 'Título del Recordatorio';
+  reminderTitle.classList.add('success-prompt-heading');
+  reminderTitle.textContent = reminder.name;
 
   // Crear el mensaje del recordatorio
   const reminderPrompt = document.createElement('div');
   reminderPrompt.classList.add('success-prompt-prompt');
 
   const reminderText = document.createElement('p');
-  reminderText.textContent = 'Este es tu recordatorio: no olvides revisar tu calendario para la reunión a las 3 PM.';
+  reminderText.innerHTML = `
+    📅  ${new Date(reminder.date).toLocaleDateString()}<br>
+    ⏰  ${reminder.time}<br>
+    📝  ${reminder.description}<br>
+    📍  ${reminder.location}
+  `;
 
   reminderPrompt.appendChild(reminderText);
 
@@ -42,8 +46,7 @@ export const NotificationReminder = () => {
   seenButton.classList.add('success-button-main');
   seenButton.textContent = 'Visto';
   seenButton.addEventListener('click', () => {
-    alert('Recordatorio marcado como visto');
-    notificationsContainer.remove(); // Eliminar la notificación al hacer clic
+    notificationsContainer.remove();
   });
 
   // Crear botón "Posponer"
@@ -61,7 +64,7 @@ export const NotificationReminder = () => {
   cancelButton.classList.add('success-button-secondary');
   cancelButton.textContent = 'Cancelar';
   cancelButton.addEventListener('click', () => {
-    notificationsContainer.remove(); // Eliminar la notificación al hacer clic en cancelar
+    notificationsContainer.remove();
   });
 
   // Agregar los botones al contenedor de botones

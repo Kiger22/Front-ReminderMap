@@ -75,11 +75,6 @@
 }
 
 
-.buttons-container [type="submit"]{
-border: 2px solid var(--kg-color-primary);
-font-size: var(--kg-font-size-link);
-}
-
 @media (max-width: 900px) {
   .reminder-form h2{
   font-size: var(--kg-font-size-h3);

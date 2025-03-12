@@ -38,7 +38,7 @@
   width: 100%;
 }
 
-.place-container .input-span > input {
+.place-container .input-span > input,select {
   grid-column: 2/3;
   width: 100%;
   border-radius: var(--kg-radius-sd);

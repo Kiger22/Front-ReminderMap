@@ -38,7 +38,9 @@
 
 .success-button-container {
   display: flex;
-  margin-top: 1rem;
+  gap: var(--kg-gap-md);
+  justify-content: flex-end;
+  margin-top: var(--kg-margin-md);
 }
 
 .success-button-main-alert {
@@ -46,9 +48,9 @@
   padding-bottom: 0.375rem;
   padding-left: 1rem;
   padding-right:1rem;
-  background-color: var(--kg-color-tertiary);
+  background-color: var(--kg-color-secondary);
   color: var(--kg-color-dark);
-  font-size: 1rem;
+  font-size: 1.2rem;
   line-height: 1.25rem;
   font-weight: bold;
   border-radius:var(--kg-radius-sd);
@@ -60,15 +62,16 @@
 }
 
 .success-button-secondary-alert {
-  padding-top: 0.375rem;
-  padding-bottom: 0.375rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  margin-left: 0.75rem;
-  background-color: var(--kg-color-primary);
-  color: var(--kg-color-tertiary);
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  border-radius:var(--kg-radius-sd);
+  padding: var(--kg-padding-sm) var(--kg-padding-lg);
+  border-radius: var(--kg-radius-md);
+  background-color: var(--kg-color-tertiary);
+  color: var(--kg-color-dark);
   border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.success-button-secondary-alert:hover {
+  background-color: var(--kg-color-dark);
+  color: var(--kg-color-tertiary);
 }

@@ -1,20 +1,24 @@
+import { renderTodayNotifications } from '../../functions/renderTodayNotifications';
 import('./today.css');
 
-export const todayPage = (node) => {
+export const todayPage = async (node) => {
   node.innerHTML = "";
 
   const todayContainer = document.createElement('div');
   todayContainer.classList.add('today-container');
 
   const header = document.createElement('h2');
-  header.textContent = "Hoy";
-
-  const content = document.createElement('p');
-  content.textContent = "Aquí puedes ver tus tareas y eventos para el día de hoy.";
-
+  header.textContent = "Recordatorios de Hoy";
   todayContainer.appendChild(header);
-  todayContainer.appendChild(content);
+
+  // Crear el contenedor para la lista de recordatorios
+  const remindersList = document.createElement('div');
+  remindersList.classList.add('reminders-list');
+  todayContainer.appendChild(remindersList);
 
   node.appendChild(todayContainer);
+
+  // Renderizar los recordatorios y notificaciones del día
+  await renderTodayNotifications(todayContainer);
 };
 

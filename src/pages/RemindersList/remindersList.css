@@ -1,15 +1,121 @@
-.reminders-container{
+.reminders-container {
   justify-self: center;
-  width: 70%;
+  width: 90%;
   height: 80%;
-  margin: auto auto;
+  margin: auto;
   display: flex;
   flex-direction: column;
   justify-content: start;
-  gap: var(--kg-gap-xl);
+  gap: var(--kg-gap-md);
+  color: var(--kg-text-primary);
+  /* Añadimos transición suave al contenedor */
+  transition: all 0.3s ease;
+}
+
+.reminders-list {
+  counter-reset: reminder-counter;
+  margin-left: var(--kg-margin-sm);
+  overflow-y: auto; /* cambiamos scroll por auto para mejor compatibilidad */
+  overflow-x: hidden;
+  /* Añadimos scroll suave */
+  scroll-behavior: smooth;
+  /* Mejoramos el scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--kg-color-tertiary) transparent;
+}
+
+/* Estilizamos el scrollbar para navegadores webkit */
+.reminders-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.reminders-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.reminders-list::-webkit-scrollbar-thumb {
+  background-color: var(--kg-color-tertiary);
+  border-radius: 4px;
+}
+
+.reminder-item {
+  counter-increment: reminder-counter;
+  text-align: start;
+  margin-bottom: var(--kg-margin-lg);
+  border-bottom: 3px solid var(--kg-color-tertiary);
+  position: relative;
+  padding-left: var(--kg-padding-md);
+  /* Añadimos transición suave */
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Efecto hover suave */
+.reminder-item:hover {
+  transform: translateX(5px);
+}
+
+.reminder-item::before {
+  content: counter(reminder-counter) ". ";
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+  color: var(--kg-color-tertiary);
+}
+
+.reminder-item > h4 {
+  margin-left: var(--kg-margin-md);
+  margin-top: var(--kg-margin-md);
+  /* Mejoramos la legibilidad */
+  font-weight: 600;
   color: var(--kg-text-primary);
 }
 
-.reminders-container > p{
+.reminder-item > p {
+  margin-left: var(--kg-margin-xl);
+  margin-bottom: var(--kg-margin-md);
+  display: inline-block;
+  width: 20%;
   text-align: start;
+  /* Mejoramos la legibilidad */
+  line-height: 1.4;
+}
+
+.reminder-item > img {
+  width: 30px;
+  height: 30px;
+  margin: 0 var(--kg-margin-md);
+  cursor: pointer;
+  /* Añadimos transición suave al hover */
+  transition: transform 0.2s ease;
+}
+
+/* Efecto hover para las imágenes */
+.reminder-item > img:hover {
+  transform: scale(1.1);
+}
+
+/* Añadimos clase para animación de eliminación */
+.reminder-item.deleting {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+
+/* Clase para cuando no hay recordatorios */
+.no-reminders {
+  text-align: center;
+  padding: var(--kg-padding-lg);
+  color: var(--kg-text-secondary);
+  font-style: italic;
+}
+
+/* Optimización para dispositivos móviles */
+@media (max-width: 768px) {
+  .reminders-container {
+    width: 95%;
+  }
+
+  .reminder-item > p {
+    width: 100%;
+    margin-left: var(--kg-margin-md);
+  }
 }

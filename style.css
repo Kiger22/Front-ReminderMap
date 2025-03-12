@@ -1,27 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Gugi&display=swap');
 
-
 :root {
-
   /* Fonts */
-  --kg-font-family-primary: 'Ubuntu',sans-serif;
-  --kg-font-family-secondary: 'Gugi',sans-serif;
+  --kg-font-family-primary: 'Ubuntu', sans-serif;
+  --kg-font-family-secondary: 'Gugi', sans-serif;
 
   /* Colors */
   --kg-color-white: #f6dcdc;
   --kg-color-grey: #707a5b;
   --kg-color-dark: #0c0e04;
   --kg-color-primary: #fefee3;
-  --kg-color-secondary: #74ceb8bd ;
+  --kg-color-secondary: #74ceb8bd;
   --kg-color-tertiary: #74ceb86e;
 
   /* Backgrounds */
   --kg-bg-primary: var(--kg-color-primary);
   --kg-bg-secondary: var(--kg-color-secondary);
-  --kg-bg-tertiary:var( --kg-color-tertiary);
-  --kg-bg-grey:var( --kg-color-gray);
-  --kg-bg-dark:var( --kg-color-dark);
+  --kg-bg-tertiary:var(--kg-color-tertiary);
+  --kg-bg-grey:var(--kg-color-grey);
+  --kg-bg-dark: var(--kg-color-dark);
   
 
   /* Text Colors */
@@ -32,13 +30,14 @@
   --kg-text-light: var(--kg-color-white);
 
   /* Font Sizes */
-  --kg-font-size-h1: 1.5em;
-  --kg-font-size-h2: 1.3em;
-  --kg-font-size-h3: 1.1em;
-  --kg-font-size-p: 0.75em;
-  --kg-font-size-text: 0.84em;
-  --kg-font-size-link: 0.95em;
-
+  --kg-font-size-h1: clamp(1.5rem, 3vw, 2.5rem);
+  --kg-font-size-h2: clamp(1.3rem, 2.5vw, 2rem);
+  --kg-font-size-p: clamp(0.75rem, 2vw, 1rem);
+  --kg-font-size-text: clamp(0.84rem, 2vw, 1.1rem);
+  --kg-font-size-link: clamp(0.95rem, 2vw, 1.2rem);
+  --kg-font-size-h3: clamp(1.1rem, 2vw, 1.5rem);
+  --kg-font-size-h4: clamp(1rem, 2vw, 1.3rem);
+  
   /* Gap */
   --kg-gap-xl: 50px;
   --kg-gap-lg: 30px;
@@ -63,6 +62,10 @@
   --kg-radius-sd: 5px;
   --kg-radius-md: 15px;
   --kg-radius-lg: 40%;
+
+  /* Dark Mode Colors */
+  --kg-text-dark-mode:var(--kg-color-dark);
+  --kg-bg-dark-mode:var(--kg-color-tertiary);
 }
 
 * {
@@ -73,11 +76,18 @@
   box-sizing: border-box;
   font-family: var(--kg-font-family-primary);
   font-style: normal;
+  transition: all 0.3s ease-in-out;
 }
 
 body {
-  background-color: var(--kg-bg-dark);; 
-};
+  background-color: var(--kg-bg-dark);
+  color: var(--kg-text-primary)
+}
+
+.dark {
+  background-color: var(--kg-bg-dark-mode);
+  color: var(--kg-text-dark-mode);
+}
 
 main{
   width: 100%;
@@ -99,7 +109,13 @@ body{
   grid-template-rows: repeat(10, 1fr);
 }
 
+html {
+  scroll-padding-top: 10px;
+}
+
 #app {
+  max-width: 1400px;
+  margin: 0 auto;
   grid-column: 3/-1;
   grid-row: 3/-1;
   display: flex;
@@ -111,7 +127,4 @@ body{
   background-color:transparent;
 }
 
-.dark {
-  background-color: var(--kg-bg-tertiary);
-  color: var(--kg-text-dark);
-}
+

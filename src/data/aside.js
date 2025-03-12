@@ -1,3 +1,5 @@
+import { AlertNotification } from "../components/AlertNotification/notification";
+import { createLoginForm } from "../components/LoginForm/login";
 import { placePage } from "../pages/AddPlace/place";
 import { categoryPage } from "../pages/AddPlaceCategory/category";
 import { calendarPage } from "../pages/CalendarPage/calendar";
@@ -11,8 +13,17 @@ export const menuAsideI = [
     icon: './assets/calendar-today-svgrepo-com.svg',
     link: '#today',
     action: () => {
-      const hero = document.querySelector('.hero-container');
-      todayPage(hero);
+      const authToken = localStorage.getItem('authToken');
+      // Validamos que haya un token de autenticación
+      if (!authToken) {
+        AlertNotification('Debes ser usuario', 'Inicia Seccion', () => {
+          createLoginForm();
+        });
+        return;
+      } else {
+        const hero = document.querySelector('.hero-container');
+        todayPage(hero);
+      }
     }
   },
   {
@@ -20,47 +31,92 @@ export const menuAsideI = [
     icon: './assets/calendar-month-svgrepo-com.svg',
     link: '#cal',
     action: () => {
-      const hero = document.querySelector('.hero-container');
-      calendarPage(hero);
+      const authToken = localStorage.getItem('authToken');
+      // Validamos que haya un token de autenticación
+      if (!authToken) {
+        AlertNotification('Debes ser usuario', 'Inicia Seccion', () => {
+          createLoginForm();
+        });
+        return;
+      } else {
+        const hero = document.querySelector('.hero-container');
+        calendarPage(hero);
+      }
     }
-  },
+  }, {},
   {
-    title: 'Recordatorios',
+    title: 'Mis Recordatorios',
     icon: './assets/calendar-alert-svgrepo-com.svg',
     link: '/reminders',
     action: () => {
-      const hero = document.querySelector('.hero-container');
-      remindersPage(hero);
+      const authToken = localStorage.getItem('authToken');
+      // Validamos que haya un token de autenticación
+      if (!authToken) {
+        AlertNotification('Debes ser usuario', 'Inicia Seccion', () => {
+          createLoginForm();
+        });
+        return;
+      } else {
+        const hero = document.querySelector('.hero-container');
+        remindersPage(hero);
+      }
     }
   },
   {
-    title: 'Lugares Favoritos',
+    title: 'Lugares Frecuentes',
     icon: './assets/gps-svgrepo-com.svg',
     link: '#listFavoritesIcon',
     action: () => {
-      const hero = document.querySelector('.hero-container');
-      favoritesPlacesPage(hero);
+      const authToken = localStorage.getItem('authToken');
+      // Validamos que haya un token de autenticación
+      if (!authToken) {
+        AlertNotification('Debes ser usuario', 'Inicia Seccion', () => {
+          createLoginForm();
+        });
+        return;
+      } else {
+        const hero = document.querySelector('.hero-container');
+        favoritesPlacesPage(hero);
+      }
     }
   }
 ];
 
 export const menuAsideII = [
   {
-    title: 'Mis Lugares',
+    title: 'Guardar Lugar',
     icon: './assets/home-svgrepo-com.svg',
     link: 'myPlacesList',
     action: () => {
-      const hero = document.querySelector('.hero-container');
-      placePage(hero);
+      const authToken = localStorage.getItem('authToken');
+      // Validamos que haya un token de autenticación
+      if (!authToken) {
+        AlertNotification('Debes ser usuario', 'Inicia Seccion', () => {
+          createLoginForm();
+        });
+        return;
+      } else {
+        const hero = document.querySelector('.hero-container');
+        placePage(hero);
+      }
     }
   },
   {
-    title: 'Agregar Categorias',
+    title: 'Crear Categoria',
     icon: './assets/book-svgrepo-com.svg',
     link: '#listCategories',
     action: () => {
-      const hero = document.querySelector('.hero-container');
-      categoryPage(hero);
+      const authToken = localStorage.getItem('authToken');
+      // Validamos que haya un token de autenticación
+      if (!authToken) {
+        AlertNotification('Debes ser usuario', 'Inicia Seccion', () => {
+          createLoginForm();
+        });
+        return;
+      } else {
+        const hero = document.querySelector('.hero-container');
+        categoryPage(hero);
+      }
     }
   }
 ];

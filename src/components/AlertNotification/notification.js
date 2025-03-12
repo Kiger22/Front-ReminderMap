@@ -1,6 +1,6 @@
 import('./notification.css');
 
-export const AlertNotification = (title, text, callback) => {
+export const AlertNotification = (title, content, callback, autoClose = true) => {
   // Crear contenedor principal de notificación
   const notificationsContainer = document.createElement('div');
   notificationsContainer.classList.add('notifications-container');
@@ -26,37 +26,43 @@ export const AlertNotification = (title, text, callback) => {
   const successPromptPrompt = document.createElement('div');
   successPromptPrompt.classList.add('success-prompt-prompt');
 
-  const promptText = document.createElement('p');
-  promptText.textContent = text;
-
-  successPromptPrompt.appendChild(promptText);
+  // Manejar el contenido según su tipo
+  if (content instanceof HTMLElement) {
+    successPromptPrompt.appendChild(content);
+  } else {
+    const promptText = document.createElement('p');
+    promptText.textContent = content;
+    successPromptPrompt.appendChild(promptText);
+  }
 
   // Crear contenedor para los botones
   const buttonContainer = document.createElement('div');
   buttonContainer.classList.add('success-button-container');
 
-  // Crear botón principal
-  const viewStatusButton = document.createElement('button');
-  viewStatusButton.type = 'button';
-  viewStatusButton.classList.add('success-button-main-alert');
-  viewStatusButton.textContent = 'ok';
-  viewStatusButton.addEventListener('click', () => {
+  // Crear botón principal (OK o Confirmar)
+  const confirmButton = document.createElement('button');
+  confirmButton.type = 'button';
+  confirmButton.classList.add('success-button-main-alert');
+  confirmButton.textContent = autoClose ? 'OK' : 'Confirmar';
+  confirmButton.addEventListener('click', () => {
     notificationsContainer.remove();
-    if (callback) callback(); // Ejecutar el callback si está definido
+    if (callback) callback();
   });
 
-  // Crear botón secundario
-  const dismissButton = document.createElement('button');
-  dismissButton.type = 'button';
-  dismissButton.classList.add('success-button-secondary-alert');
-  dismissButton.textContent = 'close';
-  dismissButton.addEventListener('click', () => {
-    notificationsContainer.remove();
-  });
+  // Agregar el botón principal
+  buttonContainer.appendChild(confirmButton);
 
-  // Agregar los botones al contenedor de botones
-  buttonContainer.appendChild(viewStatusButton);
-  buttonContainer.appendChild(dismissButton);
+  // Si no es autoClose, añadir botón de cancelar
+  if (!autoClose) {
+    const cancelButton = document.createElement('button');
+    cancelButton.type = 'button';
+    cancelButton.classList.add('success-button-secondary-alert');
+    cancelButton.textContent = 'Cancelar';
+    cancelButton.addEventListener('click', () => {
+      notificationsContainer.remove();
+    });
+    buttonContainer.appendChild(cancelButton);
+  }
 
   // Agregar todos los elementos al contenedor principal
   successPromptWrap.appendChild(successPromptHeading);

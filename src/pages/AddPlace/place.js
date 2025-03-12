@@ -1,10 +1,11 @@
+import { addPlace } from '../../functions/addPlace';
+import { getCategories } from '../../functions/getCategory';
 import { verifyLabels } from '../../functions/verifyLabels';
 
 import('./place.css')
 
-export const placePage = (node) => {
+export const placePage = async (node) => {
   node.innerHTML = "";
-
   if (document.querySelector('.place-form')) return;
 
   const placeForm = document.createElement('div');
@@ -18,7 +19,7 @@ export const placePage = (node) => {
   placeContainer.classList.add('place-container');
 
 
-  const createField = (labelText, inputType, inputId, inputName, isRequired = false) => {
+  const createField = (labelText, inputType, inputId, inputName, isRequired = false, options = []) => {
     const span = document.createElement('span');
     span.classList.add('input-span');
 
@@ -26,12 +27,34 @@ export const placePage = (node) => {
     label.setAttribute('for', inputId);
     label.textContent = labelText;
 
-    const input = document.createElement('input');
-    input.type = inputType;
-    input.id = inputId;
-    input.name = inputName;
-    if (isRequired) input.required = true;
+    let input;
+    if (inputType === 'select') {
+      input = document.createElement('select');
+      input.id = inputId;
+      input.name = inputName;
 
+      // Agregar opción placeholder
+      const placeholderOption = document.createElement('option');
+      placeholderOption.textContent = 'Selecciona Categoría';
+      placeholderOption.value = '';
+      placeholderOption.disabled = true;
+      placeholderOption.selected = true;
+      input.appendChild(placeholderOption);
+      if (isRequired) input.required = true;
+
+      options.forEach(option => {
+        const optionElement = document.createElement('option');
+        optionElement.value = option.value;
+        optionElement.textContent = option.label;
+        input.appendChild(optionElement);
+      });
+    } else {
+      input = document.createElement('input');
+      input.type = inputType;
+      input.id = inputId;
+      input.name = inputName;
+      if (isRequired) input.required = true;
+    }
     span.appendChild(label);
     span.appendChild(input);
     return span;
@@ -42,13 +65,15 @@ export const placePage = (node) => {
 
   const fields = [
     { label: 'Nombre del lugar', type: 'text', id: 'place-name', name: 'placeName', required: true },
-    { label: 'Categoría', type: 'text', id: 'place-category', name: 'placeCategory' },
+    { label: 'Categoría', type: 'select', id: 'place-category', name: 'placeCategory' },
     { label: 'Descripción', type: 'text', id: 'place-description', name: 'placeDescription' },
     { label: 'Ubicación', type: 'text', id: 'location', name: 'location' }
   ];
 
+  const categories = await getCategories();
+
   fields.forEach(field => {
-    const fieldElement = createField(field.label, field.type, field.id, field.name, field.required);
+    const fieldElement = createField(field.label, field.type, field.id, field.name, field.required, field.type === 'select' ? categories : []);
     fieldsWrapper.appendChild(fieldElement);
   });
 
@@ -70,6 +95,9 @@ export const placePage = (node) => {
   };
 
   const addButton = createButton('Añadir', 'submit');
+  addButton.addEventListener('click', () => {
+    addPlace();
+  });
 
   const resetButton = createButton('Limpiar', 'reset');
   resetButton.addEventListener('click', () => {

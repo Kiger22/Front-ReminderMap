@@ -1,0 +1,90 @@
+.update-reminder-form {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--kg-color-dark);
+  opacity: 95%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.update-reminder-container {
+  background-color: var(--kg-color-tertiary);
+  padding: var(--kg-padding-lg);
+  border-radius: var(--kg-radius-md);
+  width: 35%;
+  border: 1px solid var(--kg-color-secondary);
+  animation: slideIn 0.3s ease-out;
+}
+
+.fields-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kg-gap-md);
+  margin-bottom: var(--kg-margin-lg);
+}
+
+.input-span {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  align-items: center;
+  gap: var(--kg-gap-md);
+}
+
+.input-span label {
+  font-weight: 600;
+}
+
+.input-span input {
+  border-radius: var(--kg-radius-sd);
+  padding: var(--kg-padding-sm) var(--kg-padding-sm);
+  width: 100%;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: var(--kg-gap-md);
+  background-color: var(--kg-color-dark);
+  color: var(--kg-color-tertiary);
+  outline: 2px solid var(--kg-color-dark);
+}
+
+.input-span input:focus {
+  outline: 2px solid var(--kg-color-grey);
+}
+
+.update-reminder-container >.buttons-container {
+  display: flex;
+  flex-direction: row;
+  gap: var(--kg-gap-md);
+  margin-top: var(--kg-margin-lg);
+}
+
+#cancel-button, #update-button{
+  width: 50%;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .update-reminder-container {
+    width: 95%;
+    padding: var(--kg-padding-md);
+  }
+
+  .input-span {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,4 +1,9 @@
+import { goToHomePage } from "../../functions/goHomePage";
+import { logOut } from "../../functions/logout";
 import { AlertNotification } from "../AlertNotification/notification";
+import { createButton } from "../Button/button";
+import { Home } from "../Home/home";
+import { NotificationReminder } from "../ReminderNotification/reminderNotification";
 import('./userHeader.css');
 
 export const createUserHeader = (node, avatarPath, settingsIconPath, openSettingsForm) => {
@@ -12,6 +17,9 @@ export const createUserHeader = (node, avatarPath, settingsIconPath, openSetting
   avatarImg.classList.add('avatar-img-header');
   avatarImg.src = avatarPath;
   avatarImg.alt = 'User Avatar';
+  avatarImg.addEventListener('click', () => {
+    NotificationReminder()
+  });
 
   avatarDiv.appendChild(avatarImg);
   userContainer.appendChild(avatarDiv);
@@ -30,6 +38,22 @@ export const createUserHeader = (node, avatarPath, settingsIconPath, openSetting
 
   settingsDiv.appendChild(settingsIcon);
   userContainer.appendChild(settingsDiv);
+
+  createButton(userContainer, "Logout", "logout-button", () => {
+    console.log("Logout");
+    logOut();
+  })
+
+  const logoutIcon = document.createElement('img');
+  logoutIcon.classList.add('logout-icon');
+  logoutIcon.src = '../../public/assets/logout-3-svgrepo-com.svg';
+
+  logoutIcon.addEventListener('click', () => {
+    console.log("Logout");
+    logOut();
+  });
+  userContainer.appendChild(logoutIcon);
+
 
   node.appendChild(userContainer);
 };

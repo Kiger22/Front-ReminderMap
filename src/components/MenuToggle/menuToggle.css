@@ -49,7 +49,7 @@
 }
 
 #mainnav span {
-  color:var(--kg-text-terciary);
+  color:var(--kg-text-tertiary);
   padding: 0.4em;
   margin-left: 0.7em;
   border-radius: 0.2em;
@@ -72,7 +72,7 @@
   margin-top: -.5em;
   border-style: solid;
   border-width: .5em .5em .5em 0;
-  border-color: transparent var(--kg-text-terciary) transparent transparent;
+  border-color: transparent var(--kg-text-tertiary) transparent transparent;
 }
 
 @keyframes easeOutBounce {

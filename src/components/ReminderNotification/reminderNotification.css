@@ -20,11 +20,15 @@
 
 .success-prompt-prompt {
   background-color: var(--kg-color-tertiary);
-  margin-top: 2rem;
-  padding: 2rem;
-  color:var(--kg-color-dark);
-  font-weight: bold;
-  font-size: var(--kg-font-size-link);
+  padding:1rem;
+  color: var(--kg-color-dark);
+  line-height: 2rem; /* Aumentamos el line-height para más espaciado */
+}
+
+.success-prompt-prompt p {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* Añadimos gap entre elementos */
 }
 
 .success-button-container {

@@ -1,0 +1,93 @@
+/* Animaciones de página */
+.page-transition {
+  animation: slideInFromRight 0.3s ease-out forwards;
+  opacity: 0;
+}
+
+.fade-out {
+  animation: fadeOut 0.3s ease-in forwards;
+}
+
+/* Animaciones de elementos */
+.reminder-card {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* Ajuste para mantener consistencia con tu diseño actual */
+.button-plus {
+  transition: all 0.3s ease-in-out;
+}
+
+.button-plus:hover {
+  transform: scale(1.1);
+  background-color: var(--kg-bg-tertiary);
+}
+
+/* Keyframes ajustados a tu esquema de colores */
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animación para el contenedor hero */
+.hero-container {
+  transition: all 0.3s ease-in-out;
+}
+
+.hero-container.fade-out {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* Animaciones para elementos dentro del hero */
+.suggestions-divs {
+  transition: all 0.3s ease-in-out;
+}
+
+.suggestions-divs.hide {
+  opacity: 0.7;
+  transform: translateY(10px);
+}
+
+/* Responsive animations */
+@media (max-width: 900px) {
+  .page-transition {
+    animation-duration: 0.2s;
+  }
+}
+
+@media (max-width: 500px) {
+  .reminder-card {
+    animation-duration: 0.3s;
+  }
+}

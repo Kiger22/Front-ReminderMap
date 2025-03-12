@@ -1,9 +1,11 @@
+
+import { addReminder } from '../../functions/addReminder';
 import { verifyLabels } from '../../functions/verifyLabels';
 
 import('./reminder.css');
 
 // Crear formulario de recordatorio
-export const reminderPage = (node) => {
+export const reminderPageForm = (node) => {
   // Limpiar el contenido del nodo para evitar duplicados
   node.innerHTML = "";
 
@@ -56,12 +58,11 @@ export const reminderPage = (node) => {
   };
 
   // Agregar cada campo al contenedor de campos
-  fieldsContainer.appendChild(createField('Titulo', 'text', 'title', 'title', true));
-  fieldsContainer.appendChild(createField('Descripción', 'text', 'description', 'description', true));
-  fieldsContainer.appendChild(createField('Cuando', 'date', 'date', 'date'));
-  fieldsContainer.appendChild(createField('Categoria de sitio', 'text', 'category', 'category'));
-  fieldsContainer.appendChild(createField('Radio', 'number', 'ratio', 'ratio'));
-  fieldsContainer.appendChild(createField('Dirección', '', 'address', 'address', false, true));
+  fieldsContainer.appendChild(createField('Titulo', 'text', 'reminder-name', 'title', true));
+  fieldsContainer.appendChild(createField('Descripción', 'text', 'reminder-description', 'description', true));
+  fieldsContainer.appendChild(createField('Cuando', 'date', 'reminder-date', 'date'));
+  fieldsContainer.appendChild(createField('Hora', 'time', 'reminder-time', 'time'));
+  fieldsContainer.appendChild(createField('Dirección', 'text', 'reminder-location', 'location', false));
 
   // Contenedor para los botones
   const buttonsContainer = document.createElement('div');
@@ -75,6 +76,10 @@ export const reminderPage = (node) => {
       <span class="gradient"></span>
       <span class="label">Añadir</span>
       `
+  addButton.addEventListener('click', async (event) => {
+    event.preventDefault();
+    await addReminder();
+  });
 
   const resetButton = document.createElement('button');
   resetButton.type = 'reset';

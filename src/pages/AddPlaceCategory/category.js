@@ -1,3 +1,4 @@
+import { addCategory } from '../../functions/addCategory';
 import { verifyLabels } from '../../functions/verifyLabels';
 
 import('./category.css');
@@ -11,7 +12,7 @@ export const categoryPage = (node) => {
   categoryForm.classList.add('category-form');
 
   const title = document.createElement('h2');
-  title.textContent = 'Crea una nueva Categoria de sitios para englobar tipo de lugares a recordar...';
+  title.textContent = 'Crea una nueva Categoria de sitios para englobar lugares a recordar...';
   categoryForm.appendChild(title);
 
   const categoryContainer = document.createElement('form');
@@ -68,6 +69,9 @@ export const categoryPage = (node) => {
   };
 
   const addButton = createButton('Guardar', 'submit');
+  addButton.addEventListener('click', () => {
+    addCategory();
+  });
 
   const resetButton = createButton('Limpiar', 'reset');
   resetButton.addEventListener('click', () => {

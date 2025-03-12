@@ -1,0 +1,9 @@
+.home-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    gap: var(--kg-gap-lg);
+    padding: var(--kg-padding-xl);
+    height: 100vh;
+}

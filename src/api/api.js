@@ -1,7 +1,9 @@
+import { AlertNotification } from "../components/AlertNotification/notification";
+
 export const api = async ({ endpoint, method, body, headers = {} }) => {
   try {
     // URL de la API
-    const API_URL = 'http://localhost:3000/api/v1';
+    const API_URL = 'http://localhost:3001/api/v1';
     const cleanEndpoint = endpoint.replace(/^\/+/, '');
     console.log('Endpoint:', cleanEndpoint);
     // Obtenemos el token de autenticación del local storage
@@ -12,7 +14,7 @@ export const api = async ({ endpoint, method, body, headers = {} }) => {
       method,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        ...(token && { Authorization: `Bearer ${token}` }),
         ...headers
       },
       mode: 'cors',
@@ -40,19 +42,26 @@ export const api = async ({ endpoint, method, body, headers = {} }) => {
     console.log('Calling API:', { url, method, headers: config.headers });
 
     const response = await fetch(url, config);
+    console.log('Fetching response:', response);
 
-    // Si la respuesta no es correcta, lanzamos una excepción con el mensaje de error
+    const contentType = response.headers.get('content-type');
+    const responseData = contentType && contentType.includes('application/json')
+      ? await response.json()
+      : null;
+    console.log('Response data:', responseData);
+
+    // Si la respuesta no es correcta
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error('API response error:', errorData);
-      throw new Error(errorData.message || `Error: ${response.status}`);
+      const errorMessage = responseData?.mensaje || 'Error en la API';
+      AlertNotification('Error', errorMessage, () => { });
+      console.error('Error en la API:', responseData);
+      throw new Error(errorMessage);
     }
 
-    // Si la respuesta es correcta, obtenemos el cuerpo y lo devolvemos
-    // Devolvemos la respuesta JSON
-    return await response.json();
-  }
-  catch (error) {
+    // Si todo está bien, devolvemos los datos
+    return responseData;
+
+  } catch (error) {
     console.error('Error en la API:', { error, endpoint });
     throw error;
   }

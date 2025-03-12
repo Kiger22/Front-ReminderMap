@@ -1,3 +1,4 @@
+import { goToHomePage } from "../../functions/goHomePage";
 import { createButton } from "../Button/button";
 import { createSvgButton } from "../IconButton/iconButton";
 import { createLoginForm } from "../LoginForm/login";
@@ -17,7 +18,9 @@ export const createHeader = (node, logoSrc, menuItems, menuItemsII) => {
   logoSection.className = "header-logo";
   const logoImg = document.createElement("img");
   logoImg.src = logoSrc;
-  logoImg.addEventListener('click', () => NotificationReminder());
+  logoImg.addEventListener('click', () => {
+    goToHomePage();
+  });
   logoSection.appendChild(logoImg);
   header.appendChild(logoSection);
 
@@ -75,11 +78,16 @@ export const createHeader = (node, logoSrc, menuItems, menuItemsII) => {
   userHeaderContainer.id = "user-header";
   userHeaderContainer.style.display = "none"; // Inicialmente oculto
 
-  createUserHeader(userHeaderContainer, './assets/aboutMe.jpeg', './assets/setting-1-svgrepo-com.svg', openProfileSettings);
+  // Creamos el header del usuario
+  if (userHeaderContainer) {
+    const avatar = localStorage.getItem('avatar');
+    createUserHeader(userHeaderContainer, avatar, '../assets/setting-1-svgrepo-com.svg', openProfileSettings);
+  }
+
 
   loginSection.appendChild(authButtons);
-  loginSection.appendChild(userHeaderContainer);
   header.appendChild(loginSection);
+  header.appendChild(userHeaderContainer);
 };
 
 // Agregamos esta función para cambiar la visibilidad
@@ -87,12 +95,16 @@ export const toggleAuthDisplay = (isLoggedIn) => {
   const authButtons = document.getElementById("auth-buttons");
   const userHeader = document.getElementById("user-header");
 
-  if (isLoggedIn) {
-    authButtons.style.display = "none";
-    userHeader.style.display = "none";
+  if (authButtons && userHeader) {
+    if (isLoggedIn) {
+      authButtons.style.display = "none";
+      userHeader.style.display = "flex";
+    } else {
+      authButtons.style.display = "flex";
+      userHeader.style.display = "none";
+    }
   } else {
-    authButtons.style.display = "flex";
-    userHeader.style.display = "flex";
+    console.error('Elementos authButtons o userHeader no encontrados en el DOM');
   }
 };
 
