@@ -8,6 +8,7 @@ import { remindersPage } from "../pages/RemindersList/remindersList";
 import { todayPage } from "../pages/TodayList/today";
 
 export const menuAsideI = [
+  // Hoy
   {
     title: 'Hoy',
     icon: './assets/calendar-today-svgrepo-com.svg',
@@ -26,6 +27,7 @@ export const menuAsideI = [
       }
     }
   },
+  // Calendario
   {
     title: 'Calendario',
     icon: './assets/calendar-month-svgrepo-com.svg',
@@ -44,6 +46,7 @@ export const menuAsideI = [
       }
     }
   }, {},
+  // Mis Recordatorios
   {
     title: 'Mis Recordatorios',
     icon: './assets/calendar-alert-svgrepo-com.svg',
@@ -62,6 +65,7 @@ export const menuAsideI = [
       }
     }
   },
+  // Mis Lugares
   {
     title: 'Lugares Frecuentes',
     icon: './assets/gps-svgrepo-com.svg',
@@ -83,8 +87,9 @@ export const menuAsideI = [
 ];
 
 export const menuAsideII = [
+  // Añadir Lugar
   {
-    title: 'Guardar Lugar',
+    title: 'Añadir Lugar',
     icon: './assets/home-svgrepo-com.svg',
     link: 'myPlacesList',
     action: () => {
@@ -101,6 +106,7 @@ export const menuAsideII = [
       }
     }
   },
+  // Crear Categoria
   {
     title: 'Crear Categoria',
     icon: './assets/book-svgrepo-com.svg',

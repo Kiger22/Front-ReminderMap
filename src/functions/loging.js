@@ -24,7 +24,15 @@ export const loging = async () => {
       password: document.getElementById('password')?.value?.trim()
     };
 
-    console.log('Datos del usuario antes de enviar:', userData);
+    console.log('Enviando datos:', {
+      username: userData.username,
+      passwordLength: userData.password?.length,
+      passwordTrimmed: userData.password?.trim()?.length
+    });
+
+    if (!userData.username || !userData.password) {
+      throw new Error('Usuario y contraseña son requeridos');
+    }
 
     // Establecemos timeout para asegurar que el loader esté visible al menos 1 segundo
     loaderTimeout = setTimeout(() => {
@@ -45,9 +53,7 @@ export const loging = async () => {
     if (response && response.éxito) {
       // Cerramos el loader
       const loader = divApp.querySelector('.loader');
-      if (loader) {
-        loader.remove();
-      }
+      if (loader) loader.remove();
 
       // Mostramos mensaje de bienvenida, cerramos el formulario de login y actualizamos el estado de autenticación
       const welcomeMessage = `¡Bienvenido, ${response.user.username}!`;
@@ -70,72 +76,20 @@ export const loging = async () => {
         // Ocultamos botones de registro e inicio de sesión
         const registerButton = document.getElementById('register-button');
         const loginButton = document.getElementById('login-button');
-        if (registerButton) {
-          registerButton.style.display = 'none';
-        }
-        if (loginButton) {
-          loginButton.style.display = 'none';
-        }
+        if (registerButton) registerButton.style.display = 'none';
+        if (loginButton) loginButton.style.display = 'none';
 
-        // Mostramos botón de cerrar sesión
         const userHeader = document.getElementById('user-header');
         if (userHeader) {
           userHeader.style.display = 'flex';
+          userHeader.innerHTML = '';
+          createUserHeader(userHeader, response.user.avatar, '../assets/setting-1-svgrepo-com.svg', openProfileSettings);
         }
-
-        // Mostramos imagen del avatar
-        const avatarImage = document.querySelector('.user-header-avatar');
-        if (avatarImage) {
-          avatarImage.style.display = 'flex';
-          avatarImage.src = response.user.avatar;
-        };
       });
 
-      // Guardamos el path del avatar en el localStorage
-      localStorage.setItem('avatar', response.user.avatar);
-      console.log('avatar en localStorage', response.user.avatar);
-
-      // Guardamos el username en localStorage
-      localStorage.setItem('username', response.user.username);
-      console.log('username en localStorage', response.user.username);
-
-      // Guardamos el email en localStorage
-      localStorage.setItem('email', response.user.email);
-      console.log('email en localStorage', response.user.email);
-
-      // Guardamos el token en localStorage
-      localStorage.setItem('authToken', response.token);
-      console.log('Token en localStorage', response.token);
-
-      // Guardamos el userId en localStorage
-      localStorage.setItem('userId', response.user._id);
-      console.log('userId en localStorage', response.user._id);
-
-      // Actualizamos el estado de autenticación
       toggleAuthDisplay(true);
-
-      // Creamos el header del usuario
-      const userHeaderContainer = document.getElementById('user-header');
-      userHeaderContainer.innerHTML = ''; // Limpiamos el contenedor
-      createUserHeader(userHeaderContainer, response.user.avatar, '../assets/setting-1-svgrepo-com.svg', openProfileSettings);
-
-    }
-    else {
-      console.log('Access Denied');
-      // Cerramos el loader
-      const loader = divApp.querySelector('.loader');
-      if (loader) {
-        loader.remove();
-      }
-
-      // Mostramos mensaje de error en un mensaje de alerta
-      AlertNotification("Error de inicio de sesión", response.mensaje || "Ocurrió un error desconocido", () => {
-        console.log('Mostrando alerta de error');
-        // Cerramos el formulario de login
-        closeLoginForm();
-      });
-      // Mostramos el mensaje de error en un mensaje de alerta
-      console.error('Error en el proceso de login:', response.mensaje || "Ocurrió un error desconocido");
+    } else {
+      throw new Error(response.mensaje || 'Error de autenticación');
     }
   }
   // Manejo de errores
@@ -144,19 +98,16 @@ export const loging = async () => {
 
     // Cerramos el loader
     const loader = divApp.querySelector('.loader');
-    if (loader) {
-      loader.remove();
-    }
+    if (loader) loader.remove();
 
-    // Mostramos mensaje de error en un mensaje de alerta
-    AlertNotification("Error de inicio de sesión", error.message || "Ocurrió un error desconocido", () => {
-      console.log('Mostrando alerta de error');
-      // Cerramos el formulario de login
-      closeLoginForm();
-    });
-  }
-  // Limpiar el timeout del loader si aún está activo
-  finally {
+    AlertNotification(
+      "Error de inicio de sesión",
+      error.message || "Credenciales incorrectas. Por favor, verifica tu usuario y contraseña.",
+      () => {
+        console.log('Mostrando alerta de error');
+      }
+    );
+  } finally {
     clearTimeout(loaderTimeout);
   }
 };

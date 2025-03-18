@@ -1,68 +1,47 @@
-import { AlertNotification } from "../components/AlertNotification/notification";
-
-export const api = async ({ endpoint, method, body, headers = {} }) => {
+export const api = async ({ endpoint, method = 'GET', body, token, isFormData = false }) => {
   try {
-    // URL de la API
-    const API_URL = 'http://localhost:3001/api/v1';
-    const cleanEndpoint = endpoint.replace(/^\/+/, '');
-    console.log('Endpoint:', cleanEndpoint);
-    // Obtenemos el token de autenticación del local storage
-    const token = localStorage.getItem('authToken');
+    const API_URL = 'http://localhost:3000/api/v1';
+    const url = `${API_URL}/${endpoint}`;
 
-    // Configuración de la solicitud
-    const config = {
+    console.log('URL de la API:', url);
+
+    // Crear objeto de cabeceras para la petición
+    const headers = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    // Solo agregamos Content-Type si no es FormData
+    if (!isFormData && method !== 'GET') {
+      headers['Content-Type'] = 'application/json';
+    }
+
+    // Configurar opciones de la petición
+    const options = {
       method,
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-        ...headers
-      },
-      mode: 'cors',
+      headers,
+      body: isFormData ? body : (body ? JSON.stringify(body) : undefined)
     };
 
-    // Añadimos el cuerpo de la solicitud según el método
-    // Automáticamente configura el body y el encabezado según el tipo
-    if (body instanceof FormData) {
-      config.body = body;
-      delete config.headers['Content-Type'];
-    } else if (body) {
-      config.body = JSON.stringify(body);
-    }
-    // Mostramos el cuerpo de la solicitud en la consola
-    console.log('Cuerpo de la solicitud:', config.body);
+    console.log('Opciones de la petición:', {
+      method: options.method,
+      headers: options.headers,
+      bodyType: isFormData ? 'FormData' : typeof options.body
+    });
 
-    // Mostramos el FormData en la consola
-    if (body instanceof FormData) {
-      console.log('FormData enviado:');
-      body.forEach((value, key) => console.log(`${key}:`, value));
-    }
+    if (method === 'GET') delete options.body;
 
-    // Llamamos a la API y obtenemos la respuesta
-    const url = `${API_URL}/${cleanEndpoint}`;
-    console.log('Calling API:', { url, method, headers: config.headers });
+    const response = await fetch(url, options);
+    const data = await response.json();
 
-    const response = await fetch(url, config);
-    console.log('Fetching response:', response);
-
-    const contentType = response.headers.get('content-type');
-    const responseData = contentType && contentType.includes('application/json')
-      ? await response.json()
-      : null;
-    console.log('Response data:', responseData);
-
-    // Si la respuesta no es correcta
     if (!response.ok) {
-      const errorMessage = responseData?.mensaje || 'Error en la API';
-      AlertNotification('Error', errorMessage, () => { });
-      console.error('Error en la API:', responseData);
-      throw new Error(errorMessage);
+      throw new Error(data.mensaje || data.message || 'Error en la petición');
     }
 
-    // Si todo está bien, devolvemos los datos
-    return responseData;
-
-  } catch (error) {
-    console.error('Error en la API:', { error, endpoint });
+    return data;
+  }
+  catch (error) {
+    console.error('Error en la API:', error);
     throw error;
   }
 };

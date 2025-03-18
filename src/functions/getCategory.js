@@ -1,20 +1,43 @@
 import { api } from "../api/api";
 
-export const getCategories = async () => {
+export const getCategories = async (userId = null) => {
   try {
-    // await new Promise(resolve => setTimeout(resolve, 1000));
-
+    const endpoint = userId ? `/categories?userId=${userId}` : '/categories';
     const response = await api({
-      endpoint: '/categories',
+      endpoint,
       method: 'GET'
     });
 
-    return response.map(category => ({
+    if (!response.success) {
+      throw new Error(response.message || 'Error al obtener categorías');
+    }
+
+    return response.categories.map(category => ({
       value: category._id,
-      label: category.name
+      label: category.name,
+      description: category.description,
+      placesCount: category.places?.length || 0
     }));
   } catch (error) {
-    console.error('Error al obtener Categorias:', error);
-    return [];
+    console.error('Error al obtener categorías:', error);
+    throw error;
+  }
+};
+
+export const getCategoryById = async (categoryId) => {
+  try {
+    const response = await api({
+      endpoint: `/categories/${categoryId}`,
+      method: 'GET'
+    });
+
+    if (!response.success) {
+      throw new Error(response.message || 'Error al obtener la categoría');
+    }
+
+    return response.category;
+  } catch (error) {
+    console.error('Error al obtener categoría por ID:', error);
+    throw error;
   }
 };

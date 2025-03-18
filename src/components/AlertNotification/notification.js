@@ -1,78 +1,77 @@
 import('./notification.css');
 
-export const AlertNotification = (title, content, callback, autoClose = true) => {
-  // Crear contenedor principal de notificación
+/**
+ * Crea una notificación de alerta
+ * @param {string} title - Título de la notificación
+ * @param {string|HTMLElement} content - Contenido de la notificación (puede ser texto o un elemento DOM)
+ * @param {Function} callback - Función a ejecutar al cerrar la notificación
+ * @param {Object} options - Opciones de configuración
+ * @param {boolean} options.autoClose - Si la notificación se cierra automáticamente
+ * @param {number} options.autoCloseTime - Tiempo en ms antes de cerrar automáticamente
+ */
+export const AlertNotification = (title, content, callback, options = {}) => {
+  const defaultOptions = {
+    autoClose: false,
+    autoCloseTime: 3000
+  };
+
+  const settings = { ...defaultOptions, ...options };
+
+  const overlay = document.createElement('div');
+  overlay.classList.add('notification-overlay');
+
   const notificationsContainer = document.createElement('div');
   notificationsContainer.classList.add('notifications-container');
 
-  // Crear contenedor para el mensaje de éxito
+  // Botón de cerrar
+  const closeBtn = document.createElement("span");
+  closeBtn.className = "closeBtn";
+  closeBtn.innerHTML = "&times;";
+  notificationsContainer.appendChild(closeBtn);
+
   const successDiv = document.createElement('div');
   successDiv.classList.add('success');
 
-  // Crear contenedor flex para alinear elementos
-  const flexDiv = document.createElement('div');
-  flexDiv.classList.add('flex');
-
-  // Crear contenedor para el mensaje de texto
-  const successPromptWrap = document.createElement('div');
-  successPromptWrap.classList.add('success-prompt-wrap');
-
-  // Crear encabezado del mensaje
-  const successPromptHeading = document.createElement('p');
+  const successPromptHeading = document.createElement('h2');
   successPromptHeading.classList.add('success-prompt-heading');
   successPromptHeading.textContent = title;
 
-  // Crear el mensaje de descripción
   const successPromptPrompt = document.createElement('div');
   successPromptPrompt.classList.add('success-prompt-prompt');
 
-  // Manejar el contenido según su tipo
+  // Manejar tanto strings como elementos DOM
   if (content instanceof HTMLElement) {
     successPromptPrompt.appendChild(content);
   } else {
-    const promptText = document.createElement('p');
-    promptText.textContent = content;
-    successPromptPrompt.appendChild(promptText);
+    successPromptPrompt.textContent = content;
   }
 
-  // Crear contenedor para los botones
   const buttonContainer = document.createElement('div');
   buttonContainer.classList.add('success-button-container');
 
-  // Crear botón principal (OK o Confirmar)
-  const confirmButton = document.createElement('button');
-  confirmButton.type = 'button';
-  confirmButton.classList.add('success-button-main-alert');
-  confirmButton.textContent = autoClose ? 'OK' : 'Confirmar';
-  confirmButton.addEventListener('click', () => {
-    notificationsContainer.remove();
-    if (callback) callback();
-  });
+  const mainButton = document.createElement('button');
+  mainButton.classList.add('success-button-main-alert');
+  mainButton.textContent = 'Aceptar';
 
-  // Agregar el botón principal
-  buttonContainer.appendChild(confirmButton);
+  buttonContainer.appendChild(mainButton);
 
-  // Si no es autoClose, añadir botón de cancelar
-  if (!autoClose) {
-    const cancelButton = document.createElement('button');
-    cancelButton.type = 'button';
-    cancelButton.classList.add('success-button-secondary-alert');
-    cancelButton.textContent = 'Cancelar';
-    cancelButton.addEventListener('click', () => {
-      notificationsContainer.remove();
-    });
-    buttonContainer.appendChild(cancelButton);
-  }
+  successDiv.appendChild(successPromptHeading);
+  successDiv.appendChild(successPromptPrompt);
+  successDiv.appendChild(buttonContainer);
 
-  // Agregar todos los elementos al contenedor principal
-  successPromptWrap.appendChild(successPromptHeading);
-  successPromptWrap.appendChild(successPromptPrompt);
-  successPromptWrap.appendChild(buttonContainer);
-
-  flexDiv.appendChild(successPromptWrap);
-  successDiv.appendChild(flexDiv);
   notificationsContainer.appendChild(successDiv);
+  overlay.appendChild(notificationsContainer);
+  document.body.appendChild(overlay);
 
-  // Agregar el contenedor de notificación al body del documento
-  document.body.appendChild(notificationsContainer);
+  const closeNotification = () => {
+    overlay.remove();
+    if (callback) callback();
+  };
+
+  closeBtn.onclick = closeNotification;
+  mainButton.onclick = closeNotification;
+
+  if (settings.autoClose) {
+    setTimeout(closeNotification, settings.autoCloseTime);
+  }
 };

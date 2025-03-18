@@ -2,6 +2,8 @@ import { registering } from "../../functions/registering";
 import { createLoginForm } from "../LoginForm/login";
 import('./register.css');
 
+const DEFAULT_AVATAR_PATH = '../assets/user-circle-svgrepo-com.svg';
+
 export const createRegisterForm = () => {
   const registerContent = document.createElement('div');
   registerContent.classList.add('register-container');
@@ -26,7 +28,7 @@ export const createRegisterForm = () => {
   avatarContainer.classList.add('avatar-container');
 
   const avatarImg = document.createElement('img');
-  avatarImg.src = './assets/aboutMe.jpeg';
+  avatarImg.src = DEFAULT_AVATAR_PATH;
   avatarImg.alt = 'Avatar';
   avatarImg.classList.add('avatar-img');
 
@@ -42,8 +44,6 @@ export const createRegisterForm = () => {
     fileInput.type = 'file';
     fileInput.id = "avatar";
     fileInput.accept = 'image/*';
-
-    // Agrega al DOM de forma invisible
     fileInput.style.display = 'none';
     document.body.appendChild(fileInput);
 
@@ -55,8 +55,11 @@ export const createRegisterForm = () => {
           avatarImg.src = reader.result;
         };
         reader.readAsDataURL(file);
+      } else {
+        avatarImg.src = DEFAULT_AVATAR_PATH;
       }
     };
+
     fileInput.click();
   };
 

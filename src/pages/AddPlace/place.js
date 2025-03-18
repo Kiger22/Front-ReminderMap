@@ -18,6 +18,12 @@ export const placePage = async (node) => {
   const placeContainer = document.createElement('form');
   placeContainer.classList.add('place-container');
 
+  // Agregar el event listener al formulario
+  placeContainer.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    console.log('Formulario enviado');
+    await addPlace();
+  });
 
   const createField = (labelText, inputType, inputId, inputName, isRequired = false, options = []) => {
     const span = document.createElement('span');
@@ -94,11 +100,6 @@ export const placePage = async (node) => {
     return button;
   };
 
-  const addButton = createButton('Añadir', 'submit');
-  addButton.addEventListener('click', () => {
-    addPlace();
-  });
-
   const resetButton = createButton('Limpiar', 'reset');
   resetButton.addEventListener('click', () => {
     placeContainer.reset();
@@ -109,12 +110,14 @@ export const placePage = async (node) => {
     placeForm.remove();
   });
 
-  divButtons.appendChild(addButton);
-  divButtons.appendChild(resetButton);
-  divButtons.appendChild(cancelButton);
+  // Crear botón de submit
+  const submitButton = document.createElement('button');
+  submitButton.type = 'submit';
+  submitButton.textContent = 'Guardar Lugar';
+  submitButton.classList.add('submit-button');
 
+  divButtons.appendChild(submitButton);
   placeContainer.appendChild(divButtons);
-
   placeForm.appendChild(placeContainer);
   node.appendChild(placeForm);
   verifyLabels();

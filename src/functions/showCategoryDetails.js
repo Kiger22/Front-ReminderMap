@@ -8,7 +8,12 @@ export const showCategoryDetails = async (categoryId) => {
       method: 'GET'
     });
 
-    const category = response;
+    // Verificamos que la respuesta sea correcta
+    if (!response.category) {
+      throw new Error('Formato de respuesta inválido');
+    }
+
+    const category = response.category;
 
     // Creamos el contenido para el modal
     const modalContent = document.createElement('div');
@@ -24,14 +29,37 @@ export const showCategoryDetails = async (categoryId) => {
 
     const stats = document.createElement('div');
     stats.classList.add('category-stats');
-    stats.textContent = `Lugares asociados: ${category.place?.length || 0}`;
+    // Corregimos el acceso al array de places
+    stats.textContent = `Lugares asociados: ${category.places?.length || 0}`;
     modalContent.appendChild(stats);
+
+    // Si hay lugares, los mostramos
+    if (category.places && category.places.length > 0) {
+      const placesList = document.createElement('div');
+      placesList.classList.add('places-list');
+
+      const placesTitle = document.createElement('h4');
+      placesTitle.textContent = 'Lugares en esta categoría:';
+      placesList.appendChild(placesTitle);
+
+      const ul = document.createElement('ul');
+      category.places.forEach(place => {
+        const li = document.createElement('li');
+        li.textContent = place.name || 'Lugar sin nombre';
+        ul.appendChild(li);
+      });
+      placesList.appendChild(ul);
+      modalContent.appendChild(placesList);
+    }
 
     // Mostramos el modal con los detalles
     AlertNotification(
       'Detalles de la Categoría',
       modalContent
     );
+
+    console.log('Detalles de categoría mostrados:', category);
+
   } catch (error) {
     console.error('Error al obtener detalles de la categoría:', error);
     AlertNotification(

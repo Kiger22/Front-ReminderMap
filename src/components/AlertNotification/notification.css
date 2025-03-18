@@ -1,3 +1,17 @@
+.notification-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--kg-color-dark);
+  opacity: 95%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
 .notifications-container {
   background-color: var(--kg-color-dark);
   border-radius: var(--kg-radius-md);

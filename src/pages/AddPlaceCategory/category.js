@@ -18,6 +18,12 @@ export const categoryPage = (node) => {
   const categoryContainer = document.createElement('form');
   categoryContainer.classList.add('category-container');
 
+  // Agregar el event listener al formulario
+  categoryContainer.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    console.log('Formulario de categoría enviado');
+    await addCategory();
+  });
 
   const createField = (labelText, inputType, inputId, inputName, isRequired = false) => {
     const span = document.createElement('span');
@@ -69,9 +75,9 @@ export const categoryPage = (node) => {
   };
 
   const addButton = createButton('Guardar', 'submit');
-  addButton.addEventListener('click', () => {
-    addCategory();
-  });
+  // addButton.addEventListener('click', () => {
+  //   addCategory();
+  // });
 
   const resetButton = createButton('Limpiar', 'reset');
   resetButton.addEventListener('click', () => {

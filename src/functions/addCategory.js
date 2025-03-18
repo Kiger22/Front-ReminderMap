@@ -4,68 +4,59 @@ import { goToHomePage } from "./goHomePage";
 
 export const addCategory = async () => {
   try {
-
-    // Obtenemos el ID del usuario
     const userId = localStorage.getItem('userId');
     const authToken = localStorage.getItem('authToken');
-    console.log('userID', userId, 'Token de autenticación:', authToken);
 
-    // Validamos que haya un ID de usuario
-    if (!userId) {
-      throw new Error('No hay ID de usuario');
+    if (!userId || !authToken) {
+      throw new Error('No hay autorización');
     }
 
-    // Validamos que el formato de userId sea un ObjectID válido
-    const isValidObjectId = /^[a-f\d]{24}$/i.test(userId);
-    if (!isValidObjectId) {
-      throw new Error('El ID de usuario no tiene un formato válido de ObjectID');
-    }
+    const categoryName = document.getElementById('category-name')?.value?.trim();
+    const descriptionName = document.getElementById('category-description')?.value?.trim();
 
-    // Validamos que haya un token de autenticación
-    if (!authToken) {
-      throw new Error('No hay token de autenticación');
-    }
-
-    // Obtenemos los datos del formulario
-    const categoryName = document.getElementById('category-name').value;
-    const descriptionName = document.getElementById('category-description').value;
-
-    // Validamos que el campo del nombre no esté vacío
     if (!categoryName) {
-      throw new Error('el campo del nombre es obligatorio');
+      throw new Error('El nombre de la categoría es obligatorio');
     }
 
-    // Creamos el objeto con los datos de la categoría
     const categoryData = {
-      userId: userId,
       name: categoryName,
-      description: descriptionName
+      description: descriptionName || '',
+      userId
     };
-    console.log('Datos de la categoría:', categoryData);
+
+    console.log('Intentando crear categoría:', categoryData);
 
     const response = await api({
-      endpoint: '/categories',
+      endpoint: 'categories',
       method: 'POST',
       body: categoryData,
       token: authToken
     });
-    console.log('Respuesta del servidor:', response);
 
-    // Verificar que la categoría creada corresponde al usuario actual
-    if (response.userId !== userId) {
-      throw new Error('Error de validación: La categoría no corresponde al usuario actual');
+    console.log('Respuesta de creación de categoría:', response);
+
+    if (!response.success) {
+      throw new Error(response.message || 'Error al crear la categoría');
     }
 
-    // Si llegamos aquí, significa que la categoría se creó correctamente
-    AlertNotification('Categoría creada', 'La categoría se ha creado correctamente', () => {
-      // Este callback solo se ejecutará cuando el usuario haga clic en OK
-      document.getElementById('category-name').value = '';
-      document.getElementById('category-description').value = '';
-      goToHomePage();
-    });
+    // Limpiar formulario
+    document.getElementById('category-name').value = '';
+    document.getElementById('category-description').value = '';
+
+    AlertNotification(
+      'Éxito',
+      'Categoría creada correctamente',
+      () => goToHomePage()
+    );
+
+    return response.category;
 
   } catch (error) {
-    console.error('Error al crear la categoría:', error);
-    AlertNotification('Error al crear la categoría', error.message || 'Error desconocido', () => { });
+    console.error('Error en addCategory:', error);
+    AlertNotification(
+      'Error',
+      error.message || 'No se pudo crear la categoría'
+    );
+    throw error;
   }
-}
+};

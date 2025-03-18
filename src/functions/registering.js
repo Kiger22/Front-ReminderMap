@@ -8,59 +8,67 @@ import { createUserHeader } from "../components/UserHeader/userHeader";
 import { openProfileSettings } from "../components/SettingForm/settingsForm";
 import { toggleAuthDisplay } from '../components/Header/header';
 
-export const registering = async () => {
+const DEFAULT_AVATAR_PATH = '../assets/user-circle-svgrepo-com.svg';
 
-  // Creamos y mostramos un loader en la aplicación
+export const registering = async () => {
   createLoader(divApp);
 
   try {
-    const userData = {
-      name: document.getElementById('name')?.value?.trim(),
-      username: document.getElementById('nickname')?.value?.trim(),
-      email: document.getElementById('email')?.value?.trim(),
-      password: document.getElementById('password')?.value?.trim()
-    };
-
+    const nameInput = document.getElementById('name');
+    const nicknameInput = document.getElementById('nickname');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
     const avatarInput = document.getElementById('avatar');
+
+    // Validación de campos requeridos
+    if (!nameInput?.value || !nicknameInput?.value || !emailInput?.value || !passwordInput?.value) {
+      throw new Error('Todos los campos son requeridos');
+    }
+
     const formData = new FormData();
 
-    // Añadimos los datos del usuario
-    Object.keys(userData).forEach(key => {
-      formData.append(key, userData[key]);
-    });
+    // Añadir datos básicos del usuario
+    formData.append('name', nameInput.value.trim());
+    formData.append('username', nicknameInput.value.trim());
+    formData.append('email', emailInput.value.trim());
+    formData.append('password', passwordInput.value.trim());
 
-    // Manejamos el avatar
-    if (avatarInput && avatarInput.files && avatarInput.files[0]) {
+    // Manejar el avatar
+    if (avatarInput?.files?.length > 0) {
+      // Si el usuario seleccionó una imagen, usarla
       formData.append('avatar', avatarInput.files[0]);
-    } else {
-      try {
-        const defaultAvatar = await fetch('/assets/aboutMe.jpeg')
-          .then(res => res.blob());
-        formData.append('avatar', defaultAvatar, 'default-avatar.jpg');
-      } catch (error) {
-        console.error('Error al cargar el avatar por defecto:', error);
-      }
     }
+    // Si no hay imagen seleccionada, no enviamos el campo avatar
+    // y dejamos que el backend use su imagen por defecto
+
+    console.log('Enviando datos de registro:', {
+      name: nameInput.value,
+      username: nicknameInput.value,
+      email: emailInput.value,
+      hasCustomAvatar: avatarInput?.files?.length > 0
+    });
 
     const response = await api({
       endpoint: 'users/register',
       method: 'POST',
-      body: formData
+      body: formData,
+      isFormData: true
     });
 
-    if (response && response.éxito) {
+    if (response && response.success) {
+      // Limpiar el loader
       const loader = divApp.querySelector('.loader');
-      if (loader) {
-        divApp.removeChild(loader);
-      }
+      if (loader) loader.remove();
 
-      // Guardamos los datos del usuario incluyendo el avatar
-      localStorage.setItem('avatar', response.user.avatar);
+      // Guardar datos en localStorage
+      localStorage.setItem('avatar', response.user.avatar || DEFAULT_AVATAR_PATH);
       localStorage.setItem('name', response.user.name);
       localStorage.setItem('username', response.user.username);
       localStorage.setItem('email', response.user.email);
+      localStorage.setItem('userId', response.user._id);
 
-      const welcomeMessage = `¡Bienvenido, ${userData.name}! Tu registro fue exitoso.`;
+      // Mostrar mensaje de éxito
+      const welcomeMessage = `¡Bienvenido, ${response.user.name}! Tu registro fue exitoso.`;
       await new Promise((resolve) => {
         AlertNotification("Registro Exitoso", welcomeMessage, () => {
           closeRegistrationForm();
@@ -69,23 +77,29 @@ export const registering = async () => {
         });
       });
 
-      // Actualizamos el header del usuario
+      // Actualizar header
       const userHeaderContainer = document.getElementById('user-header');
       if (userHeaderContainer) {
         userHeaderContainer.innerHTML = '';
         createUserHeader(
           userHeaderContainer,
-          response.user.avatar,
+          response.user.avatar || DEFAULT_AVATAR_PATH,
           '../assets/setting-1-svgrepo-com.svg',
           openProfileSettings
         );
-        toggleAuthDisplay(true); // Actualizamos la visualización del header
+        toggleAuthDisplay(true);
       }
     } else {
-      throw new Error(response.mensaje || "Error en el registro");
+      throw new Error(response.message || "Error en el registro");
     }
   } catch (error) {
     console.error('Error durante el registro:', error);
-    AlertNotification("Error", "Error en el registro: " + error.message);
+    const loader = divApp.querySelector('.loader');
+    if (loader) loader.remove();
+
+    AlertNotification(
+      "Error en el registro",
+      error.message || "No se pudo completar el registro. Por favor, intenta nuevamente."
+    );
   }
 }

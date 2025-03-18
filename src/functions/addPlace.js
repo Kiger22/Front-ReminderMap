@@ -3,71 +3,99 @@ import { AlertNotification } from "../components/AlertNotification/notification"
 import { goToHomePage } from "./goHomePage";
 
 export const addPlace = async () => {
+  console.log('Iniciando addPlace');
   try {
-
-    // Obtenemos el ID del usuario
     const userId = localStorage.getItem('userId');
     const authToken = localStorage.getItem('authToken');
-    console.log('userID', userId, 'Token de autenticación:', authToken);
 
-    // Validamos que haya un ID de usuario
-    if (!userId) {
-      throw new Error('No hay ID de usuario');
+    if (!userId || !authToken) {
+      throw new Error('No hay autorización');
     }
 
-    // Validamos que el formato de userId sea un ObjectID válido
-    const isValidObjectId = /^[a-f\d]{24}$/i.test(userId);
-    if (!isValidObjectId) {
-      throw new Error('El ID de usuario no tiene un formato válido de ObjectID');
-    }
-
-    // Validamos que haya un token de autenticación
-    if (!authToken) {
-      throw new Error('No hay token de autenticación');
-    }
-
-    // Obtenemos los datos del formulario
+    // Obtener datos del formulario
     const placeName = document.getElementById("place-name").value;
-    const placeCategory = document.getElementById("place-category").value;
+    const categoryId = document.getElementById("place-category").value;
     const placeDescription = document.getElementById("place-description").value;
     const placeLocation = document.getElementById("location").value;
 
-    // Validamos que los datos no estén vacíos
-    if (!placeName || !placeCategory || !placeDescription || !placeLocation) {
+    console.log('Datos del formulario:', {
+      placeName,
+      categoryId,
+      placeDescription,
+      placeLocation
+    });
+
+    // Validar datos
+    if (!placeName || !categoryId || !placeDescription || !placeLocation) {
       throw new Error('Todos los campos son obligatorios');
     }
 
-    const placeBody = {
+    // Crear objeto con los datos del lugar
+    const placeData = {
       name: placeName,
-      category: placeCategory,
       description: placeDescription,
       location: placeLocation,
+      category: categoryId,
+      userId: userId
     };
-    console.log('Datos del formulario:', placeBody);
 
-    // Llama a la API para crear el lugar
-    const response = await api({
-      endpoint: '/places',
+    console.log('Intentando crear lugar:', placeData);
+
+    // 1. Crear el lugar
+    const placeResponse = await api({
+      endpoint: 'places',
       method: 'POST',
-      body: placeBody,
+      body: placeData,
+      token: authToken
     });
-    console.log('Respuesta de la API:', response);
 
-    // Validamos la respuesta de la API
-    if (response) {
-      console.log('Lugar creado:', response);
-      AlertNotification('Lugar creado', 'El lugar se ha creado correctamente', () => {
-        // Limpiamos los campos del formulario
+    console.log('Respuesta de creación de lugar:', placeResponse);
+
+    if (!placeResponse || !placeResponse.lugar) {
+      throw new Error('Error al crear el lugar');
+    }
+
+    // 2. Actualizar la categoría
+    const categoryResponse = await api({
+      endpoint: `categories/${categoryId}`,
+      method: 'PUT',
+      body: {
+        placeId: placeResponse.lugar._id,
+        action: 'add'
+      },
+      token: authToken
+    });
+
+    console.log('Respuesta de actualización de categoría:', categoryResponse);
+
+    if (!categoryResponse.success) {
+      // Solo hacer rollback si la actualización de categoría falló
+      console.log('Iniciando rollback del lugar creado');
+      await api({
+        endpoint: `places/${placeResponse.lugar._id}`,
+        method: 'DELETE',
+        token: authToken
+      });
+      throw new Error(categoryResponse?.message || 'Error al actualizar la categoría');
+    }
+
+    console.log('Proceso completado con éxito');
+
+    // Si todo fue exitoso, mostrar notificación y limpiar formulario
+    AlertNotification(
+      'Éxito',
+      'Lugar creado y añadido a la categoría correctamente',
+      () => {
         document.getElementById("place-name").value = '';
         document.getElementById("place-category").value = '';
         document.getElementById("place-description").value = '';
         document.getElementById("location").value = '';
-      }, false);
-    }
+        goToHomePage();
+      }
+    );
 
-  }
-  catch (error) {
-    console.error('Error al crear el lugar:', error);
-    AlertNotification('Error al crear el lugar', error.message, () => { });
+  } catch (error) {
+    console.error('Error en addPlace:', error);
+    AlertNotification('Error', error.message || 'Error al procesar la solicitud', () => { });
   }
 };

@@ -2,13 +2,13 @@
 
 ## Descripción
 
-ReminderMap es una aplicación web que permite a los usuarios crear y gestionar recordatorios basados en ubicación.
+ReminderMap es una aplicación web moderna que permite a los usuarios crear y gestionar recordatorios basados en ubicación. Desarrollada con JavaScript vanilla y arquitectura modular, ofrece una experiencia fluida y responsive.
 
 ## Características Principales
 
 - Gestión de recordatorios geográficos
 - Sistema de autenticación de usuarios
-- Integración con mapas interactivos
+- Integración con mapas interactivos (Leaflet)
 - Categorización de lugares
 - Sistema de notificaciones
 - Modo claro/oscuro
@@ -17,63 +17,170 @@ ReminderMap es una aplicación web que permite a los usuarios crear y gestionar 
 - Sistema de conteo de uso de lugares
 - Scroll personalizado y responsivo
 - Interfaz de usuario intuitiva
+- Gestión de perfil de usuario con avatar
 
 ## Tecnologías Utilizadas
 
-- Vanilla JavaScript
-- HTML5 & CSS3
-- Vite como bundler
-- Leaflet para mapas
+- Vanilla JavaScript (ES6+)
+- HTML5 & CSS3/SASS
+- Vite como bundler y herramienta de desarrollo
+- Leaflet para mapas interactivos
 - API REST personalizada
+- FormData para manejo de archivos
+- Cloudinary para almacenamiento de imágenes
+- LocalStorage para persistencia local
 
 ## Estructura del Proyecto
 
-```src/
-├── components/       # Componentes reutilizables
-├── pages/           # Páginas principales
-├── functions/       # Funciones utilitarias
-├── styles/          # Estilos globales
-├── api/             # Configuración de API
-└── assets/          # Recursos estáticos
+```bash
+├── public/    
+│   └── assets/          # Recursos estáticos (imágenes, iconos)
+├── src/
+│   ├── api/            # Configuración y servicios de API
+│   ├── components/     # Componentes reutilizables
+│   │   ├── Home/
+│   │   ├── Hero/
+│   │   ├── Map/
+│   │   ├── LoginForm/
+│   │   └── ...
+│   ├── data/          # Datos estáticos (configuraciones, textos)
+│   ├── functions/     # Funciones utilitarias
+│   ├── pages/         # Páginas principales
+│   ├── styles/        # Estilos globales SASS
+│   └── utils/         # Utilidades y helpers
+├── index.html         # Punto de entrada HTML
+└── main.js           # Punto de entrada JavaScript
 ```
 
-## Instalación y Uso
+## Instalación y Desarrollo
 
-1. Clonar el repositorio
+### Prerrequisitos
+
+- Node.js (versión 14 o superior)
+- npm (incluido con Node.js)
+
+### Configuración Inicial
+
+1. Clonar el repositorio:
 
 ```bash
 git clone [url-repositorio]
+cd Front-ReminderMap
 ```
 
-2. Instalar dependencias
+2. Instalar dependencias:
 
 ```bash
 npm install
 ```
 
-3. Iniciar servidor de desarrollo
+3. Configurar variables de entorno:
 
-```bash
-npm run dev
+Crear archivo `.env`:
+
+```plaintext
+VITE_API_URL=http://localhost:3000/api/v1
+VITE_CLOUDINARY_URL=tu_cloudinary_url
 ```
+
+### Scripts Disponibles
+
+- `npm run dev`: Inicia el servidor de desarrollo con Vite
+- `npm run build`: Construye la aplicación para producción
+- `npm run preview`: Vista previa de la build de producción
+
+## Componentes Principales
+
+### Hero
+
+- Componente principal que maneja la vista inicial
+- Integra el mapa y los controles principales
+- Gestiona la navegación principal
+
+### Map
+
+- Integración con Leaflet
+- Manejo de marcadores y eventos
+- Geolocalización y cálculo de distancias
+
+### LoginForm
+
+- Sistema de autenticación
+- Validación de formularios
+- Gestión de sesiones
+
+## Guía de Desarrollo
+
+### Estándares de Código
+
+- Usar ES6+ features
+- Mantener componentes modulares
+- Seguir principios DRY (Don't Repeat Yourself)
+- Documentar funciones y componentes principales
+
+### Buenas Prácticas
+
+1. **Manejo de Estado**
+   - Usar LocalStorage para persistencia
+   - Mantener estado global mínimo
+   - Implementar patrón observer cuando sea necesario
+
+2. **Optimización**
+   - Lazy loading de componentes
+   - Optimización de imágenes
+   - Minificación de assets en producción
+
+3. **Seguridad**
+   - Validación de inputs
+   - Sanitización de datos
+   - Manejo seguro de tokens
 
 ## Funcionalidades Implementadas
 
-- [x] Sistema de autenticación de usuarios
-- [x] Creación y gestión de recordatorios
-- [x] Integración con mapas interactivos
-- [x] Categorización de lugares
+- [x] Sistema de autenticación
+- [x] Gestión de recordatorios
+- [x] Integración con mapas
+- [x] Modo claro/oscuro
+- [x] Perfil de usuario
 - [x] Sistema de notificaciones
 - [x] Modo claro/oscuro
 - [x] Visualización de lugares frecuentes
 - [x] Sistema de conteo de uso de lugares
 - [x] Detalles de categorías
 - [x] Interfaz responsiva
+- [x] Gestión de perfil de usuario
+- [x] Carga y actualización de avatar
+- [x] Almacenamiento de ubicaciones personalizadas
 
-## Funcionalidades por Implementar
+## Próximas Funcionalidades
 
 - [ ] Compartir recordatorios
 - [ ] Estadísticas de uso
 - [ ] Integración con calendario
 - [ ] Modo offline
-- [ ] Actualización automática
+- [ ] Notificaciones push
+
+## Contribución
+
+1. Fork del repositorio
+2. Crear rama feature (`git checkout -b feature/NuevaCaracteristica`)
+3. Commit cambios (`git commit -m 'Añadir nueva característica'`)
+4. Push a la rama (`git push origin feature/NuevaCaracteristica`)
+5. Crear Pull Request
+
+## Licencia
+
+Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE.md](LICENSE.md) para detalles
+
+---
+
+**⌨️ Desarrollado por [kiger22](https://github.com/Kiger22)**
+
+## Contribuciones
+
+Las contribuciones son bienvenidas. Por favor, asegúrate de:
+
+1. Seguir las convenciones de código existentes
+2. Documentar nuevas funcionalidades
+3. Actualizar el README cuando sea necesario
+4. Probar los cambios antes de hacer PR

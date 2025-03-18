@@ -61,7 +61,7 @@
 
 button {
   font-size:var(--kg-font-size-link);
-  padding: 1em 2.7em;
+  padding: 0.7em 2.7em;
   font-weight: 500;
   background:var(--kg-color-secondary);
   color: var(--kg-color-primary);

@@ -46,7 +46,7 @@ export const createUserHeader = (node, avatarPath, settingsIconPath, openSetting
 
   const logoutIcon = document.createElement('img');
   logoutIcon.classList.add('logout-icon');
-  logoutIcon.src = '../../public/assets/logout-3-svgrepo-com.svg';
+  logoutIcon.src = '../../assets/logout-3-svgrepo-com.svg';
 
   logoutIcon.addEventListener('click', () => {
     console.log("Logout");
