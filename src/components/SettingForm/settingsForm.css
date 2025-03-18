@@ -42,6 +42,25 @@
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid var(--kg-color-dark);
+  transition: transform 0.3s ease;
+}
+
+.current-avatar:hover {
+  transform: scale(1.05);
+}
+
+.change-avatar-btn {
+  background-color: var(--kg-color-dark);
+  color: var(--kg-color-tertiary);
+  padding: var(--kg-padding-sm) var(--kg-padding-md);
+  border: none;
+  border-radius: var(--kg-radius-sd);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.change-avatar-btn:hover {
+  background-color: var(--kg-color-grey);
 }
 
 .field-container {

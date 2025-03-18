@@ -4,6 +4,8 @@ import { createButton } from '../Button/button';
 import { updateUserProfile } from '../../functions/updateUserProfile';
 import('./settingsForm.css');
 
+const DEFAULT_AVATAR_PATH = './assets/user-circle-svgrepo-com.svg';
+
 export const createSettingsForm = (userData) => {
   const modal = document.createElement('div');
   modal.classList.add('settings-modal');
@@ -20,7 +22,7 @@ export const createSettingsForm = (userData) => {
   avatarSection.classList.add('avatar-section');
 
   const currentAvatar = document.createElement('img');
-  currentAvatar.src = userData.avatar || '../assets/default-avatar.png';
+  currentAvatar.src = userData.avatar || DEFAULT_AVATAR_PATH;
   currentAvatar.classList.add('current-avatar');
   avatarSection.appendChild(currentAvatar);
 
@@ -28,8 +30,42 @@ export const createSettingsForm = (userData) => {
   avatarInput.type = 'file';
   avatarInput.id = 'avatar-update';
   avatarInput.accept = 'image/*';
-  avatarSection.appendChild(avatarInput);
+  avatarInput.style.display = 'none';
 
+  // Botón personalizado para seleccionar imagen
+  const selectImageBtn = document.createElement('button');
+  selectImageBtn.type = 'button';
+  selectImageBtn.textContent = 'Cambiar Avatar';
+  selectImageBtn.classList.add('change-avatar-btn');
+  selectImageBtn.onclick = () => avatarInput.click();
+
+  // Evento para mostrar vista previa
+  avatarInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        currentAvatar.src = e.target.result;
+
+        // También actualizamos el avatar en el header para vista previa
+        const headerAvatar = document.querySelector('.avatar-img-header');
+        if (headerAvatar) {
+          headerAvatar.src = e.target.result;
+        }
+      };
+      reader.readAsDataURL(file);
+    } else {
+      // Si no se selecciona archivo, volver a la imagen por defecto
+      currentAvatar.src = DEFAULT_AVATAR_PATH;
+      const headerAvatar = document.querySelector('.avatar-img-header');
+      if (headerAvatar) {
+        headerAvatar.src = DEFAULT_AVATAR_PATH;
+      }
+    }
+  });
+
+  avatarSection.appendChild(avatarInput);
+  avatarSection.appendChild(selectImageBtn);
   form.appendChild(avatarSection);
 
   // Campos de entrada
@@ -65,6 +101,12 @@ export const createSettingsForm = (userData) => {
   // Crear botones usando el componente button
   createButton(buttonContainer, 'Guardar', 'save-button', async (e) => {
     e.preventDefault();
+
+    // Deshabilitar el botón mientras se procesa
+    const saveButton = document.querySelector('#save-button');
+    if (saveButton) saveButton.disabled = true;
+
+    // Crear y mostrar el loader
     createLoader(document.body);
 
     const formData = new FormData();
@@ -79,10 +121,22 @@ export const createSettingsForm = (userData) => {
       if (value) formData.append(field.id, value);
     });
 
-    await updateUserProfile(formData);
+    try {
+      const success = await updateUserProfile(formData, openProfileSettings);
 
-    const loader = document.querySelector('.loader');
-    if (loader) loader.remove();
+      if (!success && !localStorage.getItem('authToken')) {
+        window.location.href = '/login';
+      }
+    } catch (error) {
+      console.error('Error al actualizar el perfil:', error);
+    } finally {
+      // Remover el loader
+      const loader = document.querySelector('.loader');
+      if (loader) loader.remove();
+
+      // Rehabilitar el botón
+      if (saveButton) saveButton.disabled = false;
+    }
   });
 
   createButton(buttonContainer, 'Cancelar', 'cancel-button', () => {

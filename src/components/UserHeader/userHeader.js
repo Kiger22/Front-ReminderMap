@@ -7,6 +7,8 @@ import { NotificationReminder } from "../ReminderNotification/reminderNotificati
 import('./userHeader.css');
 
 export const createUserHeader = (node, avatarPath, settingsIconPath, openSettingsForm) => {
+  const DEFAULT_AVATAR_PATH = './assets/user-circle-svgrepo-com.svg';
+
   const userContainer = document.createElement('div');
   userContainer.classList.add('user-header');
 
@@ -15,11 +17,16 @@ export const createUserHeader = (node, avatarPath, settingsIconPath, openSetting
 
   const avatarImg = document.createElement('img');
   avatarImg.classList.add('avatar-img-header');
-  avatarImg.src = avatarPath;
+  avatarImg.src = avatarPath || DEFAULT_AVATAR_PATH;
   avatarImg.alt = 'User Avatar';
   avatarImg.addEventListener('click', () => {
     NotificationReminder()
   });
+
+  // Manejar errores de carga de imagen
+  avatarImg.onerror = () => {
+    avatarImg.src = DEFAULT_AVATAR_PATH;
+  };
 
   avatarDiv.appendChild(avatarImg);
   userContainer.appendChild(avatarDiv);

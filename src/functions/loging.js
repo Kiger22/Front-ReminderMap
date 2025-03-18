@@ -24,12 +24,6 @@ export const loging = async () => {
       password: document.getElementById('password')?.value?.trim()
     };
 
-    console.log('Enviando datos:', {
-      username: userData.username,
-      passwordLength: userData.password?.length,
-      passwordTrimmed: userData.password?.trim()?.length
-    });
-
     if (!userData.username || !userData.password) {
       throw new Error('Usuario y contraseña son requeridos');
     }
@@ -46,16 +40,16 @@ export const loging = async () => {
       body: userData
     });
 
-    // Mostramos la respuesta del servidor
-    console.log('Respuesta del servidor:', response);
-
     // Verificamos la respuesta del servidor
     if (response && response.éxito) {
+      // Guardamos el token en localStorage
+      localStorage.setItem('authToken', response.token);
+
       // Cerramos el loader
       const loader = divApp.querySelector('.loader');
       if (loader) loader.remove();
 
-      // Mostramos mensaje de bienvenida, cerramos el formulario de login y actualizamos el estado de autenticación
+      // Mostramos mensaje de bienvenida
       const welcomeMessage = `¡Bienvenido, ${response.user.username}!`;
       await new Promise((resolve) => {
         AlertNotification("Inicio de sesión exitoso", welcomeMessage, () => {
@@ -63,15 +57,20 @@ export const loging = async () => {
           resolve();
         });
 
-        // Cambiamos el texto del h1 del header
+        // Guardamos los datos del usuario en localStorage
+        localStorage.setItem('name', response.user.name);
+        localStorage.setItem('email', response.user.email);
+        localStorage.setItem('avatar', response.user.avatar);
+        localStorage.setItem('userId', response.user._id);
+        localStorage.setItem('username', response.user.username);
+        localStorage.setItem('myHouseLocation', response.user.myHouseLocation || '');
+        localStorage.setItem('myWorkLocation', response.user.myWorkLocation || '');
+
+        // Actualizamos la UI
         const titleHeader = document.getElementById('title-header');
         if (titleHeader) {
           titleHeader.innerText = `Hola ${response.user.name}`;
         }
-
-        // Guardamos el username en localStorage
-        localStorage.setItem('name', response.user.name);
-        console.log('name en localStorage', response.user.name);
 
         // Ocultamos botones de registro e inicio de sesión
         const registerButton = document.getElementById('register-button');
@@ -91,21 +90,15 @@ export const loging = async () => {
     } else {
       throw new Error(response.mensaje || 'Error de autenticación');
     }
-  }
-  // Manejo de errores
-  catch (error) {
+  } catch (error) {
     console.error('Error en el proceso de login:', error);
-
-    // Cerramos el loader
     const loader = divApp.querySelector('.loader');
     if (loader) loader.remove();
 
     AlertNotification(
       "Error de inicio de sesión",
       error.message || "Credenciales incorrectas. Por favor, verifica tu usuario y contraseña.",
-      () => {
-        console.log('Mostrando alerta de error');
-      }
+      () => console.log('Mostrando alerta de error')
     );
   } finally {
     clearTimeout(loaderTimeout);

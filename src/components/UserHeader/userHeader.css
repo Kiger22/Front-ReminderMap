@@ -21,6 +21,12 @@
   object-fit: cover;
 }
 
+/* Selector específico para el avatar por defecto */
+.avatar-img-header[src*="user-circle-svgrepo-com.svg"] {
+  width: 70%;
+  height: 70%;
+}
+
 .settings-container {
   display: flex;
   align-items: center;
@@ -58,9 +64,17 @@
     height: 40px;
   }
 
+  /* Mantener la proporción en responsive */
+  .avatar-img-header[src*="user-circle-svgrepo-com.svg"] {
+    width: 70%;
+    height: 70%;
+  }
 } 
 
 @media (max-width: 500px) {
-
-
+  /* Mantener la proporción en móviles */
+  .avatar-img-header[src*="user-circle-svgrepo-com.svg"] {
+    width: 70%;
+    height: 70%;
+  }
 } 

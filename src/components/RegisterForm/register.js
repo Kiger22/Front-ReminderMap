@@ -126,13 +126,35 @@ export const createRegisterForm = () => {
   passwordLabel.classList.add('label');
   passwordLabel.textContent = 'Contraseña';
 
+  const passwordContainer = document.createElement('div');
+  passwordContainer.classList.add('password-container');
+
   const passwordInput = document.createElement('input');
   passwordInput.type = 'password';
   passwordInput.name = 'password';
   passwordInput.id = 'password';
 
+  const toggleButton = document.createElement('button');
+  toggleButton.type = 'button';
+  toggleButton.classList.add('toggle-password');
+  toggleButton.innerHTML = `
+    <img src="../assets/eye-svgrepo-com.svg" alt="mostrar contraseña" />
+  `;
+
+  toggleButton.addEventListener('click', () => {
+    const type = passwordInput.type === 'password' ? 'text' : 'password';
+    passwordInput.type = type;
+    toggleButton.querySelector('img').src =
+      type === 'password'
+        ? '../assets/eye-svgrepo-com.svg'
+        : '../assets/eye-slash-svgrepo-com.svg';
+  });
+
+  passwordContainer.appendChild(passwordInput);
+  passwordContainer.appendChild(toggleButton);
+
   passwordSpan.appendChild(passwordLabel);
-  passwordSpan.appendChild(passwordInput);
+  passwordSpan.appendChild(passwordContainer);
 
   // Botón de enviar
   const submitInput = document.createElement('input');

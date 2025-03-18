@@ -110,6 +110,32 @@
   cursor: pointer;
 }
 
+.password-container {
+  position: relative;
+  width: 100%;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--kg-color-tertiary);
+}
+
+.toggle-password:hover {
+  opacity: 0.8;
+}
+
+.toggle-password img {
+  width: 20px;
+  height: 20px;
+}
+
 @media (max-width: 900px) {
   .form {
     width: 70%;
