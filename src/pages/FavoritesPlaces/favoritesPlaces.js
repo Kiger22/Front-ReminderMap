@@ -85,9 +85,9 @@ export const favoritesPlacesPage = async (node) => {
         // Mejorar el formato del contador
         const formatUseCount = (count) => {
           count = Number(count) || 0; // Asegurarse de que count sea un número
-          if (count === 0) return 'No usado aún';
-          if (count === 1) return 'Usado 1 vez';
-          return `Usado ${count} veces`;
+          if (count === 0) return 'Sin uso';
+          if (count === 1) return '1 vez';
+          return `${count} veces`;
         };
         useCount.textContent = formatUseCount(place.useCount);
         useCount.title = `Última actualización: ${place.updatedAt
@@ -152,7 +152,7 @@ export const favoritesPlacesPage = async (node) => {
         deleteButton.src = './assets/delette-svgrepo-com.svg';
         deleteButton.classList.add('action-icon');
 
-        // Agregar los event listeners
+        // Event listener para el botón de favorito
         favoriteButton.addEventListener('click', async () => {
           try {
             if (place.isFavorite) {
@@ -160,16 +160,14 @@ export const favoritesPlacesPage = async (node) => {
               if (success) {
                 favoriteButton.src = '../assets/heart-svgrepo2-com.svg';
                 place.isFavorite = false;
-                // Actualizar la UI inmediatamente
-                await updatePlacesList();
+                // Ya no llamamos a updatePlacesList aquí
               }
             } else {
               const success = await toggleFavorite(place._id);
               if (success) {
                 favoriteButton.src = '../assets/heart-svgrepo1-com.svg';
                 place.isFavorite = true;
-                // Actualizar la UI inmediatamente
-                await updatePlacesList();
+                // Ya no llamamos a updatePlacesList aquí
               }
             }
           } catch (error) {
@@ -215,13 +213,13 @@ export const favoritesPlacesPage = async (node) => {
 
         // Agregar todos los botones al contenedor de iconos en el orden correcto
         actionIcons.appendChild(favoriteButton);
-        actionIcons.appendChild(reminderButton); // Agregar el nuevo botón
+        actionIcons.appendChild(reminderButton);
         actionIcons.appendChild(editButton);
         actionIcons.appendChild(deleteButton);
 
         // Agregar elementos al contenedor de acciones
-        placeActions.appendChild(useCount);
         placeActions.appendChild(actionIcons);
+        placeActions.appendChild(useCount);
 
         // Agregar todo al item del lugar
         placeItem.appendChild(placeInfo);
