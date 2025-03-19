@@ -1,9 +1,10 @@
-import { api } from "../api/api";
-import { AlertNotification } from "../components/AlertNotification/notification";
-import { goToHomePage } from "./goHomePage";
+import { api } from '../api/api';
+import { AlertNotification } from '../components/AlertNotification/notification';
+import { reminderPageForm } from '../pages/AddReminder/reminder';
 
-export const addPlace = async () => {
-  console.log('Iniciando addPlace');
+export const addPlace = async (fromReminder = false) => {
+  console.log('addPlace called with fromReminder:', fromReminder);
+
   try {
     const userId = localStorage.getItem('userId');
     const authToken = localStorage.getItem('authToken');
@@ -12,37 +13,34 @@ export const addPlace = async () => {
       throw new Error('No hay autorización');
     }
 
-    // Obtener datos del formulario
-    const placeName = document.getElementById("place-name").value;
-    const categoryId = document.getElementById("place-category").value;
-    const placeDescription = document.getElementById("place-description").value;
-    const placeLocation = document.getElementById("location").value;
+    // Obtener el nodo contenedor actual
+    const currentForm = document.querySelector('.place-form');
+    if (!currentForm || !currentForm.parentNode) {
+      throw new Error('No se encontró el contenedor del formulario');
+    }
+    const containerNode = currentForm.parentNode;
 
-    console.log('Datos del formulario:', {
-      placeName,
-      categoryId,
-      placeDescription,
-      placeLocation,
-      userId
-    });
+    const placeNameInput = document.getElementById('place-name');
+    const descriptionInput = document.getElementById('place-description');
+    const locationInput = document.getElementById('location');
+    const categoryInput = document.getElementById('place-category');
 
-    // Validar datos
-    if (!placeName || !categoryId || !placeDescription || !placeLocation) {
-      throw new Error('Todos los campos son obligatorios');
+    if (!placeNameInput || !descriptionInput || !locationInput || !categoryInput) {
+      throw new Error('No se encontraron todos los campos del formulario');
     }
 
-    // Crear objeto con los datos del lugar
     const placeData = {
-      name: placeName,
-      description: placeDescription,
-      location: placeLocation,
-      category: categoryId,
-      userId: userId  // Incluir el userId en los datos
+      name: placeNameInput.value.trim(),
+      description: descriptionInput.value.trim(),
+      location: locationInput.value.trim(),
+      category: categoryInput.value.trim(),
+      userId: userId
     };
 
-    console.log('Intentando crear lugar:', placeData);
+    if (!placeData.name || !placeData.location) {
+      throw new Error('El nombre y la ubicación son obligatorios');
+    }
 
-    // 1. Crear el lugar
     const placeResponse = await api({
       endpoint: 'places',
       method: 'POST',
@@ -50,53 +48,37 @@ export const addPlace = async () => {
       token: authToken
     });
 
-    console.log('Respuesta de creación de lugar:', placeResponse);
+    if (placeResponse && placeResponse.lugar) {
+      localStorage.setItem('newCreatedPlace', JSON.stringify(placeResponse.lugar));
 
-    if (!placeResponse || !placeResponse.lugar) {
-      throw new Error('Error al crear el lugar');
-    }
+      if (fromReminder) {
+        console.log('Attempting to redirect back to reminder form');
+        console.log('Container node found:', !!containerNode);
 
-    // 2. Actualizar la categoría
-    const categoryResponse = await api({
-      endpoint: `categories/${categoryId}`,
-      method: 'PUT',
-      body: {
-        placeId: placeResponse.lugar._id,
-        action: 'add'
-      },
-      token: authToken
-    });
-
-    console.log('Respuesta de actualización de categoría:', categoryResponse);
-
-    if (!categoryResponse.success) {
-      // Solo hacer rollback si la actualización de categoría falló
-      console.log('Iniciando rollback del lugar creado');
-      await api({
-        endpoint: `places/${placeResponse.lugar._id}`,
-        method: 'DELETE',
-        token: authToken
-      });
-      throw new Error(categoryResponse?.message || 'Error al actualizar la categoría');
-    }
-
-    console.log('Proceso completado con éxito');
-
-    // Si todo fue exitoso, mostrar notificación y limpiar formulario
-    AlertNotification(
-      'Éxito',
-      'Lugar creado y añadido a la categoría correctamente',
-      () => {
-        document.getElementById("place-name").value = '';
-        document.getElementById("place-category").value = '';
-        document.getElementById("place-description").value = '';
-        document.getElementById("location").value = '';
-        goToHomePage();
+        if (containerNode) {
+          // Primero mostramos la notificación
+          AlertNotification('Éxito', 'Lugar agregado correctamente', async () => {
+            // Después de que el usuario cierre la notificación, redirigimos
+            try {
+              await reminderPageForm(containerNode);
+            } catch (error) {
+              console.error('Error al redirigir:', error);
+            }
+          });
+        } else {
+          console.error('No se encontró el contenedor para la redirección');
+        }
+      } else {
+        AlertNotification('Éxito', 'Lugar agregado correctamente', () => { });
       }
-    );
 
+      return true;
+    }
+
+    throw new Error('No se pudo crear el lugar');
   } catch (error) {
     console.error('Error en addPlace:', error);
-    AlertNotification('Error', error.message || 'Error al procesar la solicitud', () => { });
+    AlertNotification('Error', error.message || 'Error al crear el lugar', () => { });
+    return false;
   }
 };

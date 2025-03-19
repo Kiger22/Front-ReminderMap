@@ -2,14 +2,18 @@ import { api } from "../api/api";
 
 export const getCategories = async (userId = null) => {
   try {
-    const endpoint = userId ? `/categories?userId=${userId}` : '/categories';
+    const authToken = localStorage.getItem('authToken');
+    const endpoint = userId ? `categories?userId=${userId}` : 'categories';
+
     const response = await api({
       endpoint,
-      method: 'GET'
+      method: 'GET',
+      token: authToken // Añadir el token
     });
 
-    if (!response.success) {
-      throw new Error(response.message || 'Error al obtener categorías');
+    if (!response || !response.categories) {
+      console.error('Respuesta inválida:', response);
+      return [];
     }
 
     return response.categories.map(category => ({
@@ -20,7 +24,7 @@ export const getCategories = async (userId = null) => {
     }));
   } catch (error) {
     console.error('Error al obtener categorías:', error);
-    throw error;
+    return [];
   }
 };
 

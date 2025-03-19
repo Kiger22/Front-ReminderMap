@@ -73,6 +73,18 @@ $color4: #f6dcdc;
         background-color: var(--kg-color-tertiary);
       }
     }
+
+    // Añadir estos estilos para días pasados
+    .day.past {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background-color: rgba(0, 0, 0, 0.1);
+      
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+        box-shadow: none;
+      }
+    }
   }
 }
 
@@ -111,67 +123,63 @@ $color4: #f6dcdc;
   }
 }
 
+.calendar-button-plus-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  
+  .caja {
+    transform: scale(0.7); // Hacer el botón un poco más pequeño
+  }
+}
+
 .reminder-notification-content {
-  padding: 1rem;
+  margin-top: var(--kg-margin-md);
+  padding: var(--kg-padding-lg);
   max-height: 70vh;
   overflow-y: auto;
+  text-align: center;
+  background-color: var(--kg-color-secondary);
 
   h3 {
-    margin-bottom: 1.5rem;
-    color: var(--kg-text-dark);
-    text-align: center;
-    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: var(--kg-color-primary);
+  }
+
+  p {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: var(--kg-color-primary);
   }
 
   .reminder-list {
+    margin-bottom: 15px;
+    text-align: left;
+  }
+}
+
+.reminder-notification-item {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: rgba(var(--kg-color-primary-rgb), 0.1);
+  border-radius: var(--kg-radius-sd);
+
+  .reminder-header {
     display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+
+    h4 {
+      margin: 0;
+      color: var(--kg-color-primary);
+    }
   }
 
-  .reminder-notification-item {
-    background-color: var(--kg-bg-secondary);
-    border-radius: 8px;
-    padding: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-    .reminder-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.5rem;
-
-      h4 {
-        color: var(--kg-text-dark);
-        font-size: 1.1rem;
-        margin: 0;
-      }
-
-      .reminder-time {
-        color: var(--kg-color-primary);
-        font-weight: 500;
-      }
-    }
-
-    .reminder-details {
-      p {
-        margin: 0.5rem 0;
-        color: var(--kg-text-dark);
-        
-        &.reminder-description {
-          font-size: 0.95rem;
-        }
-        
-        &.reminder-location {
-          color: var(--kg-text-secondary);
-          font-size: 0.9rem;
-        }
-      }
-    }
-
-    &:hover {
-      transform: translateY(-2px);
-      transition: transform 0.2s ease;
+  .reminder-details {
+    p {
+      margin: 5px 0;
+      font-size: 0.9rem;
     }
   }
 }

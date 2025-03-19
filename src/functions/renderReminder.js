@@ -24,7 +24,19 @@ export const createReminderElement = (reminder, remindersList) => {
   time.textContent = `Hora: ${reminder.time}`;
 
   const location = document.createElement('p');
-  location.textContent = `${reminder.location}`;
+  // Verificamos si location es un objeto (lugar completo) o un string (ID)
+  if (typeof reminder.location === 'object' && reminder.location !== null) {
+    location.textContent = `${reminder.location.name} (${reminder.location.location})`;
+  } else {
+    // Si es un string (ID), intentamos obtener el nombre del lugar del select
+    const locationSelect = document.getElementById('reminder-location');
+    if (locationSelect) {
+      const selectedOption = Array.from(locationSelect.options).find(option => option.value === reminder.location);
+      location.textContent = selectedOption ? selectedOption.textContent : reminder.location;
+    } else {
+      location.textContent = reminder.location;
+    }
+  }
 
   // Botón de editar
   const editButton = document.createElement('img');

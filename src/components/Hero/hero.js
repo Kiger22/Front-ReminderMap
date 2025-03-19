@@ -1,6 +1,6 @@
 import { reminderPageForm } from "../../pages/AddReminder/reminder";
 import { AlertNotification } from "../AlertNotification/notification";
-import { buttonPlus } from "../ButtonPlus/buttonPlus";
+import { ButtonPlus } from "../ButtonPlus/buttonPlus";
 import { Home } from "../Home/home";
 import { createLoginForm } from "../LoginForm/login";
 import { insertMap } from "../Map/insertMap";
@@ -20,19 +20,18 @@ export const heroPage = (node) => {
   heroContainer.classList.add("hero-container");
 
   // Botón para añadir recordatorio
-  buttonPlus(hero, "AÑADIR RECORDATORIO");
+  ButtonPlus(hero, "AÑADIR RECORDATORIO");
   const button = document.querySelector('.button_plus');
   button.addEventListener("click", () => {
     const authToken = localStorage.getItem('authToken');
-    console.log('authToken: ' + authToken);
-    // Validamos que haya un token de autenticación
     if (!authToken) {
       AlertNotification('Debes ser usuario', 'Inicia Seccion', () => {
         createLoginForm();
       });
       return;
     } else {
-      reminderPageForm(heroContainer);
+      // Pasamos false como tercer parámetro para indicar que venimos del home
+      reminderPageForm(heroContainer, null, false);
     }
   });
 

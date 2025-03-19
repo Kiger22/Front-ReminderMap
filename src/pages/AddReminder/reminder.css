@@ -1,4 +1,33 @@
-.reminder-form{
+/* Resetear estilos heredados de forma más específica */
+.reminder-form input:not([type="file"]),
+.reminder-form select,
+.reminder-container .input-span > input:not([type="file"]),
+.reminder-container .input-span > select {
+  all: unset !important;
+  box-sizing: border-box !important;
+  background-color: white !important;
+  color: black !important;
+  border-radius: var(--kg-radius-sd) !important;
+  padding: var(--kg-padding-sm) var(--kg-padding-sm) !important;
+  border: none !important;
+  width: 100% !important;
+}
+
+
+
+/* Eliminar cualquier otro estilo heredado */
+.reminder-container .input-span > input:not([type="file"]):focus,
+.reminder-container .input-span > select:focus {
+  outline: none !important;
+  background-color: white !important;
+  color: black !important;
+}
+
+/* Asegurar que los contenedores tengan sus propios estilos sin herencia */
+.reminder-form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
   justify-self: center;
   width: 70%;
   height: 80%;
@@ -6,29 +35,62 @@
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  gap: var(--kg-gap-md);
+  gap: var(--kg-gap-xl);
   color: var(--kg-text-primary);
 }
 
-.title-reminder{
-  font-size: var(--kg-font-size-h1);
-  font-weight: 600;
+.form-group {
+  margin-bottom: 15px;
 }
 
-.reminder-container{
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.button-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.submit-button,
+.add-place-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submit-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.add-place-button {
+  background-color: #2196F3;
+  color: white;
+}
+
+.reminder-container {
+  all: unset;
   display: flex;
   width: 100%;
   height: 100%;
   gap: var(--kg-gap-sm);
 }
 
-.fields-container{
-  display: flex;
-  flex-direction: column;
-  gap: var(--kg-gap-sm);
-}
-
 .reminder-container .input-span {
+  all: unset;
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 3fr;
@@ -43,28 +105,15 @@
   width: 100%;
 }
 
-.reminder-container .input-span > input {
+.reminder-container .input-span > input,
+.reminder-container .input-span > select {
   grid-column: 2/3;
   width: 100%;
   border-radius: var(--kg-radius-sd);
   padding: var(--kg-padding-sm) var(--kg-padding-sm);
-  width: 100%;
   border: none;
-  display: flex;
-  align-items: center;
-  gap: var(--kg-gap-md);
-  background-color: var(--kg-color-primary);
-  color: var(--kg-color-dark);
-}
-
-.reminder-container .input-span > input:focus{
-  outline: 2px solid var(--kg-color-dark);
-}
-
-.iframe-address{
-  width: 100%;
-  height: 50%;
-  border: 2px solid var(--kg-color-primary);
+  background-color: white !important;
+  color: black !important;
 }
 
 .buttons-container{
@@ -74,56 +123,18 @@
   gap: var(--kg-gap-md);
 }
 
-.input-span select {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid var(--kg-color-primary);
-  border-radius: 4px;
-  font-size: 1em;
-  cursor: pointer;
-}
-
-.input-span select:focus {
-  outline: none;
-  border-color: var(--kg-color-secondary);
-  box-shadow: 0 0 5px rgba(116, 206, 184, 0.5);
-}
-
-.input-span select option {
-  padding: 8px;
-  background-color: var(--kg-color-background);
-  color: var(--kg-color-text);
-}
-
-.input-span select option:disabled {
-  color: var(--kg-color-secondary);
-}
-
-/* Estilo especial para la opción de agregar nuevo lugar */
-.input-span select option[value="new"] {
-  font-weight: bold;
-}
-
 @media (max-width: 900px) {
   .reminder-form h2{
-  font-size: var(--kg-font-size-h3);
+    font-size: var(--kg-font-size-h3);
   }
 
   .reminder-container{
-    display: flex;
     flex-direction: column;
-    width: 100%;
-    height: 100%;
-    gap: var(--kg-gap-sm);
   }
 
   .buttons-container{
-    display: flex;
-    flex-direction: column;
-    margin: 10px auto; ;
-    justify-content: start;
+    margin: 10px auto;
     align-items: start;
-    gap: var(--kg-gap-md);
   }
 } 
 
@@ -131,49 +142,109 @@
   .reminder-form{
     width: 70%;
     height: 80%;
-    margin: auto ;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
+    margin: auto;
     gap: var(--kg-gap-sm);
-    color: var(--kg-text-primary);
-  }
-  .reminder-container .input-span > input {
-    padding: 5px;
-    width: 100%;
-    gap: var(--kg-gap-sm);
-    font-size:x-small;
   }
 
   .reminder-container .input-span {
-    display: flex;
     flex-direction: column;
     gap: 0;
     font-size: var(--kg-font-size-p);
   }
 
-  .reminder-form{
-    gap: var(--kg-gap-sm);
-  }
-
-  .reminder-container{
-    display: flex;
-    flex-direction: column;
+  .reminder-container .input-span > input {
+    padding: 5px;
     width: 100%;
-    height: 100%;
     gap: var(--kg-gap-sm);
+    font-size: x-small;
   }
 
-  .iframe-address{
-    height: 30%;
-  }
-  
   .buttons-container{
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
     gap: var(--kg-gap-sm);
     margin-top: 5px;
     font-size: var(--kg-font-size-p);
   }
-} 
+}
+
+/* Estilos específicos para el select y sus opciones */
+.reminder-container .input-span > select {
+  cursor: pointer !important;
+  appearance: auto !important; /* Esto es importante para que se muestren las opciones correctamente */
+}
+
+.reminder-container .input-span > select option {
+  background-color: white;
+  color: black;
+  padding: 8px;
+}
+
+/* Estilo específico para la opción "Agregar nuevo lugar" */
+.reminder-container .input-span > select option[value="new"] {
+  font-weight: bold !important;
+  background-color: var(--kg-color-primary) !important;
+  color: white !important;
+  cursor: pointer !important;
+}
+
+/* Asegurar que las opciones del select tengan el padding correcto */
+.reminder-container .input-span > select option {
+  padding: var(--kg-padding-sm);
+}
+
+.custom-select-container {
+  width: 100%;
+  position: relative;
+}
+
+.custom-select {
+  width: 100%;
+}
+
+.selected-option {
+  background-color: white;
+  color: black;
+  padding: var(--kg-padding-sm);
+  border-radius: var(--kg-radius-sd);
+  cursor: pointer;
+  user-select: none;
+}
+
+.options-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: white;
+  color: black;
+  border-radius: var(--kg-radius-sd);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.option {
+  padding: var(--kg-padding-sm);
+  cursor: pointer;
+}
+
+.option:hover {
+  background-color:var(--kg-color-secondary);
+  color: var(--kg-color-primary);
+}
+
+.new-place-option {
+  font-weight: bold;
+  background-color: var(--kg-color-secondary);
+  color: var(--kg-color-dark);
+}
+
+.new-place-option:hover {
+  opacity: 0.9;
+}
+
+.separator {
+  height: 1px;
+  background-color: #eee;
+  margin: 4px 0;
+}

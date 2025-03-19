@@ -2,11 +2,18 @@ import { addPlace } from '../../functions/addPlace';
 import { getCategories } from '../../functions/getCategory';
 import { verifyLabels } from '../../functions/verifyLabels';
 
-import('./place.css')
+import('./place.css');
 
-export const placePage = async (node) => {
-  node.innerHTML = "";
-  if (document.querySelector('.place-form')) return;
+export const placePage = async (node, fromReminder = false) => {
+  console.log('placePage called with fromReminder:', fromReminder); // Debug log
+
+  // Limpiamos el contenido existente
+  const existingContent = node.querySelector('.place-form, .reminder-form');
+  if (existingContent) {
+    existingContent.remove();
+  }
+
+  node.innerHTML = '';
 
   const placeForm = document.createElement('div');
   placeForm.classList.add('place-form');
@@ -18,11 +25,15 @@ export const placePage = async (node) => {
   const placeContainer = document.createElement('form');
   placeContainer.classList.add('place-container');
 
-  // Agregar el event listener al formulario
+  // Guardamos fromReminder en un data attribute
+  placeContainer.dataset.fromReminder = fromReminder;
+
+  // Evento submit del formulario
   placeContainer.addEventListener('submit', async (e) => {
     e.preventDefault();
-    console.log('Formulario enviado');
-    await addPlace();
+    const isFromReminder = e.target.dataset.fromReminder === 'true';
+    console.log('Form submitted with fromReminder:', isFromReminder); // Debug log
+    await addPlace(isFromReminder);
   });
 
   const createField = (labelText, inputType, inputId, inputName, isRequired = false, options = []) => {
@@ -70,10 +81,34 @@ export const placePage = async (node) => {
   fieldsWrapper.classList.add('fields-wrapper');
 
   const fields = [
-    { label: 'Nombre del lugar', type: 'text', id: 'place-name', name: 'placeName', required: true },
-    { label: 'Categoría', type: 'select', id: 'place-category', name: 'placeCategory' },
-    { label: 'Descripción', type: 'text', id: 'place-description', name: 'placeDescription' },
-    { label: 'Ubicación', type: 'text', id: 'location', name: 'location' }
+    {
+      label: 'Nombre del lugar',
+      type: 'text',
+      id: 'place-name',           // ID coincide con addPlace.js
+      name: 'name',
+      required: true
+    },
+    {
+      label: 'Categoría',
+      type: 'select',
+      id: 'place-category',       // ID coincide con addPlace.js
+      name: 'category',
+      required: true
+    },
+    {
+      label: 'Descripción',
+      type: 'text',
+      id: 'place-description',    // ID coincide con addPlace.js
+      name: 'description',
+      required: false
+    },
+    {
+      label: 'Ubicación',
+      type: 'text',
+      id: 'location',             // ID coincide con addPlace.js
+      name: 'location',
+      required: true
+    }
   ];
 
   const categories = await getCategories();
@@ -113,6 +148,9 @@ export const placePage = async (node) => {
   const cancelButton = createButton('Cancelar', 'button');
   cancelButton.addEventListener('click', () => {
     placeForm.remove();
+    if (fromReminder && existingReminderForm) {
+      existingReminderForm.style.display = 'flex';
+    }
   });
 
   // Añadir los botones en el orden correcto

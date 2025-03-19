@@ -30,10 +30,24 @@ export const addReminder = async () => {
     const reminderDescription = document.getElementById('reminder-description').value;
     const reminderDate = document.getElementById('reminder-date').value;
     const reminderTime = document.getElementById('reminder-time').value;
-    const reminderLocation = document.getElementById('reminder-location').value;
+    const locationSelect = document.getElementById('reminder-location');
+    const selectedOption = locationSelect.options[locationSelect.selectedIndex];
+    const locationText = selectedOption.textContent;
+
+    // Validación de fecha y hora
+    const now = new Date();
+    const selectedDateTime = new Date(`${reminderDate}T${reminderTime}`);
+
+    // Ajustamos la fecha actual para ignorar los segundos y milisegundos
+    now.setSeconds(0, 0);
+    selectedDateTime.setSeconds(0, 0);
+
+    if (selectedDateTime < now) {
+      throw new Error('No puedes crear recordatorios en el pasado');
+    }
 
     // Validamos que los datos no estén vacíos
-    if (!reminderName || !reminderDescription || !reminderDate || !reminderTime || !reminderLocation) {
+    if (!reminderName || !reminderDescription || !reminderDate || !reminderTime || !locationSelect.value) {
       throw new Error('Todos los campos son obligatorios');
     }
 
@@ -44,9 +58,11 @@ export const addReminder = async () => {
       description: reminderDescription,
       date: reminderDate,
       time: reminderTime,
-      location: reminderLocation,
+      location: locationText
     };
-    console.log('Datos del recordatorio:', reminderData);
+
+    // Log para depuración
+    console.log('Datos a enviar al servidor:', reminderData);
 
     // Realizamos la petición al servidor usando la función api
     const response = await api({
@@ -55,11 +71,17 @@ export const addReminder = async () => {
       body: reminderData,
       token: authToken,
     });
+
+    // Log para depuración
     console.log('Respuesta del servidor:', response);
 
-    // Manejamos la respuesta del servidor
     if (response) {
       console.log('Recordatorio creado:', response);
+
+      // Limpiamos los datos temporales
+      localStorage.removeItem('tempReminderData');
+      localStorage.removeItem('lastCreatedPlaceId');
+
       AlertNotification('Recordatorio creado', 'El recordatorio se ha creado correctamente', () => {
         // Limpiamos los campos del formulario
         document.getElementById('reminder-name').value = '';

@@ -68,7 +68,6 @@
   grid-template-columns: 1fr 3fr;
   align-items: center;
   gap: var(--kg-gap-md);
-  margin-bottom: var(--kg-margin-md);
 }
 
 .field-container label {

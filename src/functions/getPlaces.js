@@ -1,4 +1,4 @@
-import { api } from "../api/api";
+import { api } from '../api/api';
 
 export const getPlaces = async () => {
   try {
@@ -15,11 +15,11 @@ export const getPlaces = async () => {
       token: authToken
     });
 
-    if (!response.éxito) {
-      throw new Error(response.mensaje || 'Error al obtener lugares');
+    if (response && response.lugares) {
+      return response.lugares;
     }
 
-    return response.lugares || [];
+    return [];
   } catch (error) {
     console.error('Error al obtener lugares:', error);
     return [];

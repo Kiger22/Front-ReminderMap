@@ -21,7 +21,7 @@ export const loadReminders = async (options = { render: true }) => {
     }
 
     const response = await api({
-      endpoint: `/reminders/${userId}`,
+      endpoint: `reminders/${userId}`, // Removido el slash extra
       method: 'GET',
     });
 
@@ -55,29 +55,25 @@ export const loadReminders = async (options = { render: true }) => {
           return dateTimeA - dateTimeB;
         });
 
-        // Renderizar recordatorios si la opción está activada
-        if (options.render) {
-          uniqueReminders.forEach(reminder => {
-            try {
-              createReminderElement(reminder, remindersList);
-            } catch (renderError) {
-              console.error('Error al renderizar recordatorio:', renderError);
-            }
-          });
-        }
+        // Renderizar recordatorios
+        uniqueReminders.forEach(reminder => {
+          try {
+            createReminderElement(reminder, remindersList);
+          } catch (renderError) {
+            console.error('Error al renderizar recordatorio:', renderError);
+          }
+        });
 
         return uniqueReminders;
       }
 
-      // Si no se requiere renderizar, solo devolvemos los datos
       return response.recordatorios;
     }
 
     throw new Error('Formato de respuesta inválido');
 
   } catch (error) {
-    console.error('Error al cargar los recordatorios:', error);
-    AlertNotification('Error', error.message, () => { });
+    console.error('Error al cargar recordatorios:', error);
     return null;
   }
 };

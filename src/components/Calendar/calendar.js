@@ -1,6 +1,8 @@
 import { AlertNotification } from '../AlertNotification/notification';
 import { NotificationReminder } from '../ReminderNotification/reminderNotification';
 import { loadReminders } from '../../functions/loadReminders';
+import { reminderPageForm } from '../../pages/AddReminder/reminder';
+import { ButtonPlus } from '../ButtonPlus/buttonPlus';
 import('./calendar.scss');
 
 export const Calendar = async (node) => {
@@ -52,34 +54,39 @@ export const Calendar = async (node) => {
     ];
     monthYearDisplay.textContent = `${monthNames[currentMonth]} ${currentYear}`;
 
-    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const firstDay = new Date(currentYear, currentMonth, 1);
+    const lastDay = new Date(currentYear, currentMonth + 1, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
     // Agregar celdas vacías para los días antes del primer día del mes
-    for (let i = 0; i < firstDay; i++) {
+    for (let i = 0; i < firstDay.getDay(); i++) {
       const emptyCell = document.createElement('div');
       emptyCell.classList.add('day', 'empty');
       daysContainer.appendChild(emptyCell);
     }
 
     // Crear celdas para cada día del mes
-    for (let day = 1; day <= daysInMonth; day++) {
+    for (let day = 1; day <= lastDay.getDate(); day++) {
       const dayCell = document.createElement('div');
       dayCell.classList.add('day');
       dayCell.textContent = day;
 
-      // Formatear la fecha del calendario para comparar
+      // Verificar si el día es pasado
       const currentDate = new Date(currentYear, currentMonth, day);
       currentDate.setHours(0, 0, 0, 0);
-      const currentDateStr = currentDate.toISOString().split('T')[0];
+      const isPastDay = currentDate < today;
 
-      // Verificar si es el día actual
-      const today = new Date();
-      if (day === today.getDate() &&
-        currentMonth === today.getMonth() &&
-        currentYear === today.getFullYear()) {
+      if (isPastDay) {
+        dayCell.classList.add('past');
+      }
+
+      // Marcar el día actual
+      if (currentDate.getTime() === today.getTime()) {
         dayCell.classList.add('today');
       }
+
+      const currentDateStr = currentDate.toISOString().split('T')[0];
 
       // Buscar recordatorios para este día
       const dayReminders = reminders.filter(reminder => {
@@ -88,12 +95,25 @@ export const Calendar = async (node) => {
         return reminderDate.toISOString().split('T')[0] === currentDateStr;
       });
 
-      // Si hay recordatorios, añadir el borde
       if (dayReminders.length > 0) {
         dayCell.classList.add('has-reminder');
       }
 
       dayCell.addEventListener('click', () => {
+        // No hacer nada si es un día pasado
+        if (isPastDay) {
+          AlertNotification(
+            'Día no disponible',
+            'No puedes crear recordatorios en días pasados',
+            null,
+            { showCancelButton: false }
+          );
+          return;
+        }
+
+        const selectedDate = new Date(currentYear, currentMonth, day);
+        const formattedDate = selectedDate.toISOString().split('T')[0];
+
         if (dayReminders.length > 0) {
           // Ordenar recordatorios por hora
           dayReminders.sort((a, b) => {
@@ -120,21 +140,66 @@ export const Calendar = async (node) => {
                   </div>
                 `).join('')}
               </div>
+              <div class="calendar-button-plus-container"></div>
             </div>
           `;
 
-          // Mostrar la notificación con el contenido formateado
           AlertNotification(
             '',
             content,
             () => { },
             false
           );
+
+          // Agregar el ButtonPlus después de que se muestre la notificación
+          const buttonContainer = document.querySelector('.calendar-button-plus-container');
+          if (buttonContainer) {
+            ButtonPlus(buttonContainer, "AÑADIR RECORDATORIO");
+
+            const plusButton = buttonContainer.querySelector('.button_plus');
+            if (plusButton) {
+              plusButton.addEventListener('click', () => {
+                const notification = document.querySelector('.notification-overlay');
+                if (notification) notification.remove();
+
+                const heroContainer = document.querySelector('.hero-container');
+                // Pasamos true como tercer parámetro para indicar que venimos del calendario
+                reminderPageForm(heroContainer, formattedDate, true);
+              });
+            }
+          }
         } else {
+          const content = `
+            <div class="reminder-notification-content">
+              <p>No hay recordatorios programados para este día</p>
+              <div class="calendar-button-plus-container"></div>
+            </div>
+          `;
+
           AlertNotification(
             `${day} de ${monthNames[currentMonth]} ${currentYear}`,
-            'No hay recordatorios programados para este día'
+            content,
+            () => { },
+            false
           );
+
+          // Agregar el ButtonPlus después de que se muestre la notificación
+          const buttonContainer = document.querySelector('.calendar-button-plus-container');
+          if (buttonContainer) {
+            ButtonPlus(buttonContainer, "AÑADIR RECORDATORIO");
+
+            const plusButton = buttonContainer.querySelector('.button_plus');
+            if (plusButton) {
+              plusButton.addEventListener('click', () => {
+                const notification = document.querySelector('.notification-overlay');
+                if (notification) notification.remove();
+
+                const heroContainer = document.querySelector('.hero-container');
+                // Pasamos true como tercer parámetro para indicar que venimos del calendario
+                reminderPageForm(heroContainer, formattedDate, true);
+              });
+            }
+          }
         }
       });
 
