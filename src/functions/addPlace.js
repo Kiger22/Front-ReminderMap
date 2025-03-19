@@ -1,10 +1,9 @@
 import { api } from '../api/api';
 import { AlertNotification } from '../components/AlertNotification/notification';
 import { reminderPageForm } from '../pages/AddReminder/reminder';
+import { favoritesPlacesPage } from '../pages/FavoritesPlaces/favoritesPlaces';
 
 export const addPlace = async (fromReminder = false) => {
-  console.log('addPlace called with fromReminder:', fromReminder);
-
   try {
     const userId = localStorage.getItem('userId');
     const authToken = localStorage.getItem('authToken');
@@ -13,7 +12,7 @@ export const addPlace = async (fromReminder = false) => {
       throw new Error('No hay autorización');
     }
 
-    // Obtener el nodo contenedor actual
+    // Obtener el formulario y sus campos
     const currentForm = document.querySelector('.place-form');
     if (!currentForm || !currentForm.parentNode) {
       throw new Error('No se encontró el contenedor del formulario');
@@ -42,34 +41,41 @@ export const addPlace = async (fromReminder = false) => {
     }
 
     const placeResponse = await api({
-      endpoint: 'places',
+      endpoint: '/places',
       method: 'POST',
-      body: placeData,
-      token: authToken
+      body: placeData
     });
 
     if (placeResponse && placeResponse.lugar) {
       localStorage.setItem('newCreatedPlace', JSON.stringify(placeResponse.lugar));
 
-      if (fromReminder) {
-        console.log('Attempting to redirect back to reminder form');
-        console.log('Container node found:', !!containerNode);
+      // Función para limpiar el formulario
+      const clearForm = () => {
+        placeNameInput.value = '';
+        descriptionInput.value = '';
+        locationInput.value = '';
+        categoryInput.value = '';
+      };
 
-        if (containerNode) {
-          // Primero mostramos la notificación
-          AlertNotification('Éxito', 'Lugar agregado correctamente', async () => {
-            // Después de que el usuario cierre la notificación, redirigimos
-            try {
-              await reminderPageForm(containerNode);
-            } catch (error) {
-              console.error('Error al redirigir:', error);
-            }
-          });
-        } else {
-          console.error('No se encontró el contenedor para la redirección');
-        }
+      if (fromReminder) {
+        AlertNotification('Éxito', 'Lugar agregado correctamente', async () => {
+          clearForm();
+          try {
+            await reminderPageForm(containerNode);
+          } catch (error) {
+            console.error('Error al redirigir:', error);
+          }
+        });
       } else {
-        AlertNotification('Éxito', 'Lugar agregado correctamente', () => { });
+        AlertNotification('Éxito', 'Lugar agregado correctamente', () => {
+          clearForm();
+          currentForm.style.display = 'none';
+          // Redirigir a la página de lugares favoritos
+          const heroContainer = document.querySelector('.hero-container');
+          if (heroContainer) {
+            favoritesPlacesPage(heroContainer);
+          }
+        });
       }
 
       return true;

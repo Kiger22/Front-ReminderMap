@@ -1,6 +1,7 @@
 import { addPlace } from '../../functions/addPlace';
 import { getCategories } from '../../functions/getCategory';
 import { verifyLabels } from '../../functions/verifyLabels';
+import { favoritesPlacesPage } from '../FavoritesPlaces/favoritesPlaces';
 
 import('./place.css');
 
@@ -33,7 +34,13 @@ export const placePage = async (node, fromReminder = false) => {
     e.preventDefault();
     const isFromReminder = e.target.dataset.fromReminder === 'true';
     console.log('Form submitted with fromReminder:', isFromReminder); // Debug log
-    await addPlace(isFromReminder);
+
+    const success = await addPlace(isFromReminder);
+    if (success && !isFromReminder) {
+      // Si no viene desde reminder y fue exitoso, limpiamos y ocultamos el formulario
+      e.target.reset();
+      placeForm.style.display = 'none';
+    }
   });
 
   const createField = (labelText, inputType, inputId, inputName, isRequired = false, options = []) => {
@@ -150,6 +157,12 @@ export const placePage = async (node, fromReminder = false) => {
     placeForm.remove();
     if (fromReminder && existingReminderForm) {
       existingReminderForm.style.display = 'flex';
+    } else {
+      // Redirigir a la página de lugares favoritos
+      const heroContainer = document.querySelector('.hero-container');
+      if (heroContainer) {
+        favoritesPlacesPage(heroContainer);
+      }
     }
   });
 

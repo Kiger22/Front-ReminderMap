@@ -20,12 +20,16 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
   let places = [];
   try {
     places = await getPlaces();
-    const savedPlace = localStorage.getItem('newCreatedPlace');
+
+    // Verificar si hay un lugar seleccionado previamente
+    const savedPlace = localStorage.getItem('selectedPlace');
     if (savedPlace) {
       const place = JSON.parse(savedPlace);
-      if (!places.find(p => p._id === place._id)) {
+      if (!places.find(p => p._id === place.id)) {
         places.unshift(place);
       }
+      // Limpiar el localStorage después de usar el lugar
+      localStorage.removeItem('selectedPlace');
     }
   } catch (error) {
     console.error('Error al obtener lugares:', error);
@@ -243,7 +247,11 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
       '¿Deseas crear este recordatorio?',
       async (confirmed) => {
         if (confirmed) {
-          await addReminder();
+          try {
+            await addReminder();
+          } catch (error) {
+            console.error('Error al crear recordatorio:', error);
+          }
         }
       },
       { showCancelButton: true }

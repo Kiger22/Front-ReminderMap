@@ -2,6 +2,9 @@ import('./favoritesPlaces.css');
 import { api } from '../../api/api';
 import { AlertNotification } from '../../components/AlertNotification/notification';
 import { showCategoryDetails } from '../../functions/showCategoryDetails';
+import { toggleFavorite, removeFavorite } from '../../functions/toggleFavorite';
+import { getPlaces } from '../../functions/getPlaces';
+import { reminderPageForm } from '../AddReminder/reminder';
 
 export const favoritesPlacesPage = async (node) => {
   node.innerHTML = "";
@@ -79,24 +82,105 @@ export const favoritesPlacesPage = async (node) => {
 
         const useCount = document.createElement('span');
         useCount.classList.add('use-count');
-        useCount.textContent = `Usado ${place.useCount || 0} ${place.useCount === 1 ? 'vez' : 'veces'}`;
+        // Mejorar el formato del contador
+        const formatUseCount = (count) => {
+          count = Number(count) || 0; // Asegurarse de que count sea un número
+          if (count === 0) return 'No usado aún';
+          if (count === 1) return 'Usado 1 vez';
+          return `Usado ${count} veces`;
+        };
+        useCount.textContent = formatUseCount(place.useCount);
+        useCount.title = `Última actualización: ${place.updatedAt
+          ? new Date(place.updatedAt).toLocaleString()
+          : 'No disponible'
+          }`;
 
         // Contenedor para los iconos de acción
         const actionIcons = document.createElement('div');
         actionIcons.classList.add('action-icons');
 
-        // Botón de editar
+        // Crear todos los botones
+        const favoriteButton = document.createElement('img');
+        favoriteButton.classList.add('action-icon', 'favorite-icon');
+        favoriteButton.src = place.isFavorite
+          ? '../assets/heart-svgrepo1-com.svg'  // Corazón lleno
+          : '../assets/heart-svgrepo2-com.svg'; // Corazón vacío
+
+        // Agregar botón de recordatorio
+        const reminderButton = document.createElement('img');
+        reminderButton.classList.add('action-icon', 'reminder-icon');
+        reminderButton.src = '../assets/add-svgrepo-com.svg'; // Cambiado al ícono de add
+        reminderButton.title = 'Crear recordatorio para este lugar';
+
+        // Event listener para el botón de recordatorio
+        reminderButton.addEventListener('click', async () => {
+          try {
+            // Guardar temporalmente la información del lugar seleccionado
+            localStorage.setItem('selectedPlace', JSON.stringify({
+              id: place._id,
+              name: place.name,
+              location: place.location
+            }));
+
+            // Obtener el contenedor principal
+            const mainContainer = document.querySelector('.hero-container');
+            if (mainContainer) {
+              // Limpiar el contenedor actual
+              mainContainer.innerHTML = '';
+              // Cargar el formulario de recordatorio
+              await reminderPageForm(mainContainer);
+
+              // Pre-seleccionar el lugar en el formulario
+              const locationSelect = document.getElementById('reminder-location');
+              if (locationSelect) {
+                locationSelect.value = place.location;
+              }
+            }
+          } catch (error) {
+            console.error('Error al cargar formulario de recordatorio:', error);
+            AlertNotification('Error', 'No se pudo cargar el formulario de recordatorio', null, {
+              showCancelButton: false
+            });
+          }
+        });
+
         const editButton = document.createElement('img');
         editButton.src = './assets/edit-svgrepo-com.svg';
         editButton.classList.add('action-icon');
+
+        const deleteButton = document.createElement('img');
+        deleteButton.src = './assets/delette-svgrepo-com.svg';
+        deleteButton.classList.add('action-icon');
+
+        // Agregar los event listeners
+        favoriteButton.addEventListener('click', async () => {
+          try {
+            if (place.isFavorite) {
+              const success = await removeFavorite(place._id);
+              if (success) {
+                favoriteButton.src = '../assets/heart-svgrepo2-com.svg';
+                place.isFavorite = false;
+                // Actualizar la UI inmediatamente
+                await updatePlacesList();
+              }
+            } else {
+              const success = await toggleFavorite(place._id);
+              if (success) {
+                favoriteButton.src = '../assets/heart-svgrepo1-com.svg';
+                place.isFavorite = true;
+                // Actualizar la UI inmediatamente
+                await updatePlacesList();
+              }
+            }
+          } catch (error) {
+            console.error('Error al cambiar estado de favorito:', error);
+          }
+        });
+
         editButton.addEventListener('click', () => {
           showUpdateForm(place);
         });
 
-        // Botón de eliminar
-        const deleteButton = document.createElement('img');
-        deleteButton.src = './assets/delette-svgrepo-com.svg';
-        deleteButton.classList.add('action-icon');
         deleteButton.addEventListener('click', () => {
           AlertNotification(
             '¿Eliminar lugar?',
@@ -129,7 +213,9 @@ export const favoritesPlacesPage = async (node) => {
           );
         });
 
-        // Agregar los botones al contenedor de iconos
+        // Agregar todos los botones al contenedor de iconos en el orden correcto
+        actionIcons.appendChild(favoriteButton);
+        actionIcons.appendChild(reminderButton); // Agregar el nuevo botón
         actionIcons.appendChild(editButton);
         actionIcons.appendChild(deleteButton);
 
@@ -247,4 +333,167 @@ const showUpdateForm = (place) => {
   cancelButton.onclick = () => formContainer.remove();
 
   document.body.appendChild(formContainer);
+};
+
+// Función para actualizar la lista de lugares
+export const updatePlacesList = async () => {
+  const placesContainer = document.querySelector('.places-container');
+  if (!placesContainer) return;
+
+  try {
+    const places = await getPlaces();
+    placesContainer.innerHTML = '';
+    places.forEach(place => {
+      const placeItem = createPlaceItem(place);
+      placesContainer.appendChild(placeItem);
+    });
+  } catch (error) {
+    console.error('Error al actualizar lista de lugares:', error);
+  }
+};
+
+// Función para crear un elemento de lugar
+const createPlaceItem = (place) => {
+  const placeItem = document.createElement('div');
+  placeItem.classList.add('place-item');
+
+  // Contenedor de información principal
+  const placeInfo = document.createElement('div');
+  placeInfo.classList.add('place-info');
+
+  const placeName = document.createElement('h3');
+  placeName.textContent = place.name;
+
+  const placeAddress = document.createElement('p');
+  placeAddress.textContent = place.address || place.location;
+
+  const placeDescription = document.createElement('p');
+  placeDescription.classList.add('place-description');
+  placeDescription.textContent = place.description;
+
+  const placeCategory = document.createElement('span');
+  placeCategory.classList.add('place-category');
+  placeCategory.textContent = place.category ? place.category.name : 'Sin categoría';
+
+  if (place.category) {
+    placeCategory.style.cursor = 'pointer';
+    placeCategory.onclick = () => showCategoryDetails(place.category._id);
+  }
+
+  // Agregar elementos al placeInfo
+  placeInfo.appendChild(placeName);
+  placeInfo.appendChild(placeAddress);
+  placeInfo.appendChild(placeDescription);
+  placeInfo.appendChild(placeCategory);
+
+  // Contenedor de acciones (contador y botones)
+  const placeActions = document.createElement('div');
+  placeActions.classList.add('place-actions');
+
+  const useCount = document.createElement('span');
+  useCount.classList.add('use-count');
+  const formatUseCount = (count) => {
+    count = Number(count) || 0;
+    if (count === 0) return 'No usado aún';
+    if (count === 1) return 'Usado 1 vez';
+    return `Usado ${count} veces`;
+  };
+  useCount.textContent = formatUseCount(place.useCount);
+  useCount.title = `Última actualización: ${place.updatedAt
+    ? new Date(place.updatedAt).toLocaleString()
+    : 'No disponible'
+    }`;
+
+  // Contenedor para los iconos de acción
+  const actionIcons = document.createElement('div');
+  actionIcons.classList.add('action-icons');
+
+  // Crear y configurar los botones
+  const favoriteButton = document.createElement('img');
+  favoriteButton.classList.add('action-icon', 'favorite-icon');
+  favoriteButton.src = place.isFavorite
+    ? '../assets/heart-svgrepo1-com.svg'
+    : '../assets/heart-svgrepo2-com.svg';
+
+  const editButton = document.createElement('img');
+  editButton.src = './assets/edit-svgrepo-com.svg';
+  editButton.classList.add('action-icon');
+
+  const deleteButton = document.createElement('img');
+  deleteButton.src = './assets/delette-svgrepo-com.svg';
+  deleteButton.classList.add('action-icon');
+
+  // Configurar event listeners
+  favoriteButton.addEventListener('click', async () => {
+    try {
+      if (place.isFavorite) {
+        const success = await removeFavorite(place._id);
+        if (success) {
+          favoriteButton.src = '../assets/heart-svgrepo2-com.svg';
+          place.isFavorite = false;
+          await updatePlacesList();
+        }
+      } else {
+        const success = await toggleFavorite(place._id);
+        if (success) {
+          favoriteButton.src = '../assets/heart-svgrepo1-com.svg';
+          place.isFavorite = true;
+          await updatePlacesList();
+        }
+      }
+    } catch (error) {
+      console.error('Error al cambiar estado de favorito:', error);
+    }
+  });
+
+  editButton.addEventListener('click', () => {
+    showUpdateForm(place);
+  });
+
+  deleteButton.addEventListener('click', () => {
+    AlertNotification(
+      '¿Eliminar lugar?',
+      '¿Estás seguro de que deseas eliminar este lugar?',
+      async (confirmed) => {
+        if (confirmed) {
+          try {
+            await api({
+              endpoint: `/places/${place._id}`,
+              method: 'DELETE'
+            });
+
+            placeItem.remove();
+
+            if (!document.querySelector('.place-item')) {
+              location.reload();
+            }
+
+            AlertNotification('Éxito', 'Lugar eliminado correctamente', null, {
+              showCancelButton: false
+            });
+          } catch (error) {
+            console.error('Error al eliminar lugar:', error);
+            AlertNotification('Error', 'No se pudo eliminar el lugar', null, {
+              showCancelButton: false
+            });
+          }
+        }
+      }
+    );
+  });
+
+  // Agregar botones al contenedor de iconos
+  actionIcons.appendChild(favoriteButton);
+  actionIcons.appendChild(editButton);
+  actionIcons.appendChild(deleteButton);
+
+  // Agregar elementos al contenedor de acciones
+  placeActions.appendChild(useCount);
+  placeActions.appendChild(actionIcons);
+
+  // Agregar todo al item del lugar
+  placeItem.appendChild(placeInfo);
+  placeItem.appendChild(placeActions);
+
+  return placeItem;
 };

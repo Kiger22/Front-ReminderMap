@@ -129,10 +129,20 @@
 }
 
 .use-count {
-  color: var(--kg-text-secondary);
-  font-size: var(--kg-font-size-p);
-  font-style: italic;
-  white-space: nowrap;
+  font-size: 0.9em;
+  color: var(--kg-color-dark);
+  background-color: var(--kg-color-tertiary);
+  padding: 4px 8px;
+  border-radius: 12px;
+  display: inline-block;
+  margin-right: 10px;
+  transition: all 0.3s ease;
+}
+
+.use-count:hover {
+  transform: scale(1.05);
+  background-color: var(--kg-color-secondary);
+  color: var(--kg-color-light);
 }
 
 .no-places-message, .error-message {
@@ -190,14 +200,33 @@
 }
 
 .action-icon {
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
   cursor: pointer;
+  margin: 0 5px;
   transition: transform 0.2s ease;
 }
 
 .action-icon:hover {
-  transform: scale(1.2);
+  transform: scale(1.1);
+}
+
+.reminder-icon {
+  width: 30px;
+  height: 30px;
+}
+
+.favorite-icon {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.favorite-icon:hover {
+  transform: scale(1.1);
+}
+
+.favorite-icon.active {
+  filter: invert(39%) sepia(89%) saturate(2242%) hue-rotate(330deg) brightness(99%) contrast(96%);
 }
 
 .update-form-container {
