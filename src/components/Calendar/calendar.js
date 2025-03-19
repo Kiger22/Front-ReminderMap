@@ -95,8 +95,41 @@ export const Calendar = async (node) => {
 
       dayCell.addEventListener('click', () => {
         if (dayReminders.length > 0) {
-          // Pasar el primer recordatorio del día (o podrías mostrar una lista)
-          NotificationReminder(dayReminders[0]);
+          // Ordenar recordatorios por hora
+          dayReminders.sort((a, b) => {
+            const timeA = new Date(`${currentDateStr}T${a.time}`);
+            const timeB = new Date(`${currentDateStr}T${b.time}`);
+            return timeA - timeB;
+          });
+
+          // Crear el contenido formateado para la notificación
+          const content = `
+            <div class="reminder-notification-content">
+              <h3>Recordatorios para el ${day} de ${monthNames[currentMonth]} ${currentYear}</h3>
+              <div class="reminder-list">
+                ${dayReminders.map(reminder => `
+                  <div class="reminder-notification-item">
+                    <div class="reminder-header">
+                      <h4>${reminder.name}</h4>
+                      <span class="reminder-time">⏰ ${reminder.time}</span>
+                    </div>
+                    <div class="reminder-details">
+                      <p class="reminder-description">📝 ${reminder.description}</p>
+                      <p class="reminder-location">📍 ${reminder.location}</p>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+
+          // Mostrar la notificación con el contenido formateado
+          AlertNotification(
+            '',
+            content,
+            () => { },
+            false
+          );
         } else {
           AlertNotification(
             `${day} de ${monthNames[currentMonth]} ${currentYear}`,

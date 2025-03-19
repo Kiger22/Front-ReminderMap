@@ -74,6 +74,35 @@
   gap: var(--kg-gap-md);
 }
 
+.input-span select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--kg-color-primary);
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.input-span select:focus {
+  outline: none;
+  border-color: var(--kg-color-secondary);
+  box-shadow: 0 0 5px rgba(116, 206, 184, 0.5);
+}
+
+.input-span select option {
+  padding: 8px;
+  background-color: var(--kg-color-background);
+  color: var(--kg-color-text);
+}
+
+.input-span select option:disabled {
+  color: var(--kg-color-secondary);
+}
+
+/* Estilo especial para la opción de agregar nuevo lugar */
+.input-span select option[value="new"] {
+  font-weight: bold;
+}
 
 @media (max-width: 900px) {
   .reminder-form h2{

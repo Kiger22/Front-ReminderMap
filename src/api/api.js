@@ -4,6 +4,7 @@ export const api = async ({ endpoint, method = 'GET', body, token, isFormData = 
     const url = `${API_URL}/${endpoint}`;
 
     console.log('URL de la API:', url);
+    console.log('Datos a enviar:', body); // Debug
 
     // Crear objeto de cabeceras para la petición
     const headers = {};
@@ -23,10 +24,10 @@ export const api = async ({ endpoint, method = 'GET', body, token, isFormData = 
       body: isFormData ? body : (body ? JSON.stringify(body) : undefined)
     };
 
-    console.log('Opciones de la petición:', {
+    console.log('Opciones completas de la petición:', {
       method: options.method,
       headers: options.headers,
-      bodyType: isFormData ? 'FormData' : typeof options.body
+      body: options.body
     });
 
     if (method === 'GET') delete options.body;
@@ -35,13 +36,13 @@ export const api = async ({ endpoint, method = 'GET', body, token, isFormData = 
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.mensaje || data.message || 'Error en la petición');
+      throw new Error(data.message || data.error || 'Error en la petición');
     }
 
     return data;
   }
   catch (error) {
-    console.error('Error en la API:', error);
+    console.error('Error detallado en la API:', error);
     throw error;
   }
 };

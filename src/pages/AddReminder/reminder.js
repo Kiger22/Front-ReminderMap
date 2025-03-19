@@ -1,11 +1,13 @@
 
 import { addReminder } from '../../functions/addReminder';
 import { verifyLabels } from '../../functions/verifyLabels';
+import { getPlaces } from '../../functions/getPlaces';
+import { placePage } from '../AddPlace/place';
 
 import('./reminder.css');
 
 // Crear formulario de recordatorio
-export const reminderPageForm = (node) => {
+export const reminderPageForm = async (node) => {
   // Limpiar el contenido del nodo para evitar duplicados
   node.innerHTML = "";
 
@@ -14,6 +16,9 @@ export const reminderPageForm = (node) => {
     console.log("El formulario ya está abierto.");
     return;
   }
+
+  // Obtener lugares guardados
+  const places = await getPlaces();
 
   // Crear contenedor principal del formulario de recordatorio
   const reminderForm = document.createElement('div');
@@ -27,7 +32,7 @@ export const reminderPageForm = (node) => {
   fieldsContainer.classList.add('fields-container');
 
   // Función para crear cada campo del formulario
-  const createField = (labelText, inputType, inputId, inputName, isRequired = false, isIframe = false) => {
+  const createField = (labelText, inputType, inputId, inputName, isRequired = false, options = null) => {
     const span = document.createElement('span');
     span.classList.add('input-span');
 
@@ -35,22 +40,60 @@ export const reminderPageForm = (node) => {
     label.setAttribute('for', inputId);
     label.textContent = labelText;
 
-    // Si es un iframe, se crea como iframe; de lo contrario, como input
-    const input = isIframe
-      ? document.createElement('iframe')
-      : document.createElement('input');
+    let input;
 
-    if (isIframe) {
-      input.classList.add('iframe-address');
-      input.src = ''; // Asigna la URL si fuera necesario
-      input.frameBorder = '0';
-      input.allowFullscreen = true;
+    if (inputType === 'select') {
+      input = document.createElement('select');
+      input.id = inputId;
+      input.name = inputName;
+
+      // Opción por defecto
+      const defaultOption = document.createElement('option');
+      defaultOption.value = '';
+      defaultOption.textContent = '-- Seleccione un lugar --';
+      input.appendChild(defaultOption);
+
+      // Opción para agregar nuevo lugar
+      const newPlaceOption = document.createElement('option');
+      newPlaceOption.value = 'new';
+      newPlaceOption.textContent = '+ Agregar nuevo lugar';
+      input.appendChild(newPlaceOption);
+
+      // Agregar lugares existentes
+      if (options && options.length > 0) {
+        const separator = document.createElement('option');
+        separator.disabled = true;
+        separator.textContent = '──────────────';
+        input.appendChild(separator);
+
+        options.forEach(place => {
+          const option = document.createElement('option');
+          option.value = place.location;
+          option.textContent = `${place.name} (${place.location})`;
+          input.appendChild(option);
+        });
+      }
+
+      // Evento change para manejar la selección
+      input.addEventListener('change', (e) => {
+        if (e.target.value === 'new') {
+          // Abrir formulario de nuevo lugar
+          const hero = document.querySelector('.hero-container');
+          placePage(hero);
+          // Resetear el select
+          setTimeout(() => {
+            e.target.value = '';
+          }, 100);
+        }
+      });
     } else {
+      input = document.createElement('input');
       input.type = inputType;
       input.id = inputId;
       input.name = inputName;
-      if (isRequired) input.required = true;
     }
+
+    if (isRequired) input.required = true;
 
     span.appendChild(label);
     span.appendChild(input);
@@ -62,7 +105,7 @@ export const reminderPageForm = (node) => {
   fieldsContainer.appendChild(createField('Descripción', 'text', 'reminder-description', 'description', true));
   fieldsContainer.appendChild(createField('Cuando', 'date', 'reminder-date', 'date'));
   fieldsContainer.appendChild(createField('Hora', 'time', 'reminder-time', 'time'));
-  fieldsContainer.appendChild(createField('Dirección', 'text', 'reminder-location', 'location', false));
+  fieldsContainer.appendChild(createField('Lugar', 'select', 'reminder-location', 'location', false, places));
 
   // Contenedor para los botones
   const buttonsContainer = document.createElement('div');

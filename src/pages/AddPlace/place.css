@@ -56,22 +56,18 @@
   outline: 2px solid var(--kg-color-dark);
 }
 
-.buttons{
+.buttons {
+
   display: flex;
   flex-direction: column;
   justify-content: start;
   gap: var(--kg-gap-md);
 }
 
-
-.buttons [type="submit"]{
-border: 2px solid var(--kg-color-primary);
-font-size: var(--kg-font-size-link);
-}
-
+/* Estilos responsivos */
 @media (max-width: 900px) {
   .place-form h2{
-  font-size: var(--kg-font-size-h3);
+    font-size: var(--kg-font-size-h3);
   }
   .place-container{
     display: flex;
@@ -80,13 +76,9 @@ font-size: var(--kg-font-size-link);
     height: 100%;
     gap: var(--kg-gap-sm);
   }
-  .buttons{
-    display: flex;
-    flex-direction: column;
-    margin: 10px auto; ;
-    justify-content: start;
-    align-items: start;
-    gap: var(--kg-gap-md);
+  .buttons {
+    margin: 10px auto;
+    align-items: stretch;
   }
 } 
 
@@ -117,12 +109,8 @@ font-size: var(--kg-font-size-link);
     height: 100%;
     gap: var(--kg-gap-sm);
   }
-  .buttons{
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
+  .buttons {
     gap: var(--kg-gap-sm);
     margin-top: 5px;
-    font-size: var(--kg-font-size-p);
   }
 } 

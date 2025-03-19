@@ -42,25 +42,27 @@ export const createReminderElement = (reminder, remindersList) => {
     AlertNotification(
       '¿Eliminar recordatorio?',
       '¿Estás seguro de que deseas eliminar este recordatorio?',
-      async () => {
-        try {
-          console.log(`Eliminar recordatorio: ${reminder._id}`);
-          await deleteReminder(reminder._id);
-          reminderItem.remove();
+      async (confirmed) => {
+        if (confirmed) {
+          try {
+            await deleteReminder(reminder._id);
+            reminderItem.remove();
 
-          // Si ya no hay recordatorios en la lista, recargar
-          if (!document.querySelector('.reminder-item')) {
-            await loadReminders();
+            if (!document.querySelector('.reminder-item')) {
+              await loadReminders();
+            }
+
+            AlertNotification('Éxito', 'Recordatorio eliminado correctamente', null, {
+              showCancelButton: false // Solo mostrar botón de aceptar
+            });
+          } catch (error) {
+            console.error('Error al eliminar el recordatorio:', error);
+            AlertNotification('Error', 'No se pudo eliminar el recordatorio', null, {
+              showCancelButton: false
+            });
           }
-
-          // Mostrar mensaje de éxito
-          AlertNotification('Éxito', 'Recordatorio eliminado correctamente', () => { });
-        } catch (error) {
-          console.error('Error al eliminar el recordatorio:', error);
-          AlertNotification('Error', 'No se pudo eliminar el recordatorio.', () => { });
         }
-      },
-      false // Para que no se cierre automáticamente
+      }
     );
   });
 

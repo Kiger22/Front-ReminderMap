@@ -100,23 +100,26 @@ export const placePage = async (node) => {
     return button;
   };
 
+  // Crear botón de submit
+  const submitButton = createButton('Guardar Lugar', 'submit');
+
+  // Crear botón de reset
   const resetButton = createButton('Limpiar', 'reset');
   resetButton.addEventListener('click', () => {
     placeContainer.reset();
   });
 
+  // Crear botón de cancelar
   const cancelButton = createButton('Cancelar', 'button');
   cancelButton.addEventListener('click', () => {
     placeForm.remove();
   });
 
-  // Crear botón de submit
-  const submitButton = document.createElement('button');
-  submitButton.type = 'submit';
-  submitButton.textContent = 'Guardar Lugar';
-  submitButton.classList.add('submit-button');
-
+  // Añadir los botones en el orden correcto
   divButtons.appendChild(submitButton);
+  divButtons.appendChild(resetButton);
+  divButtons.appendChild(cancelButton);
+
   placeContainer.appendChild(divButtons);
   placeForm.appendChild(placeContainer);
   node.appendChild(placeForm);

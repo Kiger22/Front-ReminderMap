@@ -21,16 +21,16 @@ export const addCategory = async () => {
     const categoryData = {
       name: categoryName,
       description: descriptionName || '',
-      userId
+      userId: userId  // Asegurarnos de que userId se envía correctamente
     };
 
-    console.log('Intentando crear categoría:', categoryData);
+    console.log('Datos de categoría a enviar:', categoryData); // Debug
 
     const response = await api({
       endpoint: 'categories',
       method: 'POST',
       body: categoryData,
-      token: authToken
+      token: authToken  // Asegurarnos de enviar el token
     });
 
     console.log('Respuesta de creación de categoría:', response);

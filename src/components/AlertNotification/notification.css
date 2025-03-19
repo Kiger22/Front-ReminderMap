@@ -17,7 +17,7 @@
   border-radius: var(--kg-radius-md);
   position: absolute;
   left: 30em;
-  top: 10em;
+  top: 5em;
   width: 40rem;
   height: auto;
   font-size: var(--kg-font-size-text);
@@ -55,31 +55,31 @@
   gap: var(--kg-gap-md);
   justify-content: flex-end;
   margin-top: var(--kg-margin-md);
+  padding: var(--kg-padding-md);
 }
 
 .success-button-main-alert {
-  padding-top: 0.375rem;
-  padding-bottom: 0.375rem;
-  padding-left: 1rem;
-  padding-right:1rem;
+  padding: var(--kg-padding-sm) var(--kg-padding-lg);
   background-color: var(--kg-color-secondary);
   color: var(--kg-color-dark);
-  font-size: 1.2rem;
-  line-height: 1.25rem;
+  font-size: 1rem;
   font-weight: bold;
-  border-radius:var(--kg-radius-sd);
-  border: none
+  border-radius: var(--kg-radius-md);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .success-button-main-alert:hover {
-  background-color: var(--kg-color-secondary);
+  background-color: var(--kg-color-tertiary);
 }
 
 .success-button-secondary-alert {
   padding: var(--kg-padding-sm) var(--kg-padding-lg);
-  border-radius: var(--kg-radius-md);
   background-color: var(--kg-color-tertiary);
   color: var(--kg-color-dark);
+  font-size: 1rem;
+  border-radius: var(--kg-radius-md);
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -88,4 +88,92 @@
 .success-button-secondary-alert:hover {
   background-color: var(--kg-color-dark);
   color: var(--kg-color-tertiary);
+}
+
+.reminder-notification-content {
+  padding: 0 var(--kg-padding-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.reminder-notification-content h3 {
+  margin-bottom: 1.5rem;
+  color: var(--kg-text-dark);
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.reminder-list {
+  height: 250px; /* Altura fija */
+  overflow-y: auto;
+  padding-right: var(--kg-padding-md);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  
+  /* Estilo del scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--kg-color-tertiary) transparent;
+}
+
+/* Estilizar scrollbar para navegadores webkit */
+.reminder-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.reminder-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.reminder-list::-webkit-scrollbar-thumb {
+  background-color: var(--kg-color-tertiary);
+  border-radius: 4px;
+}
+
+.reminder-notification-item {
+  background-color: var(--kg-bg-secondary);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.category-details {
+  margin:var(--kg-margin-xl) var(--kg-margin-lg);
+  background-color: var(--kg-bg-secondary);
+  padding:var(--kg-padding-md);
+  display: flex;
+  flex-direction: column;
+  gap:var(--kg-gap-md);
+  color: var(--kg-color-dark);
+}
+
+.category-details h3 {
+  font-size: var(--kg-font-size-h3);
+}
+
+.category-details h4 {
+  margin-bottom: 1rem;
+  font-size: var(--kg-font-size-h4);
+}
+
+.places-list {
+  padding: var(--kg-padding-md);
+}
+
+.category-details p {
+  font-size: var(--kg-font-size-text);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .reminder-list {
+    height: 300px; /* Altura más pequeña para móviles */
+  }
+}
+
+@media (max-width: 480px) {
+  .reminder-list {
+    height: 250px;
+  }
 }

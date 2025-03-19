@@ -22,7 +22,8 @@ export const addPlace = async () => {
       placeName,
       categoryId,
       placeDescription,
-      placeLocation
+      placeLocation,
+      userId
     });
 
     // Validar datos
@@ -36,7 +37,7 @@ export const addPlace = async () => {
       description: placeDescription,
       location: placeLocation,
       category: categoryId,
-      userId: userId
+      userId: userId  // Incluir el userId en los datos
     };
 
     console.log('Intentando crear lugar:', placeData);
