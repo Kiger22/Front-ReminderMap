@@ -58,7 +58,6 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
       input.name = inputName;
 
       const defaultOption = document.createElement('option');
-      defaultOption.value = '';
       defaultOption.textContent = '-- Seleccione un lugar --';
       input.appendChild(defaultOption);
 
@@ -117,13 +116,21 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
       // Establecer valores por defecto para fecha y hora
       if (inputType === 'date') {
         const today = new Date();
+        today.setMinutes(today.getMinutes() - today.getTimezoneOffset()); // Ajuste de zona horaria
         input.min = today.toISOString().split('T')[0];
-        // Usar la fecha seleccionada si existe, si no usar la fecha actual
-        input.value = selectedDate || today.toISOString().split('T')[0];
+
+        if (selectedDate) {
+          input.value = selectedDate;
+        } else {
+          // Si no hay fecha seleccionada, usar la fecha actual
+          input.value = today.toISOString().split('T')[0];
+        }
       }
 
       if (inputType === 'time') {
         const now = new Date();
+        // Añadir 10 minutos a la hora actual
+        now.setMinutes(now.getMinutes() + 10);
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
         input.value = `${hours}:${minutes}`;
@@ -132,11 +139,18 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
       // Modificar la restauración de datos temporales
       const tempData = JSON.parse(localStorage.getItem('tempReminderData') || '{}');
       if (tempData[inputName]) {
-        if (inputType === 'date' && !selectedDate) { // Solo restaurar si no hay fecha seleccionada
+        if (inputType === 'date' && !selectedDate) {
           const tempDate = new Date(tempData[inputName]);
           const today = new Date();
           today.setHours(0, 0, 0, 0);
           if (tempDate >= today) {
+            input.value = tempData[inputName];
+          }
+        } else if (inputType === 'time') {
+          // Verificar que la hora temporal no esté en el pasado
+          const tempDateTime = new Date(`${document.getElementById('reminder-date').value}T${tempData[inputName]}`);
+          const nowPlus10 = new Date(Date.now() + 10 * 60000); // actual + 10 minutos
+          if (tempDateTime >= nowPlus10) {
             input.value = tempData[inputName];
           }
         } else if (inputType !== 'date') {

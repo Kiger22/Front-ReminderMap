@@ -5,6 +5,7 @@ import { showCategoryDetails } from '../../functions/showCategoryDetails';
 import { toggleFavorite, removeFavorite } from '../../functions/toggleFavorite';
 import { getPlaces } from '../../functions/getPlaces';
 import { reminderPageForm } from '../AddReminder/reminder';
+import { loadReminders } from '../../functions/loadReminders';
 
 export const favoritesPlacesPage = async (node) => {
   node.innerHTML = "";
@@ -82,9 +83,8 @@ export const favoritesPlacesPage = async (node) => {
 
         const useCount = document.createElement('span');
         useCount.classList.add('use-count');
-        // Mejorar el formato del contador
         const formatUseCount = (count) => {
-          count = Number(count) || 0; // Asegurarse de que count sea un número
+          count = Number(count) || 0;
           if (count === 0) return 'Sin uso';
           if (count === 1) return '1 vez';
           return `${count} veces`;
@@ -94,6 +94,71 @@ export const favoritesPlacesPage = async (node) => {
           ? new Date(place.updatedAt).toLocaleString()
           : 'No disponible'
           }`;
+
+        // Agregar el evento click al contador
+        useCount.style.cursor = 'pointer';
+        useCount.addEventListener('click', async () => {
+          try {
+            // Usar loadReminders con render: false para obtener todos los recordatorios
+            const reminders = await loadReminders({ render: false });
+
+            if (reminders) {
+              // Filtrar los recordatorios que corresponden a este lugar
+              const placeReminders = reminders.filter(reminder =>
+                reminder.location === place.location ||
+                (reminder.location && reminder.location._id === place._id)
+              );
+
+              // Ordenar por fecha y hora
+              placeReminders.sort((a, b) => {
+                const dateA = new Date(`${a.date.split('T')[0]}T${a.time}`);
+                const dateB = new Date(`${b.date.split('T')[0]}T${b.time}`);
+                return dateA - dateB;
+              });
+
+              const content = `
+                <div class="reminder-notification-content">
+                  <h3>Recordatorios en ${place.name}</h3>
+                  <div class="reminder-list">
+                    ${placeReminders.length > 0
+                  ? placeReminders.map(reminder => `
+                          <div class="reminder-notification-item">
+                            <div class="reminder-header">
+                              <h4>${reminder.name}</h4>
+                              <span class="reminder-time">⏰ ${reminder.time}</span>
+                            </div>
+                            <div class="reminder-details">
+                              <p class="reminder-description">📝 ${reminder.description}</p>
+                              <p class="reminder-date">📅 ${new Date(reminder.date).toLocaleDateString()}</p>
+                            </div>
+                          </div>
+                        `).join('')
+                  : '<p class="empty-message">No hay recordatorios registrados para este lugar</p>'
+                }
+                  </div>
+                </div>
+              `;
+
+              AlertNotification(
+                '',
+                content,
+                null,
+                {
+                  showCancelButton: false,
+                  confirmButtonText: 'Cerrar'
+                }
+              );
+            }
+          } catch (error) {
+            console.error('Error al obtener recordatorios:', error);
+            AlertNotification(
+              'Error',
+              'No se pudieron cargar los recordatorios',
+              null,
+              { showCancelButton: false }
+            );
+          }
+        });
 
         // Contenedor para los iconos de acción
         const actionIcons = document.createElement('div');

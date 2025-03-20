@@ -180,9 +180,10 @@
 
 /* Estilo específico para la opción "Agregar nuevo lugar" */
 .reminder-container .input-span > select option[value="new"] {
+  font-size: 20px !important;
   font-weight: bold !important;
-  background-color: var(--kg-color-primary) !important;
-  color: white !important;
+  background-color: var(--kg-color-dark) !important;
+  color: var(--kg-color-primary) !important;
   cursor: pointer !important;
 }
 
