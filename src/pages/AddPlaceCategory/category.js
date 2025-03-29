@@ -18,7 +18,7 @@ export const categoryPage = (node) => {
   const categoryContainer = document.createElement('form');
   categoryContainer.classList.add('category-container');
 
-  // Agregar el event listener al formulario
+  // Agregamos el event listener al formulario
   categoryContainer.addEventListener('submit', async (e) => {
     e.preventDefault();
     console.log('Formulario de categoría enviado');

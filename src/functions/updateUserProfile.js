@@ -71,13 +71,13 @@ export const updateUserProfile = async (formData, openSettingsCallback) => {
 
 // Función auxiliar para actualizar elementos de la UI
 const updateUIElements = (userData) => {
-  // Actualizar el título del header
+  // Actualizamos el título del header
   const titleHeader = document.getElementById('title-header');
   if (titleHeader && userData.name) {
     titleHeader.textContent = `¡Bienvenido, ${userData.name}!`;
   }
 
-  // Actualizar el avatar en el header
+  // Actualizamos el avatar en el header
   const userHeaderContainer = document.getElementById('user-header');
   if (userHeaderContainer) {
     const avatarImg = userHeaderContainer.querySelector('.avatar-img-header');

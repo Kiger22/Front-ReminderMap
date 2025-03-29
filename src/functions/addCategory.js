@@ -21,16 +21,16 @@ export const addCategory = async () => {
     const categoryData = {
       name: categoryName,
       description: descriptionName || '',
-      userId: userId  // Asegurarnos de que userId se envía correctamente
+      userId: userId  // Nos aseguramos de que userId se envía correctamente
     };
 
-    console.log('Datos de categoría a enviar:', categoryData); // Debug
+    console.log('Datos de categoría a enviar:', categoryData);
 
     const response = await api({
       endpoint: 'categories',
       method: 'POST',
       body: categoryData,
-      token: authToken  // Asegurarnos de enviar el token
+      token: authToken  // Nos aseguramos de enviar el token
     });
 
     console.log('Respuesta de creación de categoría:', response);
@@ -39,7 +39,7 @@ export const addCategory = async () => {
       throw new Error(response.message || 'Error al crear la categoría');
     }
 
-    // Limpiar formulario
+    // Limpiamos el formulario
     document.getElementById('category-name').value = '';
     document.getElementById('category-description').value = '';
 

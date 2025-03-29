@@ -4,7 +4,7 @@ import { loadReminders } from "./loadReminders";
 import { updateReminderForm } from "../components/UpdateReminderForm/updateReminder";
 
 export const createReminderElement = (reminder, remindersList) => {
-  // Verificar si el recordatorio ya existe en la lista
+  // Verificamos si el recordatorio ya existe en la lista
   if (document.getElementById(`reminder-${reminder._id}`)) return;
 
   const reminderItem = document.createElement('div');
@@ -50,7 +50,7 @@ export const createReminderElement = (reminder, remindersList) => {
   const deleteButton = document.createElement('img');
   deleteButton.src = '../assets/delette-svgrepo-com.svg';
   deleteButton.addEventListener('click', () => {
-    // Mostrar confirmación antes de eliminar
+    // Mostramos una notificación de confirmación antes de eliminar
     AlertNotification(
       '¿Eliminar recordatorio?',
       '¿Estás seguro de que deseas eliminar este recordatorio?',
@@ -78,7 +78,7 @@ export const createReminderElement = (reminder, remindersList) => {
     );
   });
 
-  // Añadir los elementos al contenedor
+  // Añadimos los elementos al contenedor
   reminderItem.appendChild(name);
   reminderItem.appendChild(description);
   reminderItem.appendChild(date);

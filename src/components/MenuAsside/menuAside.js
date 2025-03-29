@@ -24,7 +24,7 @@ export const createAsideMenu = (node, menuItems, menuItemsII) => {
     link.href = item.href || '#';
     li.appendChild(link);
 
-    // Añadir un contenedor de icono
+    // Añadimos un contenedor de icono
     if (item.icon) {
       const iconDiv = document.createElement("div");
       iconDiv.classList.add("menu-icon");
@@ -35,17 +35,17 @@ export const createAsideMenu = (node, menuItems, menuItemsII) => {
       iconImg.alt = `${item.title} icon`;
       iconDiv.appendChild(iconImg);
 
-      // Insertar el contenedor de icono en el enlace
+      // Insertamos el contenedor de icono en el enlace
       link.appendChild(iconDiv);
     }
 
-    // Añadir un contenedor para el texto
+    // Añadimos un contenedor para el texto
     const textDiv = document.createElement("div");
     textDiv.classList.add("menu-text");
     textDiv.textContent = item.title;
     link.appendChild(textDiv);
 
-    // Añadir acción si existe
+    // Añadimos acción si existe
     if (typeof item.action === 'function') {
       link.addEventListener('click', (e) => {
         e.preventDefault();
@@ -54,7 +54,7 @@ export const createAsideMenu = (node, menuItems, menuItemsII) => {
     }
   };
 
-  // Crear elementos de menú para el primer grupo
+  // Creamos elementos de menú para el primer grupo
   menuItems.forEach(item => {
     createMenuItem(item, ul);
   });
@@ -63,7 +63,7 @@ export const createAsideMenu = (node, menuItems, menuItemsII) => {
   ulII.classList.add("menu-list");
   nav.appendChild(ulII);
 
-  // Crear elementos de menú para el segundo grupo
+  // Creamos elementos de menú para el segundo grupo
   menuItemsII.forEach(item => {
     createMenuItem(item, ulII);
   });

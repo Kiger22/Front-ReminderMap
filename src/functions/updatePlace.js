@@ -3,7 +3,7 @@ import { AlertNotification } from "../components/AlertNotification/notification"
 
 export const updatePlace = async (placeId, oldCategoryId, newData) => {
   try {
-    // Actualizar el lugar
+    // Actualizamos el lugar
     const placeResponse = await api({
       endpoint: `/places/${placeId}`,
       method: 'PUT',
@@ -14,9 +14,9 @@ export const updatePlace = async (placeId, oldCategoryId, newData) => {
       throw new Error('Error al actualizar el lugar');
     }
 
-    // Si la categoría ha cambiado, actualizar ambas categorías
+    // Si la categoría ha cambiado, actualizamos ambas categorías
     if (newData.category && newData.category !== oldCategoryId) {
-      // Eliminar el lugar de la categoría anterior
+      // Eliminamos el lugar de la categoría anterior
       await api({
         endpoint: `/categories/${oldCategoryId}`,
         method: 'PUT',
@@ -26,7 +26,7 @@ export const updatePlace = async (placeId, oldCategoryId, newData) => {
         }
       });
 
-      // Añadir el lugar a la nueva categoría
+      // Añadimos el lugar a la nueva categoría
       await api({
         endpoint: `/categories/${newData.category}`,
         method: 'PUT',
@@ -37,12 +37,12 @@ export const updatePlace = async (placeId, oldCategoryId, newData) => {
       });
     }
 
-    AlertNotification('Éxito', 'Lugar actualizado correctamente', () => {}, false);
+    AlertNotification('Éxito', 'Lugar actualizado correctamente', () => { }, false);
     return placeResponse;
 
   } catch (error) {
     console.error('Error al actualizar el lugar:', error);
-    AlertNotification('Error', error.message, () => {});
+    AlertNotification('Error', error.message, () => { });
     throw error;
   }
 };

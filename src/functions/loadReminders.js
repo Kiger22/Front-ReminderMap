@@ -44,7 +44,7 @@ export const loadReminders = async (options = { render: true }) => {
           return [];
         }
 
-        // Procesar y ordenar recordatorios
+        // Procesamos y ordenamos los recordatorios
         const uniqueReminders = Array.from(
           new Map(response.recordatorios.map(reminder => [reminder._id, reminder])).values()
         );
@@ -55,7 +55,7 @@ export const loadReminders = async (options = { render: true }) => {
           return dateTimeA - dateTimeB;
         });
 
-        // Renderizar recordatorios
+        // Renderizamos los recordatorios
         uniqueReminders.forEach(reminder => {
           try {
             createReminderElement(reminder, remindersList);

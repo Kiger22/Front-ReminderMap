@@ -13,10 +13,10 @@ export const Calendar = async (node) => {
   let currentYear = currentDate.getFullYear();
   let reminders = [];
 
-  // Obtener recordatorios usando la función existente
+  // Obtenemos recordatorios usando la función existente
   reminders = await loadReminders({ render: false }) || [];
 
-  // Agregar un console.log para verificar los recordatorios cargados
+  // Agregamos un console.log para verificar los recordatorios cargados
   console.log('Recordatorios cargados:', reminders);
 
   const calendarContainer = document.createElement('div');
@@ -59,20 +59,20 @@ export const Calendar = async (node) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Agregar celdas vacías para los días antes del primer día del mes
+    // Agregamos celdas vacías para los días antes del primer día del mes
     for (let i = 0; i < firstDay.getDay(); i++) {
       const emptyCell = document.createElement('div');
       emptyCell.classList.add('day', 'empty');
       daysContainer.appendChild(emptyCell);
     }
 
-    // Crear celdas para cada día del mes
+    // Creamos celdas para cada día del mes
     for (let day = 1; day <= lastDay.getDate(); day++) {
       const dayCell = document.createElement('div');
       dayCell.classList.add('day');
       dayCell.textContent = day;
 
-      // Verificar si el día es pasado
+      // Verificamos si el día es pasado
       const currentDate = new Date(currentYear, currentMonth, day);
       currentDate.setHours(0, 0, 0, 0);
       const isPastDay = currentDate < today;
@@ -81,14 +81,14 @@ export const Calendar = async (node) => {
         dayCell.classList.add('past');
       }
 
-      // Marcar el día actual
+      // Marcamos el día actual
       if (currentDate.getTime() === today.getTime()) {
         dayCell.classList.add('today');
       }
 
       const currentDateStr = currentDate.toISOString().split('T')[0];
 
-      // Buscar recordatorios para este día
+      // Buscamos recordatorios para este día
       const dayReminders = reminders.filter(reminder => {
         const reminderDate = new Date(reminder.date);
         reminderDate.setHours(0, 0, 0, 0);
@@ -115,14 +115,14 @@ export const Calendar = async (node) => {
         const formattedDate = selectedDate.toISOString().split('T')[0];
 
         if (dayReminders.length > 0) {
-          // Ordenar recordatorios por hora
+          // Ordenamos los recordatorios por hora
           dayReminders.sort((a, b) => {
             const timeA = new Date(`${currentDateStr}T${a.time}`);
             const timeB = new Date(`${currentDateStr}T${b.time}`);
             return timeA - timeB;
           });
 
-          // Crear el contenido formateado para la notificación
+          // Creamos el contenido formateado para la notificación
           const content = `
             <div class="reminder-notification-content">
               <h3>Recordatorios para el ${day} de ${monthNames[currentMonth]} ${currentYear}</h3>
@@ -151,7 +151,7 @@ export const Calendar = async (node) => {
             false
           );
 
-          // Agregar el ButtonPlus después de que se muestre la notificación
+          // Agregamos el ButtonPlus después de que se muestre la notificación
           const buttonContainer = document.querySelector('.calendar-button-plus-container');
           if (buttonContainer) {
             ButtonPlus(buttonContainer, "AÑADIR RECORDATORIO");
@@ -183,7 +183,7 @@ export const Calendar = async (node) => {
             false
           );
 
-          // Agregar el ButtonPlus después de que se muestre la notificación
+          // Agregamos el ButtonPlus después de que se muestre la notificación
           const buttonContainer = document.querySelector('.calendar-button-plus-container');
           if (buttonContainer) {
             ButtonPlus(buttonContainer, "AÑADIR RECORDATORIO");
@@ -217,7 +217,7 @@ export const Calendar = async (node) => {
       currentYear++;
     }
 
-    // Actualizar recordatorios
+    // Actualizamos recordatorios
     reminders = await loadReminders({ render: false }) || [];
     console.log('Recordatorios actualizados al cambiar mes:', reminders);
     renderCalendar();

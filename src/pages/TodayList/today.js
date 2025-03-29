@@ -11,14 +11,14 @@ export const todayPage = async (node) => {
   header.textContent = "Recordatorios de Hoy";
   todayContainer.appendChild(header);
 
-  // Crear el contenedor para la lista de recordatorios
+  // Creamos el contenedor para la lista de recordatorios
   const remindersList = document.createElement('div');
   remindersList.classList.add('reminders-list');
   todayContainer.appendChild(remindersList);
 
   node.appendChild(todayContainer);
 
-  // Renderizar los recordatorios y notificaciones del día
+  // Renderizamos los recordatorios y notificaciones del día
   await renderTodayNotifications(todayContainer);
 };
 

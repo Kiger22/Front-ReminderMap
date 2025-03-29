@@ -11,7 +11,7 @@ export const heroPage = (node) => {
   node.innerHTML = '';
 
   // Creamos la primera pagina de nuestra APP
-  const hero = document.createElement("div");
+  const hero = document.createElement("section");
   hero.classList.add("hero");
   node.appendChild(hero);
 
@@ -64,11 +64,4 @@ export const heroPage = (node) => {
     //arrow.textContent = suggestionsDivs.classList.contains("hide") ? '<' : '>';
   });
   suggestionsDivs.classList.add("hide");
-
-  // Creamos el mapa
-  const Src_Map = "https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d12079.93823943867!2d0.6929329576949611!3d40.80633308204328!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2ses!4v1730927072599!5m2!1ses!2ses";
-  insertMap(hero, Src_Map);
 };
-
-
-

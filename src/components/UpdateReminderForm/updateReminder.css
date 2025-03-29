@@ -63,9 +63,6 @@
   margin-top: var(--kg-margin-lg);
 }
 
-#cancel-button, #update-button{
-  width: 50%;
-}
 
 @keyframes slideIn {
   from {

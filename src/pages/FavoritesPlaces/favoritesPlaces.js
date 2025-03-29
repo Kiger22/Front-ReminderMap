@@ -31,7 +31,7 @@ export const favoritesPlacesPage = async (node) => {
   const placesContainer = document.createElement('div');
   placesContainer.classList.add('places-container');
 
-  // Agregar header y contenedor al contenedor principal
+  // Agregamos el header y contenedor al contenedor principal
   placesPage.appendChild(placesHeader);
   placesPage.appendChild(placesContainer);
 
@@ -71,7 +71,7 @@ export const favoritesPlacesPage = async (node) => {
           placeCategory.onclick = () => showCategoryDetails(place.category._id);
         }
 
-        // Agregar elementos al placeInfo
+        // Agregamos elementos al placeInfo
         placeInfo.appendChild(placeName);
         placeInfo.appendChild(placeAddress);
         placeInfo.appendChild(placeDescription);
@@ -95,21 +95,21 @@ export const favoritesPlacesPage = async (node) => {
           : 'No disponible'
           }`;
 
-        // Agregar el evento click al contador
+        // Agregamos el evento click al contador
         useCount.style.cursor = 'pointer';
         useCount.addEventListener('click', async () => {
           try {
-            // Usar loadReminders con render: false para obtener todos los recordatorios
+            // Usamos loadReminders con render: false para obtener todos los recordatorios
             const reminders = await loadReminders({ render: false });
 
             if (reminders) {
-              // Filtrar los recordatorios que corresponden a este lugar
+              // Filtramos los recordatorios que corresponden a este lugar
               const placeReminders = reminders.filter(reminder =>
                 reminder.location === place.location ||
                 (reminder.location && reminder.location._id === place._id)
               );
 
-              // Ordenar por fecha y hora
+              // Ordenamos por fecha y hora
               placeReminders.sort((a, b) => {
                 const dateA = new Date(`${a.date.split('T')[0]}T${a.time}`);
                 const dateB = new Date(`${b.date.split('T')[0]}T${b.time}`);
@@ -164,14 +164,14 @@ export const favoritesPlacesPage = async (node) => {
         const actionIcons = document.createElement('div');
         actionIcons.classList.add('action-icons');
 
-        // Crear todos los botones
+        // Creamos todos los botones
         const favoriteButton = document.createElement('img');
         favoriteButton.classList.add('action-icon', 'favorite-icon');
         favoriteButton.src = place.isFavorite
           ? '../assets/heart-svgrepo1-com.svg'  // Corazón lleno
           : '../assets/heart-svgrepo2-com.svg'; // Corazón vacío
 
-        // Agregar botón de recordatorio
+        // Agregamos el botón de recordatorio
         const reminderButton = document.createElement('img');
         reminderButton.classList.add('action-icon', 'reminder-icon');
         reminderButton.src = '../assets/add-svgrepo-com.svg'; // Cambiado al ícono de add
@@ -180,19 +180,19 @@ export const favoritesPlacesPage = async (node) => {
         // Event listener para el botón de recordatorio
         reminderButton.addEventListener('click', async () => {
           try {
-            // Guardar temporalmente la información del lugar seleccionado
+            // Guardamos temporalmente la información del lugar seleccionado
             localStorage.setItem('selectedPlace', JSON.stringify({
               id: place._id,
               name: place.name,
               location: place.location
             }));
 
-            // Obtener el contenedor principal
+            // Obtenemos el contenedor principal
             const mainContainer = document.querySelector('.hero-container');
             if (mainContainer) {
-              // Limpiar el contenedor actual
+              // Limpiamos el contenedor actual
               mainContainer.innerHTML = '';
-              // Cargar el formulario de recordatorio
+              // Cargamos el formulario de recordatorio
               await reminderPageForm(mainContainer);
 
               // Pre-seleccionar el lugar en el formulario
@@ -225,14 +225,12 @@ export const favoritesPlacesPage = async (node) => {
               if (success) {
                 favoriteButton.src = '../assets/heart-svgrepo2-com.svg';
                 place.isFavorite = false;
-                // Ya no llamamos a updatePlacesList aquí
               }
             } else {
               const success = await toggleFavorite(place._id);
               if (success) {
                 favoriteButton.src = '../assets/heart-svgrepo1-com.svg';
                 place.isFavorite = true;
-                // Ya no llamamos a updatePlacesList aquí
               }
             }
           } catch (error) {
@@ -276,17 +274,17 @@ export const favoritesPlacesPage = async (node) => {
           );
         });
 
-        // Agregar todos los botones al contenedor de iconos en el orden correcto
+        // Agregamos todos los botones al contenedor de iconos en el orden correcto
         actionIcons.appendChild(favoriteButton);
         actionIcons.appendChild(reminderButton);
         actionIcons.appendChild(editButton);
         actionIcons.appendChild(deleteButton);
 
-        // Agregar elementos al contenedor de acciones
+        // Agregamos elementos al contenedor de acciones
         placeActions.appendChild(actionIcons);
         placeActions.appendChild(useCount);
 
-        // Agregar todo al item del lugar
+        // Agregamos todo al item del lugar
         placeItem.appendChild(placeInfo);
         placeItem.appendChild(placeActions);
         placesContainer.appendChild(placeItem);
@@ -319,7 +317,7 @@ const showUpdateForm = (place) => {
   const fieldsContainer = document.createElement('div');
   fieldsContainer.classList.add('fields-container');
 
-  // Crear campos del formulario
+  // Creamos los campos del formulario
   const fields = [
     { id: 'name', label: 'Nombre', value: place.name },
     { id: 'description', label: 'Descripción', value: place.description },
@@ -443,7 +441,7 @@ const createPlaceItem = (place) => {
     placeCategory.onclick = () => showCategoryDetails(place.category._id);
   }
 
-  // Agregar elementos al placeInfo
+  // Agregamos elementos al placeInfo
   placeInfo.appendChild(placeName);
   placeInfo.appendChild(placeAddress);
   placeInfo.appendChild(placeDescription);
@@ -471,7 +469,7 @@ const createPlaceItem = (place) => {
   const actionIcons = document.createElement('div');
   actionIcons.classList.add('action-icons');
 
-  // Crear y configurar los botones
+  // Creamos y configuramos los botones
   const favoriteButton = document.createElement('img');
   favoriteButton.classList.add('action-icon', 'favorite-icon');
   favoriteButton.src = place.isFavorite
@@ -486,7 +484,7 @@ const createPlaceItem = (place) => {
   deleteButton.src = './assets/delette-svgrepo-com.svg';
   deleteButton.classList.add('action-icon');
 
-  // Configurar event listeners
+  // Configuración de event listeners
   favoriteButton.addEventListener('click', async () => {
     try {
       if (place.isFavorite) {
@@ -545,16 +543,16 @@ const createPlaceItem = (place) => {
     );
   });
 
-  // Agregar botones al contenedor de iconos
+  // Agregamos los botones al contenedor de iconos
   actionIcons.appendChild(favoriteButton);
   actionIcons.appendChild(editButton);
   actionIcons.appendChild(deleteButton);
 
-  // Agregar elementos al contenedor de acciones
+  // Agregamos elementos al contenedor de acciones
   placeActions.appendChild(useCount);
   placeActions.appendChild(actionIcons);
 
-  // Agregar todo al item del lugar
+  // Agregamos todo al item del lugar
   placeItem.appendChild(placeInfo);
   placeItem.appendChild(placeActions);
 

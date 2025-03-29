@@ -23,7 +23,7 @@ export const createUserHeader = (node, avatarPath, settingsIconPath, openSetting
     NotificationReminder()
   });
 
-  // Manejar errores de carga de imagen
+  // Manejamos errores de carga de imagen
   avatarImg.onerror = () => {
     avatarImg.src = DEFAULT_AVATAR_PATH;
   };

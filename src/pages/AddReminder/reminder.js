@@ -21,14 +21,14 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
   try {
     places = await getPlaces();
 
-    // Verificar si hay un lugar seleccionado previamente
+    // Verificamos si hay un lugar seleccionado previamente
     const savedPlace = localStorage.getItem('selectedPlace');
     if (savedPlace) {
       const place = JSON.parse(savedPlace);
       if (!places.find(p => p._id === place.id)) {
         places.unshift(place);
       }
-      // Limpiar el localStorage después de usar el lugar
+      // Limpiamos el localStorage después de usar el lugar
       localStorage.removeItem('selectedPlace');
     }
   } catch (error) {
@@ -80,13 +80,13 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
         });
       }
 
-      // Restaurar datos temporales
+      // Restauración de datos temporales
       const tempData = JSON.parse(localStorage.getItem('tempReminderData') || '{}');
       if (tempData[inputName]) {
         input.value = tempData[inputName];
       }
 
-      // Verificar y seleccionar lugar recién creado
+      // Verificamos si hay un lugar recién creado y seleccionamos el lugar recién creado
       const savedPlace = localStorage.getItem('newCreatedPlace');
       if (savedPlace) {
         const place = JSON.parse(savedPlace);
@@ -95,7 +95,7 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
 
       input.addEventListener('change', async (e) => {
         if (e.target.value === 'new') {
-          // Guardar todos los datos del formulario actual
+          // Guardamos todos los datos del formulario actual
           const tempData = {
             name: document.getElementById('reminder-name').value,
             description: document.getElementById('reminder-description').value,
@@ -113,7 +113,7 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
       input.id = inputId;
       input.name = inputName;
 
-      // Establecer valores por defecto para fecha y hora
+      // Establecemos valores por defecto para fecha y hora
       if (inputType === 'date') {
         const today = new Date();
         today.setMinutes(today.getMinutes() - today.getTimezoneOffset()); // Ajuste de zona horaria
@@ -122,21 +122,21 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
         if (selectedDate) {
           input.value = selectedDate;
         } else {
-          // Si no hay fecha seleccionada, usar la fecha actual
+          // Si no hay fecha seleccionada, usamos la fecha actual
           input.value = today.toISOString().split('T')[0];
         }
       }
 
       if (inputType === 'time') {
         const now = new Date();
-        // Añadir 10 minutos a la hora actual
+        // Añadimos 10 minutos a la hora actual
         now.setMinutes(now.getMinutes() + 10);
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
         input.value = `${hours}:${minutes}`;
       }
 
-      // Modificar la restauración de datos temporales
+      // Modificamos la restauración de datos temporales
       const tempData = JSON.parse(localStorage.getItem('tempReminderData') || '{}');
       if (tempData[inputName]) {
         if (inputType === 'date' && !selectedDate) {
@@ -147,10 +147,16 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
             input.value = tempData[inputName];
           }
         } else if (inputType === 'time') {
-          // Verificar que la hora temporal no esté en el pasado
-          const tempDateTime = new Date(`${document.getElementById('reminder-date').value}T${tempData[inputName]}`);
-          const nowPlus10 = new Date(Date.now() + 10 * 60000); // actual + 10 minutos
-          if (tempDateTime >= nowPlus10) {
+          const dateInput = document.getElementById('reminder-date');
+          // Solo verificamos la hora si ya existe el campo de fecha
+          if (dateInput) {
+            const tempDateTime = new Date(`${dateInput.value}T${tempData[inputName]}`);
+            const nowPlus10 = new Date(Date.now() + 10 * 60000);
+            if (tempDateTime >= nowPlus10) {
+              input.value = tempData[inputName];
+            }
+          } else {
+            // Si no existe el campo de fecha, simplemente establecemos la hora
             input.value = tempData[inputName];
           }
         } else if (inputType !== 'date') {
@@ -166,7 +172,7 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
     return span;
   };
 
-  // Agregar campos al contenedor
+  // Agregamos los campos al contenedor
   fieldsContainer.appendChild(createField('Titulo', 'text', 'reminder-name', 'name', true));
   fieldsContainer.appendChild(createField('Descripción', 'text', 'reminder-description', 'description', true));
   fieldsContainer.appendChild(createField('Cuando', 'date', 'reminder-date', 'date'));
@@ -209,7 +215,7 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
   `;
 
   closeButton.addEventListener('click', async () => {
-    // Limpiar datos temporales
+    // Limpiamos los datos temporales
     localStorage.removeItem('tempReminderData');
     localStorage.removeItem('newCreatedPlace');
 
@@ -226,7 +232,7 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
     }
   });
 
-  // Agregar los botones al contenedor de botones
+  // Agregamos los botones al contenedor de botones
   buttonsContainer.appendChild(addButton);
   buttonsContainer.appendChild(resetButton);
   buttonsContainer.appendChild(closeButton);

@@ -12,7 +12,7 @@ export const addPlace = async (fromReminder = false) => {
       throw new Error('No hay autorización');
     }
 
-    // Obtener el formulario y sus campos
+    // Obtenemos el formulario y sus campos
     const currentForm = document.querySelector('.place-form');
     if (!currentForm || !currentForm.parentNode) {
       throw new Error('No se encontró el contenedor del formulario');
@@ -28,22 +28,24 @@ export const addPlace = async (fromReminder = false) => {
       throw new Error('No se encontraron todos los campos del formulario');
     }
 
+    // Validamos que los campos requeridos no estén vacíos
+    if (!placeNameInput.value.trim() || !locationInput.value.trim() || !categoryInput.value) {
+      throw new Error('El nombre, la ubicación y la categoría son obligatorios');
+    }
+
     const placeData = {
       name: placeNameInput.value.trim(),
       description: descriptionInput.value.trim(),
       location: locationInput.value.trim(),
-      category: categoryInput.value.trim(),
+      category: categoryInput.value, // Este es el ID de la categoría seleccionada
       userId: userId
     };
 
-    if (!placeData.name || !placeData.location) {
-      throw new Error('El nombre y la ubicación son obligatorios');
-    }
-
     const placeResponse = await api({
-      endpoint: '/places',
+      endpoint: 'places',
       method: 'POST',
-      body: placeData
+      body: placeData,
+      token: authToken
     });
 
     if (placeResponse && placeResponse.lugar) {

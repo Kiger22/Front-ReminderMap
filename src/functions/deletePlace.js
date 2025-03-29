@@ -3,7 +3,7 @@ import { AlertNotification } from "../components/AlertNotification/notification"
 
 export const deletePlace = async (placeId, categoryId) => {
   try {
-    // Eliminar el lugar
+    // Eliminamos el lugar
     const placeResponse = await api({
       endpoint: `/places/${placeId}`,
       method: 'DELETE'
@@ -13,7 +13,7 @@ export const deletePlace = async (placeId, categoryId) => {
       throw new Error('Error al eliminar el lugar');
     }
 
-    // Eliminar la referencia del lugar en la categoría
+    // Eliminamos la referencia del lugar en la categoría
     await api({
       endpoint: `/categories/${categoryId}`,
       method: 'PUT',
@@ -23,12 +23,12 @@ export const deletePlace = async (placeId, categoryId) => {
       }
     });
 
-    AlertNotification('Éxito', 'Lugar eliminado correctamente', () => {}, false);
+    AlertNotification('Éxito', 'Lugar eliminado correctamente', () => { }, false);
     return placeResponse;
 
   } catch (error) {
     console.error('Error al eliminar el lugar:', error);
-    AlertNotification('Error', error.message, () => {});
+    AlertNotification('Error', error.message, () => { });
     throw error;
   }
 };

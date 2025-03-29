@@ -291,24 +291,6 @@
   outline: 2px solid var(--kg-color-grey);
 }
 
-
-#cancel-button, #update-button {
-  width: 50%;
-  padding: var(--kg-padding-sm);
-  border-radius: var(--kg-radius-md);
-  background-color: var(--kg-color-dark);
-  color: var(--kg-color-secondary);
-  border: 2px solid var(--kg-color-dark);
-  cursor: pointer;
-  transition: all 300ms;
-  font-weight: 600;
-}
-
-#cancel-button:hover, #update-button:hover {
-  background-color: transparent;
-  color: var(--kg-color-dark);
-}
-
 @keyframes slideIn {
   from {
     opacity: 0;

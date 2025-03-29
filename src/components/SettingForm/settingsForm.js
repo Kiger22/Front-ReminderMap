@@ -55,7 +55,7 @@ export const createSettingsForm = (userData) => {
       };
       reader.readAsDataURL(file);
     } else {
-      // Si no se selecciona archivo, volver a la imagen por defecto
+      // Si no se selecciona archivo, volvemos a la imagen por defecto
       currentAvatar.src = DEFAULT_AVATAR_PATH;
       const headerAvatar = document.querySelector('.avatar-img-header');
       if (headerAvatar) {
@@ -98,15 +98,15 @@ export const createSettingsForm = (userData) => {
   const buttonContainer = document.createElement('div');
   buttonContainer.classList.add('button-container');
 
-  // Crear botones usando el componente button
+  // Creamos botones usando el componente button
   createButton(buttonContainer, 'Guardar', 'save-button', async (e) => {
     e.preventDefault();
 
-    // Deshabilitar el botón mientras se procesa
+    // Deshabilitamos el botón mientras se procesa
     const saveButton = document.querySelector('#save-button');
     if (saveButton) saveButton.disabled = true;
 
-    // Crear y mostrar el loader
+    // Creamos y mostramos el loader
     createLoader(document.body);
 
     const formData = new FormData();
@@ -130,11 +130,11 @@ export const createSettingsForm = (userData) => {
     } catch (error) {
       console.error('Error al actualizar el perfil:', error);
     } finally {
-      // Remover el loader
+      // Removemos el loader
       const loader = document.querySelector('.loader');
       if (loader) loader.remove();
 
-      // Rehabilitar el botón
+      // Rehabilitamos el botón
       if (saveButton) saveButton.disabled = false;
     }
   });

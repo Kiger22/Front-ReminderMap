@@ -83,7 +83,7 @@ export const updateReminderForm = (reminder) => {
     }
   };
 
-  // Crear botones usando el componente createButton
+  // Creamos botones usando el componente createButton
   createButton(buttonsContainer, "Actualizar", "update-button", (e) => {
     e.preventDefault();
     handleUpdate(e);

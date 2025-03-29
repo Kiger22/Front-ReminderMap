@@ -12,7 +12,7 @@ export const addReminder = async () => {
       throw new Error('No hay autorización');
     }
 
-    // Obtener los valores del formulario
+    // Obtenemos los valores del formulario
     const nameInput = document.getElementById('reminder-name');
     const descriptionInput = document.getElementById('reminder-description');
     const dateInput = document.getElementById('reminder-date');
@@ -47,7 +47,7 @@ export const addReminder = async () => {
       }
     }
 
-    // Crear el objeto con los datos del recordatorio
+    // Creamos el objeto con los datos del recordatorio
     const reminderData = {
       name: nameInput.value,
       description: descriptionInput.value,
@@ -57,7 +57,7 @@ export const addReminder = async () => {
       userId: userId
     };
 
-    // Enviar el recordatorio
+    // Enviamos el recordatorio
     const response = await api({
       endpoint: '/reminders',
       method: 'POST',

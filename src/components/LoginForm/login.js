@@ -95,7 +95,7 @@ export const createLoginForm = () => {
   });
   forgotPasswordSpan.appendChild(forgotPasswordLink);
 
-  // Agregar el EventListener al formulario
+  // Agregamos el EventListener al formulario
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     loging();

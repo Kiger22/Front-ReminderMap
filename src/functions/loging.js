@@ -10,7 +10,7 @@ import { openProfileSettings } from "../components/SettingForm/settingsForm";
 // Función principal de login
 export const loging = async () => {
 
-  // Crear y mostrar el loader
+  // Creamos y mostramos el loader
   createLoader(divApp);
 
   // Tiempo mínimo que el loader debe estar visible 

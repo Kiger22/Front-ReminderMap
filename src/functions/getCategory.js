@@ -8,14 +8,15 @@ export const getCategories = async (userId = null) => {
     const response = await api({
       endpoint,
       method: 'GET',
-      token: authToken // Añadir el token
+      token: authToken
     });
 
     if (!response || !response.categories) {
-      console.error('Respuesta inválida:', response);
+      console.error('Respuesta inválida de categorías:', response);
       return [];
     }
 
+    // Mapeamos las categorías al formato esperado
     return response.categories.map(category => ({
       value: category._id,
       label: category.name,
