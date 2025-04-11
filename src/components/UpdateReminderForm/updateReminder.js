@@ -1,8 +1,9 @@
 import { AlertNotification } from "../AlertNotification/notification";
 import { api } from "../../api/api";
-import { loadReminders } from "../../functions/loadReminders";
+import { loadReminders } from "../../functions/reminders/loadReminders";
 import { createButton } from "../Button/button";
 import('./updateReminder.css');
+import { createField } from "../../utils/formUtils";
 
 export const updateReminderForm = (reminder) => {
 
@@ -22,31 +23,12 @@ export const updateReminderForm = (reminder) => {
   const fieldsContainer = document.createElement('div');
   fieldsContainer.classList.add('fields-container');
 
-  const createField = (labelText, inputType, inputId, value) => {
-    const span = document.createElement('span');
-    span.classList.add('input-span');
-
-    const label = document.createElement('label');
-    label.setAttribute('for', inputId);
-    label.textContent = labelText;
-
-    const input = document.createElement('input');
-    input.type = inputType;
-    input.id = inputId;
-    input.value = value;
-    input.required = true;
-
-    span.appendChild(label);
-    span.appendChild(input);
-    return span;
-  };
-
   // Creamos los campos con los valores actuales del recordatorio
-  fieldsContainer.appendChild(createField('Título', 'text', 'update-reminder-name', reminder.name));
-  fieldsContainer.appendChild(createField('Descripción', 'text', 'update-reminder-description', reminder.description));
-  fieldsContainer.appendChild(createField('Fecha', 'date', 'update-reminder-date', reminder.date.split('T')[0]));
-  fieldsContainer.appendChild(createField('Hora', 'time', 'update-reminder-time', reminder.time));
-  fieldsContainer.appendChild(createField('Ubicación', 'text', 'update-reminder-location', reminder.location));
+  fieldsContainer.appendChild(createField('Título', 'text', 'update-reminder-name', 'name', true, null, reminder.name));
+  fieldsContainer.appendChild(createField('Descripción', 'text', 'update-reminder-description', 'description', true, null, reminder.description));
+  fieldsContainer.appendChild(createField('Fecha', 'date', 'update-reminder-date', 'date', true, null, reminder.date.split('T')[0]));
+  fieldsContainer.appendChild(createField('Hora', 'time', 'update-reminder-time', 'time', true, null, reminder.time));
+  fieldsContainer.appendChild(createField('Ubicación', 'text', 'update-reminder-location', 'location', true, null, reminder.location));
 
   // Contenedor para botones
   const buttonsContainer = document.createElement('div');

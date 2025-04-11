@@ -11,8 +11,8 @@
   justify-content: center;
   border-radius: 50%;
   overflow: hidden;
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
 }
 
 .avatar-img-header {
@@ -21,10 +21,9 @@
   object-fit: cover;
 }
 
-/* Selector específico para el avatar por defecto */
 .avatar-img-header[src*="user-circle-svgrepo-com.svg"] {
-  width: 70%;
-  height: 70%;
+  width: 60%;
+  height: 60%;
 }
 
 .settings-container {
@@ -34,15 +33,15 @@
 }
 
 .settings-icon {
-  width: 45px;
-  height: 45px;
+  width: 40px;
+  height: 40px;
 }
 
 .logout-icon{
   cursor: pointer;
   display: none;
-  width: 45px;
-  height: 45px;
+  width: 40px;
+  height: 40px;
 }
 
 @media (max-width: 900px) {
@@ -60,11 +59,10 @@
   }
 
   .avatar-container-header {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
   }
 
-  /* Mantener la proporción en responsive */
   .avatar-img-header[src*="user-circle-svgrepo-com.svg"] {
     width: 70%;
     height: 70%;
@@ -72,7 +70,6 @@
 } 
 
 @media (max-width: 500px) {
-  /* Mantener la proporción en móviles */
   .avatar-img-header[src*="user-circle-svgrepo-com.svg"] {
     width: 70%;
     height: 70%;

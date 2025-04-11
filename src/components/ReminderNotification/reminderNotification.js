@@ -1,6 +1,10 @@
 import('./reminderNotification.css');
 
 export const NotificationReminder = (reminder) => {
+  // Creamos el overlay
+  const overlay = document.createElement('div');
+  overlay.classList.add('reminder-notification-overlay');
+
   // Creamos contenedor principal de notificación
   const notificationsContainer = document.createElement('div');
   notificationsContainer.classList.add('reminder-notifications-container');
@@ -46,7 +50,7 @@ export const NotificationReminder = (reminder) => {
   seenButton.classList.add('success-button-main');
   seenButton.textContent = 'Visto';
   seenButton.addEventListener('click', () => {
-    notificationsContainer.remove();
+    overlay.remove();
   });
 
   // Creamos botón "Posponer"
@@ -56,6 +60,7 @@ export const NotificationReminder = (reminder) => {
   snoozeButton.textContent = 'Posponer';
   snoozeButton.addEventListener('click', () => {
     alert('Recordatorio pospuesto por 10 minutos');
+    overlay.remove();
   });
 
   // Creamos botón "Cancelar"
@@ -64,7 +69,7 @@ export const NotificationReminder = (reminder) => {
   cancelButton.classList.add('success-button-secondary');
   cancelButton.textContent = 'Cancelar';
   cancelButton.addEventListener('click', () => {
-    notificationsContainer.remove();
+    overlay.remove();
   });
 
   // Agregamos los botones al contenedor de botones
@@ -82,5 +87,6 @@ export const NotificationReminder = (reminder) => {
   notificationsContainer.appendChild(reminderDiv);
 
   // Agregamos el contenedor de notificación al body del documento
-  document.body.appendChild(notificationsContainer);
+  document.body.appendChild(overlay);
+  overlay.appendChild(notificationsContainer);
 };

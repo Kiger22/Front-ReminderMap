@@ -2,7 +2,7 @@ import("./buttonPlus.css");
 
 export const ButtonPlus = (node, text) => {
   const caja = document.createElement("div");
-  caja.classList.add("caja");
+  caja.classList.add("box_plus");
   node.appendChild(caja);
 
   const button = document.createElement("div");

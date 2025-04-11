@@ -3,7 +3,7 @@ import { AlertNotification } from "../AlertNotification/notification";
 import { ButtonPlus } from "../ButtonPlus/buttonPlus";
 import { Home } from "../Home/home";
 import { createLoginForm } from "../LoginForm/login";
-import { insertMap } from "../Map/insertMap";
+import { insertMap } from "../../components/Map/insertMap";
 
 import("./hero.css");
 

@@ -31,7 +31,7 @@ export const createAsideMenu = (node, menuItems, menuItemsII) => {
 
       const iconImg = document.createElement("img");
       iconImg.classList.add("icon");
-      iconImg.src = item.icon; // Aquí va la ruta del archivo SVG
+      iconImg.src = item.icon;
       iconImg.alt = `${item.title} icon`;
       iconDiv.appendChild(iconImg);
 
@@ -68,6 +68,3 @@ export const createAsideMenu = (node, menuItems, menuItemsII) => {
     createMenuItem(item, ulII);
   });
 };
-
-
-

@@ -5,6 +5,9 @@
   background-color: var(--kg-color-dark);
   opacity: 95%;
   z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .form {
@@ -152,4 +155,4 @@
     top: 5%;
     gap: 1rem;
   }
-} 
+}

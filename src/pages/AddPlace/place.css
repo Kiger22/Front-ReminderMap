@@ -1,6 +1,6 @@
 .place-form {
   justify-self: center;
-  width: 90%;
+  width: 80%;
   height: 80%;
   margin: auto auto;
   display: flex;
@@ -176,12 +176,37 @@
   transition: all 0.2s ease;
 }
 
+.location-search-button img {
+  width: 30px;
+  height: 30px;
+}
+
 .location-search-button:hover {
-  background-color: var(--kg-color-primary);
+  background-color: var(--kg-color-tertiary);
 }
 
 .location-search-button i {
   font-size: 1.2rem;
+}
+
+/* Añadimos estilos para el mensaje de no categorías */
+.no-categories-message, .error-message {
+  padding: var(--kg-padding-md);
+  background-color: var(--kg-color-tertiary);
+  border-radius: var(--kg-radius-md);
+  margin:0 0 var(--kg-margin-md)  0;
+  width: 100%;
+}
+
+.error-message {
+  background-color: var(--kg-color-error);
+  color: var(--kg-color-light);
+}
+
+/* Estilo para el botón dentro del mensaje */
+.no-categories-message button, .error-message button {
+  margin-top: var(--kg-margin-md);
+  padding: var(--kg-padding-sm) var(--kg-padding-md);
 }
 
 @media (max-width: 900px) {

@@ -1,5 +1,4 @@
 import { Calendar } from '../../components/Calendar/calendar';
-
 import('./calendar.css');
 
 export const calendarPage = (node) => {

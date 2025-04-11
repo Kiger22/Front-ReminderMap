@@ -1,8 +1,7 @@
-import { AlertNotification } from '../AlertNotification/notification';
-import { NotificationReminder } from '../ReminderNotification/reminderNotification';
-import { loadReminders } from '../../functions/loadReminders';
+import { AlertNotification } from '../../components/AlertNotification/notification';
+import { loadReminders } from '../../functions/reminders/loadReminders';
 import { reminderPageForm } from '../../pages/AddReminder/reminder';
-import { ButtonPlus } from '../ButtonPlus/buttonPlus';
+import { ButtonPlus } from '../../components/ButtonPlus/buttonPlus';
 import('./calendar.scss');
 
 export const Calendar = async (node) => {

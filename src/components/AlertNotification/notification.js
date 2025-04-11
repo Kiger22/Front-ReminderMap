@@ -3,7 +3,7 @@ import('./notification.css');
 export const AlertNotification = (title, content, callback, options = {}) => {
   const defaultOptions = {
     autoClose: false,
-    autoCloseTime: 3000,
+    autoCloseTime: 5000,
     showCancelButton: true
   };
 
@@ -68,10 +68,12 @@ export const AlertNotification = (title, content, callback, options = {}) => {
   acceptButton.textContent = 'Aceptar';
   acceptButton.onclick = () => {
     overlay.remove();
-    if (callback) callback(true); // Pasamos true para indicar que se aceptó
+    if (callback) callback(true);
   };
 
-  // Creamos el botón de cancelar
+  buttonContainer.appendChild(acceptButton);
+
+  // Creamos el botón de cancelar si está habilitado
   if (mergedOptions.showCancelButton) {
     const cancelButton = document.createElement('button');
     cancelButton.type = 'button';
@@ -79,13 +81,12 @@ export const AlertNotification = (title, content, callback, options = {}) => {
     cancelButton.textContent = 'Cancelar';
     cancelButton.onclick = () => {
       overlay.remove();
-      if (callback) callback(false); // Pasamos false para indicar que se canceló
+      if (callback) callback(false);
     };
     buttonContainer.appendChild(cancelButton);
   }
 
   // Ensamblamos la notificación
-  buttonContainer.appendChild(acceptButton);
   contentWrap.appendChild(buttonContainer);
   flexDiv.appendChild(contentWrap);
   successDiv.appendChild(flexDiv);

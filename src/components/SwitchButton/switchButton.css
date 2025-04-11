@@ -1,28 +1,16 @@
-.switch-container{
-  position: fixed;
-  bottom: 2.5rem;
-  left: 0.5%;
-  z-index: 14;
-}
-
-#switch,
-#circle {
-
-  height: 30px;
-  transition: all 0.4s cubic-bezier(0.54, 1.6, 0.5, 1);
-  transition: all 0.4s cubic-bezier(0.54, 1.6, 0.5, 1);
-} 
-
 #switch {
-  width: 50px;
-  left: 50px;
+  width: 60px;
+  height: 30px;
+  padding: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
   border: 3px solid var(--kg-bg-secondary);
   border-radius: 27px;
-  background: var(--kg-bg-darks);
-  position: relative;
 }
 
 #circle {
+  transition: transform 0.3s;
   margin-top: 5%;
   margin-left: 5%;
   width: 40%;
@@ -31,24 +19,24 @@
   background: var(--kg-bg-secondary);
 }
 
+#circle.on {
+  transform: translateX(25px);
+  background-color: var(--kg-color-secondary);
+}
+
 .switched {
   border-color: var(--kg-bg-darks) !important;
   background: var(--kg-bg-secondary) !important;
 }
 
-.switched #circle {
-  margin-left: 55%;
-  background: var(--kg-bg-dark);
-}
-
 @media (max-width: 900px) {
-  .switch-container{
+  .switch-container {
     bottom: 3.5rem;
   }
-} 
+}
 
 @media (max-width: 500px) {
-  .switch-container{
+  .switch-container {
     bottom: 2rem;
   }
-} 
+}

@@ -13,7 +13,7 @@ export const createLoader = (node) => {
   // Establecemos un timeout para asegurar que el loader esté visible al menos 1 segundos
   setTimeout(() => {
     loaderDiv.remove();
-  }, 1000);
+  }, 2000);
 
   node.appendChild(loaderDiv);
 };

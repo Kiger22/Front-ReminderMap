@@ -1,22 +1,22 @@
-.caja{
+.box_plus{
   display: flex;
   align-items: center;
-  gap: var(--kg-gap-xl);
-}
-
-.span_plus{
-  font-size: 24px;
-  color:var(--kg-color-primary);
+  gap: var(--kg-gap-md);
 }
 
 .button_plus {
   position: relative;
-  width: 85px;
-  height: 85px;
+  width: 90px;
+  height: 90px;
   background: var(--kg-bg-dark);
   cursor: pointer;
   border: 7px solid var(--kg-bg-secondary);
   border-radius: 50%;
+}
+
+.span_plus{
+  font-size:var(--kg-font-size-h3);
+  color:var(--kg-color-primary);
 }
 
 .button_plus:after {
@@ -53,29 +53,18 @@
 }
 
 @media (max-width: 900px) {
-  .caja{
-    display: flex;
-    align-items: center;
-    gap: var(--kg-gap-md);
-    position: absolute;
-    top: 2rem;
-  }
   .span_plus{
-    font-size: 20px;
+    font-size: var(--kg-font-size-h4);
+  }
+  .button_plus {
+    width: 75px;
+    height: 75px;
   }
 } 
 
 @media (max-width: 500px) {
-  .caja{
-    display: flex;
-
-    align-items: center;
-    gap: var(--kg-gap-sm);
-    position: absolute;
-    top: 2rem;
-  }
   .span_plus{
-    font-size: 10px;
+    font-size: var(--kg-font-size-h5);
   }
   .button_plus {
     width: 65px;

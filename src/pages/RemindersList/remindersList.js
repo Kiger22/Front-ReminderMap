@@ -1,5 +1,5 @@
-import { loadReminders } from '../../functions/loadReminders';
-import { createReminderElement } from '../../functions/renderReminder';
+import { loadReminders } from '../../functions/reminders/loadReminders';
+import { createReminderElement } from '../../functions/reminders/renderReminder';
 
 import('./remindersList.css');
 

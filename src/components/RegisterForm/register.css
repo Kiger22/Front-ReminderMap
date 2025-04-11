@@ -5,13 +5,14 @@
   background-color: var(--kg-color-dark);
   opacity: 95%;
   z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .register-form {
   position: absolute;
   width: 35%;
-  left: 30%;
-  top: 1rem;
   background-color: var(--kg-color-tertiary);
   border: 1px solid var(--kg-color-secondary);
   border-radius: var(--kg-radius-md);
@@ -19,12 +20,12 @@
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  padding: 1.5rem 0;
-  gap: 1rem;
+  padding: var(--kg-padding-lg) 0;
+  gap: var(--kg-gap-md);
 }
 
 .form-title {
-  font-size: 1.8rem;
+  font-size:var(--kg-font-size-h2);
   font-weight: 600;
 }
 
@@ -36,17 +37,10 @@
   gap: var(--kg-gap-sm);
 }
 
-.change-avatar-btn{
-  background-color: var(--kg-color-dark);
-  font-size: 0.8rem;
-  padding: var(--kg-padding-sm);
-  color: var(--kg-color-tertiary);
-  cursor: pointer;
-}
 
 .avatar-img{
-  width: 8rem;
-  height: 8rem;
+  width: 6rem;
+  height: 6rem;
   border-radius: 50%;
   object-fit: cover;
 }

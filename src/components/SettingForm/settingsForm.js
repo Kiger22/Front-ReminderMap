@@ -1,7 +1,7 @@
 import { AlertNotification } from '../AlertNotification/notification';
 import { createLoader } from '../Loader/loader';
 import { createButton } from '../Button/button';
-import { updateUserProfile } from '../../functions/updateUserProfile';
+import { updateUserProfile } from '../../functions/users/updateUserProfile';
 import('./settingsForm.css');
 
 const DEFAULT_AVATAR_PATH = './assets/user-circle-svgrepo-com.svg';

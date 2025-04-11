@@ -2,13 +2,13 @@
 
 ## Descripción
 
-ReminderMap es una aplicación web moderna que permite a los usuarios crear y gestionar recordatorios basados en ubicación. Desarrollada con JavaScript vanilla y arquitectura modular, ofrece una experiencia fluida y responsive.
+ReminderMap es una aplicación web moderna que permite a los usuarios crear y gestionar recordatorios basados en ubicación. Desarrollada con JavaScript vanilla y arquitectura modular, ofrece una experiencia fluida y responsive para recibir notificaciones cuando estás cerca de lugares específicos.
 
 ## Características Principales
 
 - Gestión de recordatorios geográficos
 - Sistema de autenticación de usuarios
-- Integración con mapas interactivos (Leaflet)
+- Integración con mapas interactivos (Google Maps)
 - Categorización de lugares
 - Sistema de notificaciones
 - Modo claro/oscuro
@@ -18,13 +18,14 @@ ReminderMap es una aplicación web moderna que permite a los usuarios crear y ge
 - Scroll personalizado y responsivo
 - Interfaz de usuario intuitiva
 - Gestión de perfil de usuario con avatar
+- Marcado de lugares favoritos
 
 ## Tecnologías Utilizadas
 
 - Vanilla JavaScript (ES6+)
 - HTML5 & CSS3/SASS
 - Vite como bundler y herramienta de desarrollo
-- Leaflet para mapas interactivos
+- Google Maps API para mapas interactivos
 - API REST personalizada
 - FormData para manejo de archivos
 - Cloudinary para almacenamiento de imágenes
@@ -42,14 +43,27 @@ ReminderMap es una aplicación web moderna que permite a los usuarios crear y ge
 │   │   ├── Hero/
 │   │   ├── Map/
 │   │   ├── LoginForm/
+│   │   ├── AlertNotification/
+│   │   ├── Footer/
+│   │   ├── Header/
+│   │   ├── MenuAsside/
+│   │   ├── SwitchButton/
+│   │   ├── UpdateReminderForm/
 │   │   └── ...
 │   ├── data/          # Datos estáticos (configuraciones, textos)
 │   ├── functions/     # Funciones utilitarias
+│   │   ├── favorites/
+│   │   ├── navigation/
+│   │   ├── reminders/
+│   │   └── ...
 │   ├── pages/         # Páginas principales
+│   │   ├── FavoritesPlaces/
+│   │   └── ...
 │   ├── styles/        # Estilos globales SASS
 │   └── utils/         # Utilidades y helpers
 ├── index.html         # Punto de entrada HTML
-└── main.js           # Punto de entrada JavaScript
+├── main.js            # Punto de entrada JavaScript
+└── vite.config.js     # Configuración de Vite
 ```
 
 ## Instalación y Desarrollo
@@ -64,7 +78,7 @@ ReminderMap es una aplicación web moderna que permite a los usuarios crear y ge
 1. Clonar el repositorio:
 
 ```bash
-git clone [url-repositorio]
+git clone https://github.com/Kiger22/Front-ReminderMap.git
 cd Front-ReminderMap
 ```
 
@@ -80,6 +94,7 @@ Crear archivo `.env`:
 
 ```plaintext
 VITE_API_URL=http://localhost:3000/api/v1
+VITE_GOOGLE_MAPS_API_KEY=tu_api_key_de_google_maps
 VITE_CLOUDINARY_URL=tu_cloudinary_url
 ```
 
@@ -99,7 +114,7 @@ VITE_CLOUDINARY_URL=tu_cloudinary_url
 
 ### Map
 
-- Integración con Leaflet
+- Integración con Google Maps API
 - Manejo de marcadores y eventos
 - Geolocalización y cálculo de distancias
 
@@ -107,7 +122,19 @@ VITE_CLOUDINARY_URL=tu_cloudinary_url
 
 - Sistema de autenticación
 - Validación de formularios
-- Gestión de sesiones
+- Gestión de sesiones con localStorage
+
+### Recordatorios
+
+- Creación, edición y eliminación de recordatorios
+- Asociación con ubicaciones específicas
+- Notificaciones basadas en proximidad
+
+### Favoritos
+
+- Marcado de lugares como favoritos
+- Gestión de lista de favoritos
+- Contador de uso de lugares
 
 ## Guía de Desarrollo
 
@@ -143,7 +170,6 @@ VITE_CLOUDINARY_URL=tu_cloudinary_url
 - [x] Modo claro/oscuro
 - [x] Perfil de usuario
 - [x] Sistema de notificaciones
-- [x] Modo claro/oscuro
 - [x] Visualización de lugares frecuentes
 - [x] Sistema de conteo de uso de lugares
 - [x] Detalles de categorías
@@ -151,6 +177,7 @@ VITE_CLOUDINARY_URL=tu_cloudinary_url
 - [x] Gestión de perfil de usuario
 - [x] Carga y actualización de avatar
 - [x] Almacenamiento de ubicaciones personalizadas
+- [x] Marcado de lugares favoritos
 
 ## Próximas Funcionalidades
 
@@ -159,6 +186,9 @@ VITE_CLOUDINARY_URL=tu_cloudinary_url
 - [ ] Integración con calendario
 - [ ] Modo offline
 - [ ] Notificaciones push
+- [ ] Rutas y navegación entre lugares
+- [ ] Filtrado avanzado de recordatorios
+- [ ] Exportación de datos
 
 ## Contribución
 

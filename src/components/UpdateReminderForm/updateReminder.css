@@ -57,10 +57,9 @@
 }
 
 .update-reminder-container >.buttons-container {
-  display: flex;
   flex-direction: row;
-  gap: var(--kg-gap-md);
-  margin-top: var(--kg-margin-lg);
+  justify-content: end;
+  padding: var(--kg-padding-md);
 }
 
 

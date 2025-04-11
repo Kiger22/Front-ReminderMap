@@ -1,22 +1,18 @@
 .header {
-  grid-column: 1/-1;
-  grid-row: 1/3;
   display: flex;
   flex-direction: row;
-  align-content: center;
   justify-content: space-between;
-  gap: 50px;
   align-items: center;
-  text-align: center;
-  padding: var(--kg-padding-lg);
-  background-color: transparent;
+  opacity: 90%;
   color: var(--kg-text-primary);
-  width: 97%;
-  height: 85px;
-  position: fixed;
-  top: 1rem;
-  left: 1rem;
-  z-index: 2;
+  text-align: center;
+  padding: 0 var(--kg-padding-md);
+  font-size: var(--kg-font-size-text);
+  border-radius: var(--kg-radius-md);
+  position: sticky;
+  margin: auto 1rem;
+  margin-top: var(--kg-margin-md);
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .header::before {
@@ -46,7 +42,7 @@
 }
 
 .header-logo:hover {
-  transform:scale(1.2);
+  transform:scale(1.05);
   transition: 1s;
   cursor: pointer;
 }

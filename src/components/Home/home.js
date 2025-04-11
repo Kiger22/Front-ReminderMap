@@ -13,7 +13,7 @@ export const Home = () => {
   homeContainer.appendChild(h3Hero);
 
   const pHeroII = document.createElement("p");
-  pHeroII.textContent = "Para empezar, Inicia Seccion y luego añade un recordatorio pulsando el botón +";
+  pHeroII.textContent = "Inicia Seccion y luego añade un recordatorio pulsando el botón +";
   homeContainer.appendChild(pHeroII);
 
   const pHero = document.createElement("p");

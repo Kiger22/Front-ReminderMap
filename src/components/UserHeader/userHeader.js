@@ -1,5 +1,5 @@
-import { goToHomePage } from "../../functions/goHomePage";
-import { logOut } from "../../functions/logout";
+import { goToHomePage } from "../../functions/navigation/goHomePage";
+import { logOut } from "../../functions/users/logout";
 import { AlertNotification } from "../AlertNotification/notification";
 import { createButton } from "../Button/button";
 import { Home } from "../Home/home";
@@ -20,7 +20,7 @@ export const createUserHeader = (node, avatarPath, settingsIconPath, openSetting
   avatarImg.src = avatarPath || DEFAULT_AVATAR_PATH;
   avatarImg.alt = 'User Avatar';
   avatarImg.addEventListener('click', () => {
-    NotificationReminder()
+    NotificationReminder("Recordatorio de prueba");
   });
 
   // Manejamos errores de carga de imagen

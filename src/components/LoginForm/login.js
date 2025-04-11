@@ -1,4 +1,4 @@
-import { loging } from "../../functions/loging";
+import { loging } from "../../functions/users/loging";
 import { AlertNotification } from "../AlertNotification/notification";
 import { createRegisterForm } from "../RegisterForm/register";
 import("./login.css");
@@ -39,6 +39,7 @@ export const createLoginForm = () => {
   userInput.type = 'text';
   userInput.name = 'user';
   userInput.id = 'user';
+  userInput.placeholder = 'Usuario con el que te registraste';
 
   userSpan.appendChild(userLabel);
   userSpan.appendChild(userInput);

@@ -32,11 +32,12 @@
   /* Font Sizes */
   --kg-font-size-h1: clamp(1.5rem, 3vw, 2.5rem);
   --kg-font-size-h2: clamp(1.3rem, 2.5vw, 2rem);
-  --kg-font-size-p: clamp(0.75rem, 2vw, 1rem);
-  --kg-font-size-text: clamp(0.84rem, 2vw, 1.1rem);
-  --kg-font-size-link: clamp(0.95rem, 2vw, 1.2rem);
   --kg-font-size-h3: clamp(1.1rem, 2vw, 1.5rem);
   --kg-font-size-h4: clamp(1rem, 2vw, 1.3rem);
+  --kg-font-size-p: clamp(0.75rem, 2vw, 1rem);
+  --kg-font-size-text: clamp(0.74rem, 1.8vw, 1rem);
+  --kg-font-size-link: clamp(0.95rem, 2vw, 1.2rem);
+  --kg-font-size-button: clamp(0.95rem, 2vw, 1rem);
   
   /* Gap */
   --kg-gap-xl: 50px;
@@ -45,6 +46,7 @@
   --kg-gap-sm: 10px;
 
   /* Padding */
+  --kg-padding-alert: 5rem;
   --kg-padding-xl: 60px;
   --kg-padding-lg: 30px;
   --kg-padding-md: 20px;
@@ -66,6 +68,9 @@
   /* Dark Mode Colors */
   --kg-text-dark-mode:var(--kg-color-dark);
   --kg-bg-dark-mode:var(--kg-color-tertiary);
+
+  /* Widths */
+  --kg-width-reminder: 900px;
 }
 
 * {
@@ -80,17 +85,43 @@
 }
 
 body {
-  max-height: 90svh;
-  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  grid-template-rows: repeat(10, 1fr);
-  position: relative; /* Añadido para posicionamiento del mapa */
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: auto 1fr auto;
   background-color: var(--kg-bg-dark);
   color: var(--kg-text-primary);
+  overflow: hidden;
+  margin: 0;
+  gap: var(--kg-gap-sm);
 }
 
-/* Estilos para el mapa de fondo */
+header {
+  grid-column: 1 / -1;
+  grid-row: 1 / 2;
+  min-height: 80px; 
+}
+
+aside {
+  grid-column: 1 / 3;
+  grid-row: 2 / 3;
+}
+
+footer {
+  grid-column: 1 / -1;    
+  grid-row: 3 / 4;
+}
+
+#app {
+  grid-column: 3 / -1;
+  grid-row: 2 / 3;
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
 .background-map__wrapper {
   position: fixed;
   top: 0;
@@ -108,30 +139,9 @@ body {
   opacity: 0.15;
 }
 
-/* Asegurarse que el contenido principal esté por encima del mapa */
-#app {
-  position: relative;
-  z-index: 1;
-  max-width: 1400px;
-  margin: 0 auto;
-  grid-column: 3/-1;
-  grid-row: 3/-1;
-  display: flex;
-  justify-content: start;
-  scroll-behavior: smooth;
-  width: 100%;
-  min-height: 90vh;
-  text-align: center;
-  background-color: transparent;
-}
-
 .dark {
   background-color: var(--kg-bg-dark-mode);
   color: var(--kg-text-dark-mode);
-}
-
-main{
-  width: 100%;
 }
 
 ul,ol {
@@ -141,31 +151,4 @@ ul,ol {
 a {
   text-decoration: none;
 }
-
-body{
-  max-height: 90svh;
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  grid-template-rows: repeat(10, 1fr);
-}
-
-html {
-  scroll-padding-top: 10px;
-}
-
-#app {
-  max-width: 1400px;
-  margin: 0 auto;
-  grid-column: 3/-1;
-  grid-row: 3/-1;
-  display: flex;
-  justify-content: start;
-  scroll-behavior: smooth;
-  width: 100%;
-  min-height: 90vh;
-  text-align: center;
-  background-color:transparent;
-}
-
 

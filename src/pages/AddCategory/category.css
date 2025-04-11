@@ -1,0 +1,125 @@
+.category-form{
+  justify-self: center;
+  width: 70%;
+  height: 80%;
+  margin: auto auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: var(--kg-gap-xl);
+  color: var(--kg-text-primary);
+}
+
+.category-container{
+  display: flex;
+  width: 100%;
+  height: 100%;
+  gap: var(--kg-gap-sm);
+}
+
+.fields-wrapper{
+  display: flex;
+  flex-direction: column;
+  gap: var(--kg-gap-sm);
+}
+
+.category-container .input-span {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  justify-content: start;
+  justify-items: start;
+  text-align: start;
+  gap: 0.5rem;
+}
+
+.category-container .input-span > label {
+  grid-column: 1/2;
+  width: 100%;
+}
+
+.category-container .input-span  [type="textarea"]{
+  height: 6rem;
+}
+
+.category-container .input-span > input {
+  grid-column: 2/3;
+  width: 100%;
+  border-radius: var(--kg-radius-sd);
+  padding: var(--kg-padding-sm) var(--kg-padding-sm);
+  width: 100%;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: var(--kg-gap-md);
+  background-color: var(--kg-color-primary);
+  color: var(--kg-color-dark);
+}
+
+.category-container .buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kg-gap-md);
+}
+
+@media (max-width: 900px) {
+  .category-form h2{
+  font-size: var(--kg-font-size-h3);
+  }
+  .category-container{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    gap: var(--kg-gap-sm);
+  }
+  .buttons{
+    display: flex;
+    flex-direction: column;
+    margin: 10px auto; ;
+    justify-content: start;
+    align-items: start;
+    gap: var(--kg-gap-md);
+  }
+}
+
+.category-container .input-span > input:focus{
+  outline: 2px solid var(--kg-color-dark);
+}
+
+@media (max-width: 500px) {
+  .category-container .input-span > input {
+    padding: var(--kg-padding-sm);
+    width: 100%;
+    gap: var(--kg-gap-sm);
+    font-size: var(--kg-font-size-p);
+  }
+  .category-container .input-span {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    font-size: var(--kg-font-size-p);
+  }
+  .category-form{
+    gap: var(--kg-gap-md);
+  }
+
+  .category-form h2{
+    font-size: var(--kg-font-size-p);
+  }
+  .category-container{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    gap: var(--kg-gap-sm);
+  }
+  .buttons{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    gap: var(--kg-gap-sm);
+    margin-top: 5px;
+    font-size: var(--kg-font-size-p);
+  }
+} 

@@ -1,6 +1,6 @@
 import('./iconButton.css');
 
-export const createSvgButton = (node, svgPath, clickHandler, tooltipText) => {
+export const createIconButton = (node, svgPath, clickHandler, tooltipText) => {
 
   const img = document.createElement('img');
   img.classList.add('svg-icon');

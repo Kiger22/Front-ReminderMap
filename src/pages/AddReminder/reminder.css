@@ -1,4 +1,3 @@
-/* Resetear estilos heredados de forma más específica */
 .reminder-form input:not([type="file"]),
 .reminder-form select,
 .reminder-container .input-span > input:not([type="file"]),
@@ -13,9 +12,6 @@
   width: 100% !important;
 }
 
-
-
-/* Eliminar cualquier otro estilo heredado */
 .reminder-container .input-span > input:not([type="file"]):focus,
 .reminder-container .input-span > select:focus {
   outline: none !important;
@@ -23,7 +19,6 @@
   color: black !important;
 }
 
-/* Asegurar que los contenedores tengan sus propios estilos sin herencia */
 .reminder-form {
   max-width: 600px;
   margin: 0 auto;
@@ -166,10 +161,9 @@
   }
 }
 
-/* Estilos específicos para el select y sus opciones */
 .reminder-container .input-span > select {
   cursor: pointer !important;
-  appearance: auto !important; /* Esto es importante para que se muestren las opciones correctamente */
+  appearance: auto !important;
 }
 
 .reminder-container .input-span > select option {
@@ -178,16 +172,14 @@
   padding: 8px;
 }
 
-/* Estilo específico para la opción "Agregar nuevo lugar" */
 .reminder-container .input-span > select option[value="new"] {
   font-size: 20px !important;
   font-weight: bold !important;
-  background-color: var(--kg-color-dark) !important;
+  background-color: var(--kg-color-primary) !important;
   color: var(--kg-color-primary) !important;
   cursor: pointer !important;
 }
 
-/* Asegurar que las opciones del select tengan el padding correcto */
 .reminder-container .input-span > select option {
   padding: var(--kg-padding-sm);
 }
@@ -248,4 +240,28 @@
   height: 1px;
   background-color: #eee;
   margin: 4px 0;
+}
+
+.reminder-page-header {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 10px;
+}
+
+.reminder-page-header h2 {
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 1.8rem;
+}
+
+.reminder-page-header p {
+  color: #666;
+  font-size: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.reminder-form {
+  margin-top: 15px;
 }

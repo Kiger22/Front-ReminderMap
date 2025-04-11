@@ -1,33 +1,14 @@
 import("./footer.css");
-
+import { SwitchButton } from "../SwitchButton/switchButton";
 
 export const createFooter = (logoSrc, menuItems, socialLinks) => {
-
   const footer = document.createElement("footer");
   footer.className = "footer";
   document.body.appendChild(footer);
 
-  // logoSrc
-  const logoSection = document.createElement("div");
-  logoSection.className = "footer-logo";
-  footer.appendChild(logoSection);
-  const logoImg = document.createElement("img");
-  logoImg.src = logoSrc;
-  logoSection.appendChild(logoImg);
-
-
-  // menuItems
-  if (!menuItems) {
-    const menuSection = document.createElement("div");
-    menuSection.className = "footer-menu";
-    menuItems.forEach(item => {
-      const link = document.createElement("a");
-      link.href = item.href;
-      link.innerText = item.text;
-      menuSection.appendChild(link);
-    });
-    footer.appendChild(menuSection);
-  }
+  // Agregar el SwitchButton al footer
+  const switchBtn = SwitchButton();
+  footer.appendChild(switchBtn);
 
   // copyright
   const copyright = document.createElement("p");

@@ -1,4 +1,4 @@
-import { renderTodayNotifications } from '../../functions/renderTodayNotifications';
+import { renderTodayNotifications } from '../../functions/notifications/renderTodayNotifications';
 import('./today.css');
 
 export const todayPage = async (node) => {

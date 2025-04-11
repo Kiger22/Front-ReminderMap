@@ -1,4 +1,4 @@
-import { registering } from "../../functions/registering";
+import { registering } from "../../functions/users/registering";
 import { createLoginForm } from "../LoginForm/login";
 import('./register.css');
 
@@ -11,6 +11,7 @@ export const createRegisterForm = () => {
   const form = document.createElement('form');
   form.classList.add('register-form');
 
+  // Botón de cerrar el Form
   const closeBtn = document.createElement("span");
   closeBtn.className = "closeBtn";
   closeBtn.innerHTML = "&times;";
@@ -19,6 +20,7 @@ export const createRegisterForm = () => {
     registerContent.remove();
   }
 
+  // Título del formulario
   const h2 = document.createElement('h2');
   h2.classList.add('form-title');
   h2.textContent = 'Registro';
@@ -36,7 +38,7 @@ export const createRegisterForm = () => {
   const changeAvatarBtn = document.createElement('button');
   changeAvatarBtn.type = 'button';
   changeAvatarBtn.classList.add('change-avatar-btn');
-  changeAvatarBtn.textContent = 'Cambiar Avatar';
+  changeAvatarBtn.textContent = 'Agregar Avatar';
 
   // Evento para seleccionar una imagen
   changeAvatarBtn.onclick = () => {
@@ -100,22 +102,23 @@ export const createRegisterForm = () => {
   emailSpan.appendChild(emailLabel);
   emailSpan.appendChild(emailInput);
 
-  // Campo de nickname
-  const nicknameSpan = document.createElement('span');
-  nicknameSpan.classList.add('input-span');
+  // Campo de Usuario
+  const usernameSpan = document.createElement('span');
+  usernameSpan.classList.add('input-span');
 
-  const nicknameLabel = document.createElement('label');
-  nicknameLabel.setAttribute('for', 'nickname');
-  nicknameLabel.classList.add('label');
-  nicknameLabel.textContent = 'Nickname';
+  const usernameLabel = document.createElement('label');
+  usernameLabel.setAttribute('for', 'username');
+  usernameLabel.classList.add('label');
+  usernameLabel.textContent = 'Usuario';
 
-  const nicknameInput = document.createElement('input');
-  nicknameInput.type = 'text';
-  nicknameInput.name = 'nickname';
-  nicknameInput.id = 'nickname';
+  const usernameInput = document.createElement('input');
+  usernameInput.type = 'text';
+  usernameInput.name = 'username';
+  usernameInput.id = 'username';
+  usernameInput.placeholder = 'Necesario para iniciar sesión';
 
-  nicknameSpan.appendChild(nicknameLabel);
-  nicknameSpan.appendChild(nicknameInput);
+  usernameSpan.appendChild(usernameLabel);
+  usernameSpan.appendChild(usernameInput);
 
   // Campo de contraseña
   const passwordSpan = document.createElement('span');
@@ -133,6 +136,7 @@ export const createRegisterForm = () => {
   passwordInput.type = 'password';
   passwordInput.name = 'password';
   passwordInput.id = 'password';
+  passwordInput.placeholder = 'Mínimo 6 caracteres';
 
   const toggleButton = document.createElement('button');
   toggleButton.type = 'button';
@@ -163,6 +167,18 @@ export const createRegisterForm = () => {
   submitInput.value = 'Registrar';
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+
+    // Validación de campos
+    if (
+      !nameInput.value.trim() ||
+      !emailInput.value.trim() ||
+      !usernameInput.value.trim() ||
+      !passwordInput.value.trim()
+    ) {
+      alert('Todos los campos son requeridos');
+      return;
+    }
+
     await registering();
   });
 
@@ -180,8 +196,8 @@ export const createRegisterForm = () => {
   form.appendChild(h2);
   form.appendChild(avatarContainer);
   form.appendChild(nameSpan);
-  form.appendChild(nicknameSpan);
   form.appendChild(emailSpan);
+  form.appendChild(usernameSpan);
   form.appendChild(passwordSpan);
   form.appendChild(submitInput);
   form.appendChild(loginSpan);

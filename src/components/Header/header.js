@@ -1,6 +1,6 @@
-import { goToHomePage } from "../../functions/goHomePage";
+import { goToHomePage } from "../../functions/navigation/goHomePage";
 import { createButton } from "../Button/button";
-import { createSvgButton } from "../IconButton/iconButton";
+import { createIconButton } from "../IconButton/iconButton";
 import { createLoginForm } from "../LoginForm/login";
 import { createRegisterForm } from "../RegisterForm/register";
 import { NotificationReminder } from "../ReminderNotification/reminderNotification";
@@ -68,9 +68,9 @@ export const createHeader = (node, logoSrc, menuItems, menuItemsII) => {
   authButtons.id = "auth-buttons";
 
   createButton(authButtons, "Login", "login-button", createLoginForm);
-  createSvgButton(authButtons, './assets/login-3-svgrepo-com.svg', createLoginForm, "Login");
+  createIconButton(authButtons, './assets/login-3-svgrepo-com.svg', createLoginForm, "Login");
   createButton(authButtons, "Register", "register-button", createRegisterForm);
-  createSvgButton(authButtons, './assets/add-square-svgrepo-com.svg', createRegisterForm, "Registro");
+  createIconButton(authButtons, './assets/add-square-svgrepo-com.svg', createRegisterForm, "Register");
 
   // Creamos un div para el header del usuario
   const userHeaderContainer = document.createElement("div");
@@ -83,7 +83,6 @@ export const createHeader = (node, logoSrc, menuItems, menuItemsII) => {
     const avatar = localStorage.getItem('avatar');
     createUserHeader(userHeaderContainer, avatar, '../assets/setting-1-svgrepo-com.svg', openProfileSettings);
   }
-
 
   loginSection.appendChild(authButtons);
   header.appendChild(loginSection);

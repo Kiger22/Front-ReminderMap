@@ -1,7 +1,6 @@
 import("./switchButton.css")
 
 export const SwitchButton = () => {
-
   const switchContainer = document.createElement('div');
   switchContainer.className = 'switch-container';
 
@@ -13,7 +12,13 @@ export const SwitchButton = () => {
   circle.id = 'circle';
   switchElement.appendChild(circle);
 
-  document.body.appendChild(switchContainer);
+  // Agregar funcionalidad para cambiar el tema
+  switchElement.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    circle.classList.toggle('on');
+  });
+
+  return switchContainer;
 };
 
 
