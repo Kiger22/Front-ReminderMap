@@ -12,11 +12,8 @@ export const SwitchButton = () => {
   circle.id = 'circle';
   switchElement.appendChild(circle);
 
-  // Agregar funcionalidad para cambiar el tema
-  switchElement.addEventListener('click', () => {
-    document.body.classList.toggle('dark');
-    circle.classList.toggle('on');
-  });
+  // No añadimos el event listener aquí, ya que se maneja en main.js
+  // para evitar duplicidad de funcionalidad
 
   return switchContainer;
 };

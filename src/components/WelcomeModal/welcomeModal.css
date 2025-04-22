@@ -1,0 +1,16 @@
+.welcome-modal-content {
+  padding:var(--kg-padding-md);
+  max-width: var(--kg-width-reminder);
+  text-align: center;
+}
+
+.welcome-modal-content h3 {
+  font-size: var(--kg-font-size-h3);
+  margin-bottom: var(--kg-margin-md);
+  color: var(--kg-text-primary);
+}
+
+.welcome-modal-content p {
+  margin-bottom: var(--kg-margin-md);
+  line-height: var(--kg-line-height-md);
+}

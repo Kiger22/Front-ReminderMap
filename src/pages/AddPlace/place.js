@@ -322,7 +322,15 @@ export const placePage = async (node, fromReminder = false) => {
     selectable: true,
     location: defaultLocation,
     onLocationSelect: (location) => {
-      locationInput.value = location;
+      console.log('Ubicación seleccionada:', location);
+      if (locationInput) {
+        locationInput.value = location;
+        // Disparar un evento input para activar cualquier listener que pueda estar escuchando cambios
+        const inputEvent = new Event('input', { bubbles: true });
+        locationInput.dispatchEvent(inputEvent);
+      } else {
+        console.error('Campo de ubicación no encontrado');
+      }
     }
   });
 

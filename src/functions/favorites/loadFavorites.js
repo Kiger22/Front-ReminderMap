@@ -21,9 +21,24 @@ export const loadFavorites = async (container) => {
 
     container.innerHTML = '';
 
-    favorites.forEach(favorite => {
-      const favoriteItem = createFavoriteItem(favorite);
-      container.appendChild(favoriteItem);
+    // Filtrar favoritos válidos (con placeId no nulo)
+    const validFavorites = favorites.filter(favorite => favorite && favorite.placeId);
+
+    if (validFavorites.length === 0) {
+      container.innerHTML = '<p class="favorite-item">No tienes lugares favoritos válidos</p>';
+      return;
+    }
+
+    // Registrar información para depuración
+    console.log(`Cargando ${validFavorites.length} favoritos válidos de ${favorites.length} totales`);
+
+    validFavorites.forEach(favorite => {
+      try {
+        const favoriteItem = createFavoriteItem(favorite);
+        container.appendChild(favoriteItem);
+      } catch (itemError) {
+        console.error('Error al crear elemento favorito:', itemError, favorite);
+      }
     });
   } catch (error) {
     console.error('Error al cargar favoritos:', error);
@@ -38,6 +53,24 @@ export const createFavoriteItem = (favorite) => {
 
   const place = favorite.placeId;
 
+  // Verificar si place existe y no es null
+  if (!place) {
+    console.error('Error: placeId es null o undefined en el favorito:', favorite);
+
+    // Crear un elemento de error para mostrar en lugar del favorito
+    const errorInfo = document.createElement('div');
+    errorInfo.classList.add('favorite-info');
+
+    const errorText = document.createElement('span');
+    errorText.classList.add('favorite-error');
+    errorText.textContent = 'Error: Lugar no disponible';
+
+    errorInfo.appendChild(errorText);
+    item.appendChild(errorInfo);
+
+    return item;
+  }
+
   // Contenedor para la información del lugar
   const infoContainer = document.createElement('div');
   infoContainer.classList.add('favorite-info');
@@ -45,7 +78,7 @@ export const createFavoriteItem = (favorite) => {
   // Nombre del lugar
   const name = document.createElement('span');
   name.classList.add('favorite-name');
-  name.textContent = place.name;
+  name.textContent = place.name || 'Lugar sin nombre';
 
   // Dirección del lugar (si está disponible)
   if (place.address) {
@@ -84,5 +117,7 @@ export const createFavoriteItem = (favorite) => {
 
   return item;
 };
+
+
 
 

@@ -6,9 +6,10 @@ import { SwitchButton } from './src/components/SwitchButton/switchButton';
 import { menuAsideI, menuAsideII } from './src/data/aside';
 import { footerLogo, menuFooter, socialLinks } from './src/data/footer';
 import { heaterLogo, menuItemsHeaderI, menuItemsHeaderII } from './src/data/header';
-import { toggletheme } from './src/functions/navigation/toggleTheme';
+import { toggletheme, loadSavedTheme } from './src/functions/navigation/toggleTheme';
 import { heroPage } from './src/components/Hero/hero';
 import { insertMap } from './src/components/Map/insertMap';
+import { showWelcomeModal } from './src/components/WelcomeModal/welcomeModal';
 
 // Objeto que contiene el elemento donde se insertará la app (App)
 export const divApp = document.querySelector("#app");
@@ -40,6 +41,12 @@ const initializeApp = () => {
   switchButton.addEventListener("click", () => {
     toggletheme(fullpage);
   });
+
+  // Cargar el tema guardado
+  loadSavedTheme();
+
+  // Mostramos el modal de bienvenida solo una vez por sesión
+  showWelcomeModal();
 };
 
 // Evento para verificar si el documento está cargado completamente (DOMContentLoaded)
