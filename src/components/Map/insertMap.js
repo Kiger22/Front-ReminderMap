@@ -17,10 +17,13 @@ export const insertMap = (node, Src, options = {}) => {
 
   const iframe = document.createElement('iframe');
   iframe.className = options.isBackground ? "background-map__iframe" : "iframe_map";
-  iframe.allowFullscreen = true; // Corregido a camelCase
+  iframe.allowFullscreen = true;
   iframe.loading = "lazy";
   iframe.referrerPolicy = "no-referrer-when-downgrade";
-  iframe.src = Src || `https://www.google.com/maps/embed/v1/place?key=${GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(options.location || 'Madrid, España')}`;
+
+  // Aseguramos que la ubicación esté codificada correctamente
+  const location = options.location || 'Madrid, España';
+  iframe.src = Src || `https://www.google.com/maps/embed/v1/place?key=${GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(location)}`;
 
   mapContainer.appendChild(iframe);
   node.appendChild(mapContainer);

@@ -189,24 +189,133 @@
   font-size: 1.2rem;
 }
 
-/* Añadimos estilos para el mensaje de no categorías */
-.no-categories-message, .error-message {
-  padding: var(--kg-padding-md);
-  background-color: var(--kg-color-tertiary);
-  border-radius: var(--kg-radius-md);
-  margin:0 0 var(--kg-margin-md)  0;
+/* Estilos para el contenedor del select de categoría y su botón */
+.category-select-container {
+  grid-column: 2/3;
   width: 100%;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  position: relative;
 }
 
+.category-select-container select {
+  flex: 1;
+  border-radius: var(--kg-radius-sd);
+  padding: var(--kg-padding-sm) var(--kg-padding-sm);
+  border: none;
+  background-color: var(--kg-color-primary);
+  color: var(--kg-color-dark);
+  height: 45px;
+  padding-right: 50px;
+  appearance: none;
+  background-image: url('/assets/arrow-down.svg');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+}
+
+.category-select-container .category-add-button {
+  position: absolute;
+  right: 0;
+  height: 45px;
+  width: 45px;
+  border: none;
+  border-radius: 0 var(--kg-radius-sd) var(--kg-radius-sd) 0;
+  background-color: var(--kg-color-secondary);
+  color: var(--kg-color-dark);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.category-select-container .category-add-button:hover {
+  background-color: var(--kg-color-tertiary);
+}
+
+.category-select-container .category-add-button img {
+  width: 30px;
+  height: 30px;
+}
+
+/* Estilos para el contenedor de input de categoría cuando no hay categorías */
+.category-input-container {
+  grid-column: 2/3;
+  width: 100%;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  position: relative;
+}
+
+.category-input-container input {
+  flex: 1;
+  border-radius: var(--kg-radius-sd);
+  padding: var(--kg-padding-sm) var(--kg-padding-sm);
+  border: none;
+  background-color: var(--kg-color-primary);
+  color: var(--kg-color-dark);
+  height: 45px;
+  padding-right: 50px;
+}
+
+.category-input-container .category-add-button {
+  position: absolute;
+  right: 0;
+  height: 45px;
+  width: 45px;
+  border: none;
+  border-radius: 0 var(--kg-radius-sd) var(--kg-radius-sd) 0;
+  background-color: var(--kg-color-secondary);
+  color: var(--kg-color-dark);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.category-input-container .category-add-button:hover {
+  background-color: var(--kg-color-tertiary);
+}
+
+.category-input-container .category-add-button img {
+  width: 30px;
+  height: 30px;
+}
+
+.add-icon {
+  width: 30px;
+  height: 30px;
+}
+
+@media (max-width: 768px) {
+  .location-input-container input,
+  .location-search-button,
+  .category-input-container input,
+  .category-input-container .category-add-button,
+  .category-select-container select,
+  .category-select-container .category-add-button {
+    height: 40px;
+  }
+  
+  .location-search-button,
+  .category-input-container .category-add-button,
+  .category-select-container .category-add-button {
+    width: 40px;
+  }
+}
+
+/* Mantenemos el estilo para mensajes de error que aún podríamos usar */
 .error-message {
   background-color: var(--kg-color-error);
   color: var(--kg-color-light);
-}
-
-/* Estilo para el botón dentro del mensaje */
-.no-categories-message button, .error-message button {
-  margin-top: var(--kg-margin-md);
-  padding: var(--kg-padding-sm) var(--kg-padding-md);
+  padding: var(--kg-padding-md);
+  border-radius: var(--kg-radius-md);
+  margin:0 0 var(--kg-margin-md) 0;
+  width: 100%;
 }
 
 @media (max-width: 900px) {

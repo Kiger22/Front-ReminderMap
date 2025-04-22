@@ -5,7 +5,7 @@ import { createButton } from "../Button/button";
 import('./updateReminder.css');
 import { createField } from "../../utils/formUtils";
 
-export const updateReminderForm = (reminder) => {
+export const updateReminderForm = (reminder, onCancel = null) => {
 
   // Verificamos si ya existe un formulario abierto
   if (document.querySelector('.update-reminder-form')) {
@@ -67,12 +67,15 @@ export const updateReminderForm = (reminder) => {
 
   // Creamos botones usando el componente createButton
   createButton(buttonsContainer, "Actualizar", "update-button", (e) => {
-    e.preventDefault();
     handleUpdate(e);
   });
 
   createButton(buttonsContainer, "Cancelar", "cancel-button", () => {
     formContainer.remove();
+    // Si hay una función de callback para cancelar, la ejecutamos
+    if (onCancel && typeof onCancel === 'function') {
+      onCancel();
+    }
   });
 
   form.appendChild(fieldsContainer);

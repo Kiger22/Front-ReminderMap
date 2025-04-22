@@ -72,10 +72,12 @@ export const placePage = async (node, fromReminder = false) => {
     authTokenPresente: !!authToken
   });
 
+  // Verificamos si faltan datos de autenticación
   if (!userId || !authToken) {
     console.warn('Falta información de autenticación para cargar categorías');
   }
 
+  // Intentamos obtener las categorías
   try {
     const categories = await getCategories(userId);
     console.log('Categorías cargadas:', categories);
@@ -84,35 +86,9 @@ export const placePage = async (node, fromReminder = false) => {
     const onlyUnknownCategory = categories.length === 1 && categories[0].label === "Desconocida";
     const noCategories = categories.length === 0 || onlyUnknownCategory;
 
-    // Si no hay categorías o solo está la categoría "Desconocida", mostrar mensaje
-    if (noCategories) {
-      const noCategoriesMessage = document.createElement('div');
-      noCategoriesMessage.classList.add('no-categories-message');
-      noCategoriesMessage.innerHTML = `
-        <p>No hay categorías personalizadas disponibles. Puedes crear un lugar sin categoría o crear una categoría primero.</p>
-        <button id="create-category-button" class="secondary-button">Crear Categoría</button>
-      `;
-
-      // Añadimos el mensaje al principio del contenedor principal
-      placeContainer.prepend(noCategoriesMessage);
-
-      // Configuramos el event listener para el botón
-      setTimeout(() => {
-        const createCategoryButton = document.getElementById('create-category-button');
-        if (createCategoryButton) {
-          createCategoryButton.addEventListener('click', () => {
-            import('../AddCategory/category.js').then(module => {
-              const { categoryPage } = module;
-              categoryPage(node);
-            });
-          });
-        }
-      }, 0);
-    }
-
     // Creamos los campos del formulario (siempre, haya o no categorías)
     fields.forEach(field => {
-      // Si es el campo de categoría y no hay categorías personalizadas, mostramos mensaje
+      // Si es el campo de categoría y no hay categorías personalizadas, mostramos input con botón
       if (field.type === 'select' && field.name === 'category' && noCategories) {
         const fieldElement = createField(
           field.label,
@@ -122,20 +98,121 @@ export const placePage = async (node, fromReminder = false) => {
           field.required,
           null
         );
+
+        // Obtenemos el input y lo configuramos
         const input = fieldElement.querySelector('input');
         if (input) {
           input.value = 'Sin categorías personalizadas';
           input.disabled = true;
+
+          // Creamos el contenedor para el botón similar al de búsqueda
+          const buttonContainer = document.createElement('div');
+          buttonContainer.classList.add('category-input-container');
+
+          // Movemos el input al contenedor
+          input.parentNode.replaceChild(buttonContainer, input);
+          buttonContainer.appendChild(input);
+
+          // Creamos el botón para añadir categoría con estilo similar al de búsqueda
+          const addCategoryButton = document.createElement('button');
+          addCategoryButton.type = 'button';
+          addCategoryButton.id = 'create-category-button';
+          addCategoryButton.classList.add('category-add-button');
+          addCategoryButton.innerHTML = `
+            <img src="/assets/add-plus-svgrepo-com.svg" alt="Añadir" class="add-icon">
+          `;
+
+          // Añadimos el event listener al botón
+          addCategoryButton.addEventListener('click', () => {
+            import('../AddCategory/category.js').then(module => {
+              const { categoryPage } = module;
+              categoryPage(node);
+            });
+          });
+
+          // Añadimos el botón al contenedor
+          buttonContainer.appendChild(addCategoryButton);
         }
+
         fieldsWrapper.appendChild(fieldElement);
-      } else {
+      } else if (field.type === 'select' && field.name === 'category') {
+        // Creamos el campo de categoría con las categorías disponibles
         const fieldElement = createField(
           field.label,
           field.type,
           field.id,
           field.name,
           field.required,
-          field.type === 'select' ? categories : null
+          categories
+        );
+
+        // Obtenemos el select
+        const select = fieldElement.querySelector('select');
+        if (select) {
+          // Verificamos si hay una categoría recién creada para seleccionarla
+          const lastCreatedCategoryId = localStorage.getItem('lastCreatedCategoryId');
+          if (lastCreatedCategoryId) {
+            // Buscamos la opción correspondiente y la seleccionamos
+            const options = select.options;
+            for (let i = 0; i < options.length; i++) {
+              if (options[i].value === lastCreatedCategoryId) {
+                select.selectedIndex = i;
+                break;
+              }
+            }
+            // Limpiamos el localStorage después de usar el valor
+            localStorage.removeItem('lastCreatedCategoryId');
+            localStorage.removeItem('lastCreatedCategoryName');
+          }
+
+          // Creamos el contenedor para el select y el botón
+          const selectContainer = document.createElement('div');
+          selectContainer.classList.add('category-select-container');
+
+          // Reemplazamos el select con el contenedor
+          select.parentNode.replaceChild(selectContainer, select);
+          selectContainer.appendChild(select);
+
+          // Creamos el botón para añadir categoría
+          const addCategoryButton = document.createElement('button');
+          addCategoryButton.type = 'button';
+          addCategoryButton.id = 'create-category-button';
+          addCategoryButton.classList.add('category-add-button');
+          addCategoryButton.innerHTML = `
+            <img src="/assets/add-plus-svgrepo-com.svg" alt="Añadir" class="add-icon">
+          `;
+
+          // Añadimos el event listener al botón
+          addCategoryButton.addEventListener('click', () => {
+            // Guardamos los datos del formulario actual en localStorage
+            const formData = new FormData(placeContainer);
+            const tempPlaceData = {};
+            for (const [key, value] of formData.entries()) {
+              tempPlaceData[key] = value;
+            }
+            localStorage.setItem('tempPlaceData', JSON.stringify(tempPlaceData));
+
+            // Navegamos a la página de categorías
+            import('../AddCategory/category.js').then(module => {
+              const { categoryPage } = module;
+              categoryPage(node);
+            });
+          });
+
+          // Añadimos el botón al contenedor
+          selectContainer.appendChild(addCategoryButton);
+        }
+
+        fieldsWrapper.appendChild(fieldElement);
+      } else {
+        // Para los demás campos, los creamos normalmente
+        const fieldElement = createField(
+          field.label,
+          field.type,
+          field.id,
+          field.name,
+          field.required,
+          null
         );
         fieldsWrapper.appendChild(fieldElement);
       }
@@ -143,20 +220,9 @@ export const placePage = async (node, fromReminder = false) => {
   } catch (error) {
     console.error('Error al cargar categorías:', error);
 
-    // Mostrar mensaje de error pero continuar con el formulario
-    const errorMessage = document.createElement('div');
-    errorMessage.classList.add('error-message');
-    errorMessage.innerHTML = `
-      <p>Error al cargar categorías. Puedes crear un lugar sin categoría o intentar crear una categoría.</p>
-      <button id="create-category-button" class="secondary-button">Crear Categoría</button>
-    `;
-
-    // Añadimos el mensaje al principio del contenedor principal
-    placeContainer.prepend(errorMessage);
-
     // Creamos los campos del formulario a pesar del error
     fields.forEach(field => {
-      // Si es el campo de categoría, creamos un campo de texto deshabilitado
+      // Si es el campo de categoría, creamos un campo de texto deshabilitado con botón
       if (field.type === 'select' && field.name === 'category') {
         const fieldElement = createField(
           field.label,
@@ -166,11 +232,41 @@ export const placePage = async (node, fromReminder = false) => {
           field.required,
           null
         );
+
         const input = fieldElement.querySelector('input');
         if (input) {
           input.value = 'Error al cargar categorías';
           input.disabled = true;
+
+          // Creamos el contenedor para el botón similar al de búsqueda
+          const buttonContainer = document.createElement('div');
+          buttonContainer.classList.add('category-input-container');
+
+          // Movemos el input al contenedor
+          input.parentNode.replaceChild(buttonContainer, input);
+          buttonContainer.appendChild(input);
+
+          // Creamos el botón para añadir categoría con estilo similar al de búsqueda
+          const addCategoryButton = document.createElement('button');
+          addCategoryButton.type = 'button';
+          addCategoryButton.id = 'create-category-button';
+          addCategoryButton.classList.add('category-add-button');
+          addCategoryButton.innerHTML = `
+            <img src="/assets/add-svgrepo-com.svg" alt="Añadir" class="add-icon">
+          `;
+
+          // Añadimos el event listener al botón
+          addCategoryButton.addEventListener('click', () => {
+            import('../AddCategory/category.js').then(module => {
+              const { categoryPage } = module;
+              categoryPage(node);
+            });
+          });
+
+          // Añadimos el botón al contenedor
+          buttonContainer.appendChild(addCategoryButton);
         }
+
         fieldsWrapper.appendChild(fieldElement);
       } else {
         const fieldElement = createField(
@@ -184,22 +280,9 @@ export const placePage = async (node, fromReminder = false) => {
         fieldsWrapper.appendChild(fieldElement);
       }
     });
-
-    // Agregamos el event listener para el botón de crear categoría
-    setTimeout(() => {
-      const createCategoryButton = document.getElementById('create-category-button');
-      if (createCategoryButton) {
-        createCategoryButton.addEventListener('click', () => {
-          import('../AddCategory/category.js').then(module => {
-            const { categoryPage } = module;
-            categoryPage(node);
-          });
-        });
-      }
-    }, 0);
   }
 
-  // Agregamos el campo de ubicación al final
+  // Agregamos el campo de ubicación
   const locationSpan = document.createElement('span');
   locationSpan.classList.add('input-span');
 

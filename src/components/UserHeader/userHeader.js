@@ -2,7 +2,7 @@ import { goToHomePage } from "../../functions/navigation/goHomePage";
 import { logOut } from "../../functions/users/logout";
 import { AlertNotification } from "../AlertNotification/notification";
 import { createButton } from "../Button/button";
-import { Home } from "../Home/home";
+import { homePage } from "../../pages/HomePage/homePage";
 import { NotificationReminder } from "../ReminderNotification/reminderNotification";
 import('./userHeader.css');
 

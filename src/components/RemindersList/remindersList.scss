@@ -1,0 +1,74 @@
+.reminder-notification-content {
+  max-width: 600px;
+  width: 100%;
+  
+  h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  
+  .reminder-list {
+    margin-top: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    
+    .reminder-notification-item {
+      padding: 10px 15px;
+      border-radius: 8px;
+      background-color: var(--kg-color-tertiary);
+      margin-bottom: 10px;
+      transition: background-color 0.2s;
+      cursor: pointer;
+      
+      &:hover {
+        background-color: var(--kg-color-secondary);
+      }
+      
+      .reminder-summary {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 5px;
+        font-size: 14px;
+        line-height: 1.4;
+        
+        .reminder-name {
+          font-weight: bold;
+          color: var(--kg-color-dark);
+        }
+        
+        .reminder-time, .reminder-location {
+          color: var(--kg-text-dark);
+        }
+      }
+    }
+  }
+  
+  .calendar-button-plus-container {
+    display: flex;
+    justify-content: center;
+    
+    .box_plus {
+      transform: scale(0.7);
+    }
+    
+    button {
+      width: 100%;
+    }
+  }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .reminder-notification-content {
+    .reminder-list {
+      .reminder-notification-item {
+        .reminder-summary {
+          font-size: 13px;
+        }
+      }
+    }
+  }
+}

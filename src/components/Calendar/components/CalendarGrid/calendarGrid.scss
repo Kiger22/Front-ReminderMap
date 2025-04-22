@@ -1,0 +1,82 @@
+$color1: var(--kg-color-primary);
+$color2: var(--kg-color-secondary);
+$color3: var(--kg-color-tertiary);
+$color4: var(--kg-color-dark);
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--kg-gap-sm);
+  padding: var(--kg-padding-sm);
+}
+
+.day {
+  display: inline-block;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  min-height: 40px;
+
+  .day-number {
+    font-weight: 500;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .reminder-count {
+    font-size: 0.8em;
+    color: $color1;
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+  }
+
+  &:hover {
+    background-color: $color2;
+    box-shadow: $color4;
+  }
+  
+  &.empty {
+    background-color: transparent;
+    cursor: default;
+  }
+
+  &.has-reminder {
+    border: 3px solid $color3;
+  }
+
+  &.today {
+    background-color: $color3;
+  }
+
+  &.past {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+@media (max-width: 900px) {
+  .calendar-grid {
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+    padding: 3px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .calendar-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2px;
+    padding: 2px;
+    font-size: 0.6rem;
+  }
+}
+
+
+

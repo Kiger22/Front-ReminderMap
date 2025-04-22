@@ -4,71 +4,45 @@ import { goToHomePage } from "../navigation/goHomePage";
 
 export const addCategory = async () => {
   try {
+    const categoryName = document.getElementById('category-name').value;
+    const categoryDescription = document.getElementById('category-description').value;
     const userId = localStorage.getItem('userId');
     const authToken = localStorage.getItem('authToken');
 
-    if (!userId || !authToken) {
-      throw new Error('No hay autorización');
+    if (!categoryName || !userId || !authToken) {
+      console.error('Faltan datos para crear la categoría');
+      return false;
     }
 
-    const categoryName = document.getElementById('category-name')?.value?.trim();
-    const descriptionName = document.getElementById('category-description')?.value?.trim();
-
-    if (!categoryName) {
-      throw new Error('El nombre de la categoría es obligatorio');
-    }
-
-    const categoryData = {
-      name: categoryName,
-      description: descriptionName || '',
-      userId: userId  // Nos aseguramos de que userId se envía correctamente
-    };
-
-    console.log('Datos de categoría a enviar:', categoryData);
-
-    // Verificar si ya existe una categoría con el mismo nombre
-    const existingCategories = await api({
-      endpoint: 'categories',
-      method: 'GET',
-      token: authToken
-    });
-
-    if (existingCategories.categories.some(category => category.name === categoryData.name)) {
-      throw new Error('Ya existe una categoría con este nombre');
-    }
-
-    const response = await api({
-      endpoint: 'categories',
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/categories`, {
       method: 'POST',
-      body: categoryData,
-      token: authToken  // Nos aseguramos de enviar el token
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+      },
+      body: JSON.stringify({
+        name: categoryName,  // Cambiado de 'label' a 'name' para coincidir con el backend
+        description: categoryDescription,
+        userId
+      })
     });
 
-    if (!response.success) {
-      console.error('Error en la respuesta del servidor:', response);
-      throw new Error(response.message || 'Error al crear la categoría');
+    if (!response.ok) {
+      throw new Error(`Error al crear categoría: ${response.status}`);
     }
 
-    console.log('Respuesta de creación de categoría:', response);
+    const data = await response.json();
+    console.log('Categoría creada:', data);
 
-    // Limpiamos el formulario
-    document.getElementById('category-name').value = '';
-    document.getElementById('category-description').value = '';
+    // Guardamos el ID de la categoría recién creada para seleccionarla al volver
+    if (data && data.category && data.category._id) {
+      localStorage.setItem('lastCreatedCategoryId', data.category._id);
+      localStorage.setItem('lastCreatedCategoryName', categoryName);
+    }
 
-    AlertNotification(
-      'Éxito',
-      'Categoría creada correctamente',
-      () => goToHomePage()
-    );
-
-    return response.category;
-
+    return true;
   } catch (error) {
-    console.error('Error en addCategory:', error);
-    AlertNotification(
-      'Error',
-      error.message || 'No se pudo crear la categoría'
-    );
-    throw error;
+    console.error('Error al crear categoría:', error);
+    return false;
   }
 };

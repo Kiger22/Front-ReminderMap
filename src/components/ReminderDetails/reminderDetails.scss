@@ -1,0 +1,62 @@
+.reminder-detail-content {
+  max-width: 500px;
+  
+  h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  
+  .reminder-detail-info {
+    margin-bottom: 20px;
+    
+    p {
+      margin: 8px 0;
+    }
+  }
+  
+  .reminder-detail-actions {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    
+    .svg-icon {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      transition: transform 0.2s, filter 0.2s;
+      display: block; /* Aseguramos que sea visible */
+      filter: brightness(0); /* Hace que los iconos sean negros */
+      opacity: 0.8; /* Ajusta la opacidad para mejor contraste */
+      
+      &:hover {
+        transform: scale(1.2);
+        filter: brightness(0) invert(0.3); /* Efecto al pasar el cursor */
+      }
+    }
+  }
+}
+
+/* Ajuste para modo oscuro */
+.dark .reminder-detail-actions .svg-icon {
+  filter: brightness(0) invert(1); /* Iconos blancos en modo oscuro */
+  opacity: 0.9;
+  
+  &:hover {
+    filter: brightness(0) invert(0.7); /* Efecto al pasar el cursor en modo oscuro */
+  }
+}
+
+@media (max-width: 768px) {
+  .reminder-detail-content {
+    max-width: 100%;
+    
+    .reminder-detail-actions {
+      flex-direction: row; /* Mantenemos los iconos en fila */
+      
+      .svg-icon {
+        margin: 0 10px;
+      }
+    }
+  }
+}

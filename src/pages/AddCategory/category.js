@@ -23,7 +23,29 @@ export const categoryPage = (node) => {
   categoryContainer.addEventListener('submit', async (e) => {
     e.preventDefault();
     console.log('Formulario de categoría enviado');
-    await addCategory();
+    const success = await addCategory();
+
+    if (success) {
+      // Volvemos a la página de lugares
+      const { placePage } = await import('../AddPlace/place.js');
+      await placePage(node);
+
+      // Restauramos los datos temporales si existen
+      const tempData = localStorage.getItem('tempPlaceData');
+      if (tempData) {
+        const data = JSON.parse(tempData);
+        const nameInput = document.getElementById('place-name');
+        const descriptionInput = document.getElementById('place-description');
+        const locationInput = document.getElementById('location');
+
+        if (nameInput && data.name) nameInput.value = data.name;
+        if (descriptionInput && data.description) descriptionInput.value = data.description;
+        if (locationInput && data.location) locationInput.value = data.location;
+
+        // Limpiamos los datos temporales
+        localStorage.removeItem('tempPlaceData');
+      }
+    }
   });
 
   const fieldsWrapper = document.createElement('div');
@@ -57,9 +79,7 @@ export const categoryPage = (node) => {
   };
 
   const addButton = createButton('Guardar', 'submit');
-  // addButton.addEventListener('click', () => {
-  //   addCategory();
-  // });
+  // No necesitamos añadir un event listener aquí, ya que el formulario ya tiene uno
 
   const resetButton = createButton('Limpiar', 'reset');
   resetButton.addEventListener('click', () => {
@@ -67,8 +87,37 @@ export const categoryPage = (node) => {
   });
 
   const cancelButton = createButton('Cancelar', 'button');
-  cancelButton.addEventListener('click', () => {
-    categoryForm.remove();
+  cancelButton.addEventListener('click', async () => {
+    // Volvemos a la página de lugares
+    const { placePage } = await import('../AddPlace/place.js');
+    await placePage(node);
+
+    // Restauramos los datos temporales si existen
+    const tempData = localStorage.getItem('tempPlaceData');
+    if (tempData) {
+      const data = JSON.parse(tempData);
+      const nameInput = document.getElementById('place-name');
+      const descriptionInput = document.getElementById('place-description');
+      const locationInput = document.getElementById('location');
+      const categorySelect = document.getElementById('place-category');
+
+      if (nameInput && data.name) nameInput.value = data.name;
+      if (descriptionInput && data.description) descriptionInput.value = data.description;
+      if (locationInput && data.location) locationInput.value = data.location;
+      if (categorySelect && data.category) {
+        // Buscamos la opción correspondiente
+        const options = categorySelect.options;
+        for (let i = 0; i < options.length; i++) {
+          if (options[i].value === data.category) {
+            categorySelect.selectedIndex = i;
+            break;
+          }
+        }
+      }
+
+      // Limpiamos los datos temporales
+      localStorage.removeItem('tempPlaceData');
+    }
   });
 
   divButtons.appendChild(addButton);

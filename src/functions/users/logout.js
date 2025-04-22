@@ -7,6 +7,25 @@ import { createUserHeader } from "../../components/UserHeader/userHeader";
 import { goToHomePage } from "../navigation/goHomePage";
 
 export const logOut = async (isPageReload = false) => {
+  // Primero mostramos una confirmación
+  if (!isPageReload) {
+    AlertNotification(
+      '¿Cerrar sesión?',
+      '¿Estás seguro de que deseas cerrar sesión?',
+      async (confirmed) => {
+        if (confirmed) {
+          await performLogout(isPageReload);
+        }
+      },
+      { showCancelButton: true }
+    );
+  } else {
+    await performLogout(isPageReload);
+  }
+};
+
+// Función auxiliar para realizar el cierre de sesión
+const performLogout = async (isPageReload) => {
   try {
     // Creamos y mostramos un loader en la aplicación
     createLoader(divApp);

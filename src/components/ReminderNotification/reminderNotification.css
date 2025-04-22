@@ -12,9 +12,53 @@
 }
 
 .reminder-notifications-container {
-  width:var(--kg-width-reminder);
+  width: var(--kg-width-reminder);
   height: auto;
-  font-size: var(--kg-font-size-text);
+  background-color: var(--kg-color-secondary);
+  border-radius: var(--kg-radius-md);
+  padding: var(--kg-padding-xl);
+}
+
+.success {
+  background-color: var(--kg-color-secondary);
+  border-radius: var(--kg-radius-md);
+  padding: var(--kg-padding-xl);
+  width: 100%;
+  height: auto;
+}
+
+.success-prompt-wrap{
+  display: flex;
+  flex-direction: column;
+  gap: var(--kg-gap-md);
+} 
+
+.success-prompt-heading {
+  font-size: var(--kg-font-size-h3);
+  line-height: 2rem;
+  font-weight: bold;
+  margin-bottom:var(--kg-margin-md);
+}
+
+.success-prompt-prompt {
+  background-color: var(--kg-color-tertiary);
+  padding:var(--kg-padding-md);
+  font-size: var(--kg-font-size-link);
+  line-height: 1.5rem;
+  color: var(--kg-color-dark);
+  border-radius: var(--kg-radius-md);
+}
+
+.success-prompt-prompt p {
+  margin: 0;
+  line-height: 1.8rem;
+}
+
+.success-button-container {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-top: 1rem;
 }
 
 .success-button-main {
@@ -35,18 +79,13 @@
 }
 
 .success-button-secondary {
-  margin-right: 1rem;
-  padding-top: 0.375rem;
-  padding-bottom: 0.375rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  margin-left: 0.75rem;
-  background-color: var(--kg-color-tertiary);
+  margin-right: 2rem;
+  padding: 1.5rem 1rem;
+  background-color: var(--kg-color-secondary);
   color: var(--kg-color-primary);
-  font-size: 0.875rem;
+  font-size: 1rem;
   line-height: 1.25rem;
-  border-radius:50%;
-  border: none;
+  font-weight: bold;
 }
 
 .success-button-secondary:hover {

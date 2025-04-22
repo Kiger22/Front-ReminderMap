@@ -1,0 +1,18 @@
+.places-header {
+  padding: 1rem;
+  background-color: var(--background-color);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.places-header h2 {
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.places-header p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}

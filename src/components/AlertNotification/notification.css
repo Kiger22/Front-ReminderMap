@@ -11,54 +11,83 @@
   z-index: 1000;
 }
 
-.notifications-container {
+.notification-container {
   width: auto;
-  height: auto;
-  font-size: var(--kg-font-size-text);
-}
-
-.success {
+  max-width: 80%;
+  max-height: 80vh;
+  overflow-y: auto;
   background-color: var(--kg-bg-secondary);
-  padding:var(--kg-padding-alert);
+  padding: var(--kg-padding-alert);
   border-radius: var(--kg-radius-md);
 }
 
-.success-prompt-wrap {
-  margin: var(--kg-margin-md) auto;
+.notification-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kg-gap-md);
 }
 
-.success-prompt-heading {
+.notification-heading {
   font-weight: bold;
-  color:var(--kg-color-dark);
+  color: var(--kg-color-dark);
   font-size: x-large;
 }
 
-.success-prompt-prompt {
+.notification-prompt {
   background-color: var(--kg-color-tertiary);
-  padding:1rem;
   font-size: var(--kg-font-size-link);
   color: var(--kg-color-dark);
   line-height: 2rem;
-  margin-top: var(--kg-margin-md);
   border-radius: var(--kg-radius-md);
+  padding: var(--kg-padding-md);
 }
 
-.success-button-container {
-  display: flex;  gap: var(--kg-gap-md);
+.notification-button-container {
+  display: flex;
+  gap: var(--kg-gap-md);
   justify-content: flex-end;
   margin-top: var(--kg-margin-md);
-  padding: var(--kg-padding-md);
+}
+.button-plus-container > .box_plus {
+  transform: scale(0.7);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .reminder-list {
-    height: 300px; 
+  .notification-container {
+    max-width: 90%;
+    padding: var(--kg-padding-md);
+  }
+  
+  .notification-button-main,
+  .notification-button-secondary {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
   }
 }
 
 @media (max-width: 480px) {
-  .reminder-list {
-    height: 250px;
+  .notification-container {
+    max-width: 95%;
+    padding: var(--kg-padding-sm);
+  }
+  
+  .notification-heading {
+    font-size: large;
+  }
+  
+  .notification-prompt {
+    font-size: var(--kg-font-size-p);
+    line-height: 1.5rem;
+  }
+  
+  .notification-button-container {
+    flex-direction: column;
+  }
+  
+  .notification-button-main,
+  .notification-button-secondary {
+    width: 100%;
+    margin-bottom: var(--kg-margin-sm);
   }
 }

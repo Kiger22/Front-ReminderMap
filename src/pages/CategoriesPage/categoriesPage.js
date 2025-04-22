@@ -45,89 +45,118 @@ export const categoriesPage = async (node) => {
     console.log('Respuesta de categorías:', response);
 
     if (response.categories && response.categories.length > 0) {
-      response.categories.forEach(category => {
-        const categoryItem = document.createElement('div');
-        categoryItem.classList.add('category-item');
+      // Filtramos la categoría "Desconocida" para que no aparezca en el listado
+      const filteredCategories = response.categories.filter(
+        category => category.name !== "Desconocida"
+      );
 
-        const categoryInfo = document.createElement('div');
-        categoryInfo.classList.add('category-info');
+      if (filteredCategories.length > 0) {
+        filteredCategories.forEach(category => {
+          const categoryItem = document.createElement('div');
+          categoryItem.classList.add('category-item');
 
-        const categoryName = document.createElement('h3');
-        categoryName.textContent = category.name;
+          const categoryInfo = document.createElement('div');
+          categoryInfo.classList.add('category-info');
 
-        const categoryDescription = document.createElement('p');
-        categoryDescription.textContent = category.description || "Sin descripción";
+          const categoryName = document.createElement('h3');
+          categoryName.textContent = category.name;
 
-        categoryInfo.appendChild(categoryName);
-        categoryInfo.appendChild(categoryDescription);
+          const categoryDescription = document.createElement('p');
+          categoryDescription.textContent = category.description || "Sin descripción";
 
-        const categoryActions = document.createElement('div');
-        categoryActions.classList.add('category-actions');
+          categoryInfo.appendChild(categoryName);
+          categoryInfo.appendChild(categoryDescription);
 
-        const editButton = document.createElement('img');
-        editButton.src = './assets/edit-svgrepo-com.svg';
-        editButton.classList.add('action-icon');
+          const categoryActions = document.createElement('div');
+          categoryActions.classList.add('category-actions');
 
-        const deleteButton = document.createElement('img');
-        deleteButton.src = './assets/delette-svgrepo-com.svg';
-        deleteButton.classList.add('action-icon');
+          const editButton = document.createElement('img');
+          editButton.src = './assets/edit-svgrepo-com.svg';
+          editButton.classList.add('action-icon');
 
-        const addPlaceButton = document.createElement('img');
-        addPlaceButton.src = './assets/add-svgrepo-com.svg';
-        addPlaceButton.classList.add('action-icon', 'add-place-icon');
-        addPlaceButton.alt = 'Agregar Lugar';
-        addPlaceButton.addEventListener('click', () => {
-          placePage(node, { category: category });
-        });
+          const deleteButton = document.createElement('img');
+          deleteButton.src = './assets/delette-svgrepo-com.svg';
+          deleteButton.classList.add('action-icon');
 
-        editButton.addEventListener('click', () => {
-          showUpdateForm(category);
-        });
+          const addPlaceButton = document.createElement('img');
+          addPlaceButton.src = './assets/add-svgrepo-com.svg';
+          addPlaceButton.classList.add('action-icon', 'add-place-icon');
+          addPlaceButton.alt = 'Agregar Lugar';
+          addPlaceButton.addEventListener('click', () => {
+            placePage(node, { category: category });
+          });
 
-        deleteButton.addEventListener('click', () => {
-          AlertNotification(
-            '¿Eliminar categoría?',
-            '¿Estás seguro de que deseas eliminar esta categoría?',
-            async (confirmed) => {
-              if (confirmed) {
-                try {
-                  await api({
-                    endpoint: `/categories/${category._id}`,
-                    method: 'DELETE',
-                    token: authToken
-                  });
+          editButton.addEventListener('click', () => {
+            showUpdateForm(category);
+          });
 
-                  categoryItem.remove();
+          deleteButton.addEventListener('click', () => {
+            AlertNotification(
+              '¿Eliminar categoría?',
+              '¿Estás seguro de que deseas eliminar esta categoría?',
+              async (confirmed) => {
+                if (confirmed) {
+                  try {
+                    await api({
+                      endpoint: `/categories/${category._id}`,
+                      method: 'DELETE',
+                      token: authToken
+                    });
 
-                  if (!document.querySelector('.category-item')) {
-                    location.reload();
+                    categoryItem.remove();
+
+                    if (!document.querySelector('.category-item')) {
+                      location.reload();
+                    }
+
+                    AlertNotification('Éxito', 'Categoría eliminada correctamente', null, {
+                      showCancelButton: false
+                    });
+                  } catch (error) {
+                    console.error('Error al eliminar categoría:', error);
+                    AlertNotification('Error', 'No se pudo eliminar la categoría', null, {
+                      showCancelButton: false
+                    });
                   }
-
-                  AlertNotification('Éxito', 'Categoría eliminada correctamente', null, {
-                    showCancelButton: false
-                  });
-                } catch (error) {
-                  console.error('Error al eliminar categoría:', error);
-                  AlertNotification('Error', 'No se pudo eliminar la categoría', null, {
-                    showCancelButton: false
-                  });
                 }
               }
-            }
-          );
+            );
+          });
+
+          const actionIcons = document.createElement('div');
+          actionIcons.classList.add('action-icons');
+          actionIcons.appendChild(editButton);
+          actionIcons.appendChild(deleteButton);
+          actionIcons.appendChild(addPlaceButton);
+
+          categoryActions.appendChild(actionIcons);
+          categoryItem.appendChild(categoryInfo);
+          categoryItem.appendChild(categoryActions);
+          categoriesContainer.appendChild(categoryItem);
+        });
+      } else {
+        const noCategoriesContainer = document.createElement('div');
+        noCategoriesContainer.classList.add('no-categories-container');
+
+        const noCategoriesMessage = document.createElement('p');
+        noCategoriesMessage.classList.add('no-categories-message');
+        noCategoriesMessage.textContent = "No hay categorías registradas.";
+
+        const createCategoryButton = document.createElement('button');
+        createCategoryButton.classList.add('primary-button');
+        createCategoryButton.textContent = "Crear nueva categoría";
+        createCategoryButton.addEventListener('click', () => {
+          // Importamos dinámicamente la función para mostrar el formulario de categoría
+          import('../AddCategory/category.js').then(module => {
+            const { categoryPage } = module;
+            categoryPage(node);
+          });
         });
 
-        const actionIcons = document.createElement('div');
-        actionIcons.classList.add('action-icons');
-        actionIcons.appendChild(editButton);
-        actionIcons.appendChild(deleteButton);
-        actionIcons.appendChild(addPlaceButton);
-
-        categoryActions.appendChild(actionIcons);
-        categoryItem.appendChild(categoryInfo);
-        categoryItem.appendChild(categoryActions);
-        categoriesContainer.appendChild(categoryItem);
-      });
+        noCategoriesContainer.appendChild(noCategoriesMessage);
+        noCategoriesContainer.appendChild(createCategoryButton);
+        categoriesContainer.appendChild(noCategoriesContainer);
+      }
     } else {
       const noCategoriesContainer = document.createElement('div');
       noCategoriesContainer.classList.add('no-categories-container');

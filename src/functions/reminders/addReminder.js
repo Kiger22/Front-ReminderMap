@@ -1,6 +1,6 @@
 import { api } from "../../api/api";
 import { AlertNotification } from "../../components/AlertNotification/notification";
-import { goToHomePage } from "../navigation/goHomePage";
+import { remindersPage } from "../../pages/RemindersList/remindersList";
 import { getPlaces } from "../places/getPlaces";
 
 export const addReminder = async () => {
@@ -65,11 +65,18 @@ export const addReminder = async () => {
     });
 
     if (response.éxito) {
-      AlertNotification('Éxito', 'Recordatorio creado correctamente');
+      AlertNotification('Éxito', 'Recordatorio creado correctamente', () => {
+        // Redirigir a la página de recordatorios
+        const heroContainer = document.querySelector('.hero-container');
+        if (heroContainer) {
+          remindersPage(heroContainer);
+        }
+      });
     }
 
     return response;
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error en addReminder:', error);
     AlertNotification('Error', 'No se pudo crear el recordatorio', null, {
       showCancelButton: false

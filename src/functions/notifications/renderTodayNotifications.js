@@ -1,6 +1,7 @@
 import { AlertNotification } from '../../components/AlertNotification/notification';
 import { createReminderElement } from '../reminders/renderReminder';
 import { loadReminders } from '../reminders/loadReminders';
+import { createMapModal } from '../../components/MapModal/mapModal';
 
 export const renderTodayNotifications = async (container) => {
   try {

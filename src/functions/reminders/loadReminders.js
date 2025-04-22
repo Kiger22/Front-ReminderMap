@@ -20,13 +20,16 @@ export const loadReminders = async (options = { render: true }) => {
       return null;
     }
 
+    console.log(`Intentando cargar recordatorios para el usuario: ${userId}`);
+
     const response = await api({
-      endpoint: `reminders/${userId}`, // Removido el slash extra
+      endpoint: `reminders/${userId}`,
       method: 'GET',
     });
 
     if (response && response.recordatorios && Array.isArray(response.recordatorios)) {
-      // Si la opción render está activada, renderizamos en el DOM
+
+      // Si se especifica renderizar, lo hacemos
       if (options.render) {
         const remindersList = document.querySelector('.reminders-list');
         if (!remindersList) {
@@ -63,17 +66,25 @@ export const loadReminders = async (options = { render: true }) => {
             console.error('Error al renderizar recordatorio:', renderError);
           }
         });
-
         return uniqueReminders;
       }
-
       return response.recordatorios;
     }
-
     throw new Error('Formato de respuesta inválido');
-
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error al cargar recordatorios:', error);
+
+    // Mostrar una notificación al usuario si el error es de conexión
+    if (error.message.includes('No se pudo conectar al servidor')) {
+      AlertNotification(
+        'Error de conexión',
+        'No se pudo conectar con el servidor. Verifica que el backend esté en ejecución.',
+        null,
+        { showCancelButton: false }
+      );
+    }
+
     return null;
   }
 };

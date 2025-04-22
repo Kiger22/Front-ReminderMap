@@ -14,7 +14,9 @@ $color4:var(--kg-color-dark);
 }
 
 .calendar-container > div{
-  height: 100%;
+  margin: auto;
+  width: 90%;
+  height: 90%;
 }
 
 .calendar-content {
@@ -51,7 +53,7 @@ $color4:var(--kg-color-dark);
     }
   }
 
-  .days-grid {
+  .calendar-days {
     height: 70%;;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -129,69 +131,91 @@ $color4:var(--kg-color-dark);
   }
 }
 
-.calendar-button-plus-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 2rem;
-  
-  .box_plus {
-    transform: scale(0.7);
-
-    .span_plus{
-      font-size: var(--kg-font-size-h3);
-      color: var(--kg-color-dark);
-    }
-  }
-}
-
 .reminder-notification-content {
-  margin-top: var(--kg-margin-md);
-  padding: var(--kg-padding-lg);
+  padding: var(--kg-padding-md);
   max-height: 70vh;
   overflow-y: auto;
-  text-align: center;
-  background-color: var(--kg-color-secondary);
 
   h3 {
-    margin-bottom: 15px;
-    color: var(--kg-color-primary);
-  }
-
-  p {
     margin-bottom: 1rem;
-    font-size: var(--kg-font-size-p);
-    color: var(--kg-color-dark);
-    font-weight: 500;
-  }
-
-  .reminder-list {
-    margin-bottom: 15px;
-    text-align: left;
   }
 }
 
 .reminder-notification-item {
-  margin-bottom: 10px;
-  padding: 10px;
-  background-color: rgba(var(--kg-color-primary-rgb), 0.1);
+  margin-bottom:var(--kg-margin-md);
+  padding:var(--kg-padding-md);
+  background-color: var(--kg-color-tertiary);
+  border: 1px solid var(--kg-color-secondary);
   border-radius: var(--kg-radius-sd);
 
   .reminder-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 5px;
+    margin-bottom: var(--kg-margin-md);
 
     h4 {
       margin: 0;
-      color: var(--kg-color-primary);
+      color: var(--kg-color-dark);
     }
   }
 
   .reminder-details {
     p {
-      margin: 5px 0;
-      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--kg-color-dark);
+      margin: var(--kg-margin-sm) 0;
+      font-size:var(--kg-font-size-link);
+    }
+  }
+}
+
+.reminder-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  gap:var(--kg-gap-md);
+  margin-top: var(--kg-margin-md);;
+  
+  .action-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    
+    &:hover {
+      transform: scale(1.2);
+    }
+    
+    &.back-icon {
+      filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(30%) contrast(100%);
+      margin-right: auto; 
+    }
+    
+    &.edit-icon, &.delete-icon {
+      filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(30%) contrast(100%);
+      margin: auto; 
+    }
+  }
+}
+
+.reminder-detail-content {
+  padding: var(--kg-padding-md);
+  
+  h2 {
+    margin-bottom: var(--kg-margin-md);
+    color:var(--kg-color-dark);
+    border-bottom: 1px solid #eee;
+    padding-bottom: var(--kg-padding-sm);
+  }
+  
+  .reminder-detail-info {
+    margin-bottom: var(--kg-margin-md);
+    
+    p {
+      margin:var(--kg-margin-sm) 0;
+      line-height: 1.5;
     }
   }
 }

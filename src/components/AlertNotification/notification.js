@@ -1,106 +1,73 @@
 import('./notification.css');
+import { createButton } from '../Button/button';
 
 export const AlertNotification = (title, content, callback, options = {}) => {
-  const defaultOptions = {
-    autoClose: false,
-    autoCloseTime: 5000,
-    showCancelButton: true
+  // Opciones por defecto
+  const mergedOptions = {
+    showCancelButton: false,
+    confirmButtonText: 'Aceptar',
+    cancelButtonText: 'Cancelar',
+    onCancel: null,
+    ...options
   };
-
-  const mergedOptions = { ...defaultOptions, ...options };
 
   // Creamos el overlay
   const overlay = document.createElement('div');
   overlay.classList.add('notification-overlay');
 
-  // Creamos el contenedor de la notificación
-  const container = document.createElement('div');
-  container.classList.add('notifications-container');
+  // Creamos el contenedor principal de la notificación
+  const notificationContainer = document.createElement('div');
+  notificationContainer.classList.add('notification-container');
 
-  // Creamos el div de éxito
-  const successDiv = document.createElement('div');
-  successDiv.classList.add('success');
+  // Creamos el contenedor de contenido
+  const notificationContent = document.createElement('div');
+  notificationContent.classList.add('notification-content');
 
-  // Creamos el contenedor flex
-  const flexDiv = document.createElement('div');
-  flexDiv.classList.add('flex');
-
-  // Creamos el contenedor del contenido
-  const contentWrap = document.createElement('div');
-  contentWrap.classList.add('success-prompt-wrap');
-
-  // Añadimos el título si existe
+  // Creamos el título
   if (title) {
-    const titleElement = document.createElement('p');
-    titleElement.classList.add('success-prompt-heading');
+    const titleElement = document.createElement('h2');
+    titleElement.classList.add('notification-heading');
     titleElement.textContent = title;
-    contentWrap.appendChild(titleElement);
+    notificationContent.appendChild(titleElement);
   }
 
-  // Manejamos el contenido
+  // Creamos el contenido
+  const contentElement = document.createElement('div');
+  contentElement.classList.add('notification-prompt');
+
   if (typeof content === 'string') {
-
-    // Si el contenido parece ser HTML
-    if (content.trim().startsWith('<')) {
-      const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = content;
-      contentWrap.appendChild(tempDiv.firstElementChild);
-    } else {
-
-      // Si es texto plano
-      const contentElement = document.createElement('p');
-      contentElement.classList.add('success-prompt-prompt');
-      contentElement.textContent = content;
-      contentWrap.appendChild(contentElement);
-    }
+    contentElement.innerHTML = content;
   } else if (content instanceof HTMLElement) {
-    contentWrap.appendChild(content);
+    contentElement.appendChild(content);
   }
+
+  notificationContent.appendChild(contentElement);
 
   // Creamos el contenedor de botones
   const buttonContainer = document.createElement('div');
-  buttonContainer.classList.add('success-button-container');
+  buttonContainer.classList.add('notification-button-container');
 
-  // Creamos el botón de aceptar
-  const acceptButton = document.createElement('button');
-  acceptButton.type = 'button';
-  acceptButton.classList.add('success-button-main-alert');
-  acceptButton.textContent = 'Aceptar';
-  acceptButton.onclick = () => {
+  // Creamos el botón de aceptar usando createButton
+  createButton(buttonContainer, mergedOptions.confirmButtonText, 'notification-confirm-button', () => {
     overlay.remove();
     if (callback) callback(true);
-  };
+  });
 
-  buttonContainer.appendChild(acceptButton);
-
-  // Creamos el botón de cancelar si está habilitado
+  // Creamos el botón de cancelar si es necesario
   if (mergedOptions.showCancelButton) {
-    const cancelButton = document.createElement('button');
-    cancelButton.type = 'button';
-    cancelButton.classList.add('success-button-secondary-alert');
-    cancelButton.textContent = 'Cancelar';
-    cancelButton.onclick = () => {
+    createButton(buttonContainer, mergedOptions.cancelButtonText, 'notification-cancel-button', () => {
       overlay.remove();
-      if (callback) callback(false);
-    };
-    buttonContainer.appendChild(cancelButton);
+      if (mergedOptions.onCancel) {
+        mergedOptions.onCancel();
+      } else if (callback) {
+        callback(false);
+      }
+    });
   }
 
   // Ensamblamos la notificación
-  contentWrap.appendChild(buttonContainer);
-  flexDiv.appendChild(contentWrap);
-  successDiv.appendChild(flexDiv);
-  container.appendChild(successDiv);
-  overlay.appendChild(container);
-
-  // Añadimos al DOM
+  notificationContent.appendChild(buttonContainer);
+  notificationContainer.appendChild(notificationContent);
+  overlay.appendChild(notificationContainer);
   document.body.appendChild(overlay);
-
-  // Auto-cerrar si está configurado
-  if (mergedOptions.autoClose) {
-    setTimeout(() => {
-      overlay.remove();
-      if (callback) callback(true);
-    }, mergedOptions.autoCloseTime);
-  }
 };

@@ -1,0 +1,32 @@
+.home-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    gap: var(--kg-gap-lg);
+    padding: var(--kg-padding-xl);
+    height: 100vh;
+    width: 80%;
+}
+
+.home-container h3{
+    font-size: var(--kg-font-size-h2);
+    font-weight: 600;
+}
+
+.home-container p{
+    font-size: var(--kg-font-size-link);
+    font-weight: 400;
+}
+
+@media (max-width: 900px) {
+    .home-container{
+        padding: var(--kg-padding-md);
+    }
+}
+
+@media (max-width: 500px) {
+    .home-container{
+        padding: var(--kg-padding-sm);
+    }
+}
