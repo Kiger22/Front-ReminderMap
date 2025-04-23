@@ -47,7 +47,8 @@
   cursor: pointer;
 }
 
-.header-title{
+/* Estilo base para el título del header (modo oscuro predeterminado) */
+.header-title {
   font-size: var(--kg-font-size-p);
   font-weight: bold;
   width: 100%;
@@ -55,6 +56,12 @@
   justify-items: center;
   align-content: center;
   align-items: center;
+  color: var(--kg-text-primary); /* Color claro en modo oscuro predeterminado */
+}
+
+/* Estilo para el título del header en modo claro */
+body.dark .header-title {
+  color: var(--kg-text-dark); /* Color oscuro en modo claro */
 }
 
 .header-login>.svg-icon{
@@ -69,9 +76,16 @@
   margin-right: 3rem;
 }
 
+/* Estilo base para los enlaces del header (modo oscuro predeterminado) */
 .header-menu a,
 .header-login a {
-  color: var(--kg-text-secondary);
+  color: var(--kg-text-secondary); /* Color secundario en modo oscuro predeterminado */
+}
+
+/* Estilo para los enlaces del header en modo claro */
+body.dark .header-menu a,
+body.dark .header-login a {
+  color: var(--kg-text-dark); /* Color oscuro en modo claro */
 }
 
 .header-menu a:hover,

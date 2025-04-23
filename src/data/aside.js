@@ -106,7 +106,7 @@ export const menuAsideII = [
         placePage(hero);
       }
     }
-  },
+  }, {},
   // Ver Categorias
   {
     title: 'Mis Categorias',

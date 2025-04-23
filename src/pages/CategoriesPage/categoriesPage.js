@@ -3,12 +3,15 @@ import { api } from '../../api/api';
 import { AlertNotification } from '../../components/AlertNotification/notification';
 import { addPlace } from '../../functions/places/addPlace';
 import { placePage } from '../AddPlace/place';
+import { loadExampleCategories } from '../../functions/categories/loadExampleCategories';
+import { deleteExampleCategories } from '../../functions/categories/deleteExampleCategories';
+import { createButton } from '../../components/Button/button';
 
 export const categoriesPage = async (node) => {
   node.innerHTML = "";
 
-  const categoriesPage = document.createElement('div');
-  categoriesPage.classList.add('categories-page');
+  const categoriesPageContainer = document.createElement('div');
+  categoriesPageContainer.classList.add('categories-page');
 
   const categoriesHeader = document.createElement('div');
   categoriesHeader.classList.add('categories-header');
@@ -22,11 +25,83 @@ export const categoriesPage = async (node) => {
   categoriesHeader.appendChild(header);
   categoriesHeader.appendChild(content);
 
+  // Añadir botones de acción en el encabezado
+  const headerActions = document.createElement('div');
+  headerActions.classList.add('header-actions');
+
+  // Usamos el componente Button para crear nueva categoría
+  createButton(headerActions, "Nueva categoría", "create-category-btn", () => {
+    import('../AddCategory/category.js').then(module => {
+      const { categoryPage } = module;
+      categoryPage(node);
+    });
+  });
+
+  // Botón para cargar/eliminar ejemplos
+  const examplesButtonContainer = document.createElement('div');
+  examplesButtonContainer.id = 'examples-button-container';
+  headerActions.appendChild(examplesButtonContainer);
+
+  // Verificamos si ya hay categorías de ejemplo para mostrar el botón adecuado
+  const checkForExamples = async () => {
+    try {
+      const authToken = localStorage.getItem('authToken');
+      const userId = localStorage.getItem('userId');
+      const endpoint = userId ? `categories?userId=${userId}` : 'categories';
+      const response = await api({
+        endpoint,
+        method: 'GET',
+        token: authToken
+      });
+
+      // Limpiamos el contenedor del botón
+      examplesButtonContainer.innerHTML = '';
+
+      // Si hay categorías que parecen ejemplos (podemos verificar por nombre o alguna propiedad)
+      const hasExamples = response.categories && response.categories.some(
+        cat => cat.name === "Restaurantes" || cat.name === "Parques" || cat.name === "Museos"
+      );
+
+      if (hasExamples) {
+        // Mostrar botón para eliminar ejemplos
+        createButton(examplesButtonContainer, "Eliminar ejemplos", "delete-examples-btn", async () => {
+          // Aquí iría la lógica para eliminar los ejemplos
+          const success = await deleteExampleCategories();
+          if (success) {
+            categoriesPage(node);
+          }
+        });
+      } else {
+        // Mostrar botón para cargar ejemplos
+        createButton(examplesButtonContainer, "Cargar ejemplos", "load-examples-btn", async () => {
+          const success = await loadExampleCategories();
+          if (success) {
+            categoriesPage(node);
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error al verificar ejemplos:', error);
+      // En caso de error, mostramos el botón de cargar ejemplos por defecto
+      createButton(examplesButtonContainer, "Cargar ejemplos", "load-examples-btn", async () => {
+        const success = await loadExampleCategories();
+        if (success) {
+          categoriesPage(node);
+        }
+      });
+    }
+  };
+
+  // Ejecutamos la verificación al cargar la página
+  checkForExamples();
+
+  categoriesHeader.appendChild(headerActions);
+
   const categoriesContainer = document.createElement('div');
   categoriesContainer.classList.add('categories-container');
 
-  categoriesPage.appendChild(categoriesHeader);
-  categoriesPage.appendChild(categoriesContainer);
+  categoriesPageContainer.appendChild(categoriesHeader);
+  categoriesPageContainer.appendChild(categoriesContainer);
 
   try {
     const authToken = localStorage.getItem('authToken');
@@ -105,8 +180,25 @@ export const categoriesPage = async (node) => {
 
                     categoryItem.remove();
 
+                    // Verificamos si quedan categorías en la lista
                     if (!document.querySelector('.category-item')) {
-                      location.reload();
+                      // En lugar de recargar toda la página, solo actualizamos la vista de categorías
+                      const categoriesContainer = document.querySelector('.categories-container');
+                      if (categoriesContainer) {
+                        // Limpiamos el contenedor
+                        categoriesContainer.innerHTML = '';
+
+                        // Creamos el mensaje de "no hay categorías"
+                        const noCategoriesContainer = document.createElement('div');
+                        noCategoriesContainer.classList.add('no-categories-container');
+
+                        const noCategoriesMessage = document.createElement('p');
+                        noCategoriesMessage.classList.add('no-categories-message');
+                        noCategoriesMessage.textContent = "No hay categorías registradas.";
+
+                        noCategoriesContainer.appendChild(noCategoriesMessage);
+                        categoriesContainer.appendChild(noCategoriesContainer);
+                      }
                     }
 
                     AlertNotification('Éxito', 'Categoría eliminada correctamente', null, {
@@ -142,22 +234,11 @@ export const categoriesPage = async (node) => {
         noCategoriesMessage.classList.add('no-categories-message');
         noCategoriesMessage.textContent = "No hay categorías registradas.";
 
-        const createCategoryButton = document.createElement('button');
-        createCategoryButton.classList.add('primary-button');
-        createCategoryButton.textContent = "Crear nueva categoría";
-        createCategoryButton.addEventListener('click', () => {
-          // Importamos dinámicamente la función para mostrar el formulario de categoría
-          import('../AddCategory/category.js').then(module => {
-            const { categoryPage } = module;
-            categoryPage(node);
-          });
-        });
-
         noCategoriesContainer.appendChild(noCategoriesMessage);
-        noCategoriesContainer.appendChild(createCategoryButton);
         categoriesContainer.appendChild(noCategoriesContainer);
       }
     } else {
+      // Sección donde se muestra "No hay categorías"
       const noCategoriesContainer = document.createElement('div');
       noCategoriesContainer.classList.add('no-categories-container');
 
@@ -165,19 +246,8 @@ export const categoriesPage = async (node) => {
       noCategoriesMessage.classList.add('no-categories-message');
       noCategoriesMessage.textContent = "No hay categorías registradas.";
 
-      const createCategoryButton = document.createElement('button');
-      createCategoryButton.classList.add('primary-button');
-      createCategoryButton.textContent = "Crear nueva categoría";
-      createCategoryButton.addEventListener('click', () => {
-        // Importamos dinámicamente la función para mostrar el formulario de categoría
-        import('../AddCategory/category.js').then(module => {
-          const { categoryPage } = module;
-          categoryPage(node);
-        });
-      });
-
       noCategoriesContainer.appendChild(noCategoriesMessage);
-      noCategoriesContainer.appendChild(createCategoryButton);
+
       categoriesContainer.appendChild(noCategoriesContainer);
     }
   } catch (error) {
@@ -188,7 +258,7 @@ export const categoriesPage = async (node) => {
     categoriesContainer.appendChild(errorMessage);
   }
 
-  node.appendChild(categoriesPage);
+  node.appendChild(categoriesPageContainer);
 };
 
 const showUpdateForm = (category) => {

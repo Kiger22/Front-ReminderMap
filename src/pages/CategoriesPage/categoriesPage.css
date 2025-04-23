@@ -1,7 +1,18 @@
+/* Estilos para los botones de acción en el encabezado */
+.header-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
 .categories-page {
   width: 90%;
   height: 90%;
   margin: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Evita que el contenido se salga */
 }
 
 .categories-container {
@@ -9,10 +20,49 @@
   width: 90%;
   margin: auto;
   color: var(--kg-text-primary);
+  overflow-y: auto;
+  max-height: calc(100% - 150px); /* Altura ajustada para que no se salga del hero-container */
+  padding: var(--kg-padding-md);
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--kg-color-tertiary) transparent;
+  flex: 1; /* Permite que ocupe el espacio disponible */
+}
+
+.categories-container::-webkit-scrollbar {
+  width: 20px;
+}
+
+.categories-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.categories-container::-webkit-scrollbar-thumb {
+  background-color: var(--kg-color-tertiary);
+  border-radius: 4px;
+}
+
+.no-categories-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+  text-align: center;
+}
+
+.no-categories-message {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 20px;
 }
 
 .categories-header {
-  padding: var(--kg-padding-md) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+  text-align: center;
 }
 
 .categories-header h2 {
@@ -91,6 +141,8 @@
 }
 
 .category-info h3 {
+  text-align: start;
+  margin-bottom: var(--kg-margin-sm);
   color: var(--kg-text-primary);
   font-size: var(--kg-font-size-h3);
   font-weight: 600;

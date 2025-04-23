@@ -9,9 +9,35 @@ export const createAsideMenu = (node, menuItems, menuItemsII) => {
   nav.classList.add("menu-nav");
   aside.appendChild(nav);
 
+  // Sección principal
+  const primarySection = document.createElement("div");
+  primarySection.classList.add("menu-section");
+  nav.appendChild(primarySection);
+
+  // Título para la sección principal
+  const primaryTitle = document.createElement("h3");
+  primaryTitle.classList.add("menu-section-title");
+  primaryTitle.textContent = "Principal";
+  primarySection.appendChild(primaryTitle);
+
   const ul = document.createElement("ul");
   ul.classList.add("menu-list");
-  nav.appendChild(ul);
+  primarySection.appendChild(ul);
+
+  // Sección secundaria
+  const secondarySection = document.createElement("div");
+  secondarySection.classList.add("menu-section");
+  nav.appendChild(secondarySection);
+
+  // Título para la sección secundaria
+  const secondaryTitle = document.createElement("h3");
+  secondaryTitle.classList.add("menu-section-title");
+  secondaryTitle.textContent = "Lugares y Categorías";
+  secondarySection.appendChild(secondaryTitle);
+
+  const ulII = document.createElement("ul");
+  ulII.classList.add("menu-list");
+  secondarySection.appendChild(ulII);
 
   // Función para crear elementos de menú
   const createMenuItem = (item, parentUl) => {
@@ -58,10 +84,6 @@ export const createAsideMenu = (node, menuItems, menuItemsII) => {
   menuItems.forEach(item => {
     createMenuItem(item, ul);
   });
-
-  const ulII = document.createElement("ul");
-  ulII.classList.add("menu-list");
-  nav.appendChild(ulII);
 
   // Creamos elementos de menú para el segundo grupo
   menuItemsII.forEach(item => {

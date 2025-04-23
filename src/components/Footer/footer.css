@@ -1,10 +1,11 @@
+/* Estilo base para el footer (modo oscuro predeterminado) */
 .footer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   opacity: 90%;
-  color: var(--kg-text-primary);
+  color: var(--kg-text-primary); /* Color claro en modo oscuro predeterminado */
   text-align: center;
   padding: var(--kg-padding-sm) var(--kg-padding-xl);
   font-size: var(--kg-font-size-text);
@@ -12,6 +13,11 @@
   position: sticky;
   margin: auto 1rem;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para el footer en modo claro */
+body.dark .footer {
+  color: var(--kg-text-dark); /* Color oscuro en modo claro */
 }
 
 .footer::before {
@@ -27,10 +33,16 @@
   z-index: -1; 
 }
 
+/* Estilo base para los enlaces del footer (modo oscuro predeterminado) */
 .footer a {
   text-decoration: none;
   margin: 0 10px;
-  color: var(--kg-text-primary);
+  color: var(--kg-text-primary); /* Color claro en modo oscuro predeterminado */
+}
+
+/* Estilo para los enlaces del footer en modo claro */
+body.dark .footer a {
+  color: var(--kg-text-dark); /* Color oscuro en modo claro */
 }
 
 .footer-logo,

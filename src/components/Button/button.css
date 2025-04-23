@@ -1,13 +1,26 @@
 button {
-  font-size:var(--kg-font-size-button);
+  font-size: var(--kg-font-size-button);
   padding: var(--kg-padding-sm) var(--kg-padding-lg);
   font-weight: 500;
-  background:var(--kg-color-secondary);
+  background: var(--kg-color-secondary);
   border: none;
   position: relative;
   overflow: hidden;
   border-radius: var(--kg-radius-md);
   cursor: pointer;
+  color: var(--kg-color-dark); /* Texto oscuro en modo oscuro para contraste */
+}
+
+/* Estilo específico para modo light (cuando body tiene clase dark) */
+body.dark button {
+  background: var(--kg-color-dark); /* Fondo oscuro en modo light */
+  color: var(--kg-color-white) !important; /* Texto más claro para mejor contraste */
+  font-weight: 600; /* Texto ligeramente más grueso para mejor legibilidad */
+}
+
+/* Asegurarse de que el texto del botón sea claro en modo light */
+body.dark button .label {
+  color: var(--kg-color-white) !important;
 }
 
 .gradient {
@@ -18,6 +31,15 @@ button {
     rgba(0, 0, 0, 0),
     rgba(0, 0, 0, 0),
     rgba(0, 0, 0, 0.3)
+  );
+}
+
+/* Gradiente más oscuro para modo light */
+body.dark .gradient {
+  background-image: linear-gradient(
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.1),
+    rgba(0, 0, 0, 0.5)
   );
 }
 
@@ -39,6 +61,11 @@ button {
   transform: translate(-50%, -50%);
 }
 
+/* Transición con color diferente para modo light */
+body.dark .transition {
+  background-color: var(--kg-color-tertiary);
+}
+
 button:hover .transition {
   width: 14em;
   height: 14em;
@@ -47,4 +74,9 @@ button:hover .transition {
 button:active {
   transform: scale(0.97);
   box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Sombra más pronunciada en modo light */
+body.dark button:active {
+  box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.4);
 }

@@ -7,9 +7,38 @@
 }
 
 .svg-icon:hover{
-transform: scale(1.3);
-transition: 0.5s;
-cursor: pointer;
+  transform: scale(1.3);
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+/* Estilo para iconos en modo oscuro (predeterminado) */
+.svg-icon {
+  filter: brightness(1); /* Normal en modo oscuro */
+}
+
+/* Estilo para iconos en modo light */
+body.dark .svg-icon {
+  filter: brightness(0.4); /* Oscurecer más en modo light para mejor contraste */
+  background-color: transparent;
+}
+
+/* Estilos específicos para action-icon, setting-icon y otros iconos similares */
+.action-icon, .settings-icon, .edit-icon, .delete-icon, .back-icon {
+  filter: brightness(1); /* Normal en modo oscuro */
+}
+
+body.dark .action-icon, 
+body.dark .settings-icon, 
+body.dark .edit-icon, 
+body.dark .delete-icon, 
+body.dark .back-icon {
+  filter: brightness(0.3) !important; /* Oscurecer más para mejor contraste en modo light */
+}
+
+/* Elementos con color secundario en modo light */
+body.dark [class*="secondary"] {
+  filter: brightness(0.8); /* Ajustar brillo para elementos con color secundario */
 }
 
 @media (max-width: 900px) {

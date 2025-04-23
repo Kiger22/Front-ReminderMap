@@ -23,6 +23,18 @@ const createBackgroundMap = () => {
   });
 };
 
+// Función para añadir la clase app-element a todos los elementos dentro del div app
+const addAppElementClass = () => {
+  const appDiv = document.querySelector("#app");
+  if (appDiv) {
+    // Añadir la clase app-element a todos los elementos de texto dentro del div app
+    const textElements = appDiv.querySelectorAll('p, h1, h2, h3, h4, h5, h6, span, div, a');
+    textElements.forEach(el => {
+      el.classList.add('app-element');
+    });
+  }
+};
+
 // Inicializar la aplicación
 const initializeApp = () => {
   // Inicializar el mapa de fondo
@@ -38,12 +50,34 @@ const initializeApp = () => {
   // Evento para el botón de cambio de tema
   const switchButton = document.querySelector("#switch");
   const fullpage = document.querySelector("body");
+
   switchButton.addEventListener("click", () => {
     toggletheme(fullpage);
+
+    // Forzar actualización de estilos en el div app
+    const appDiv = document.querySelector("#app");
+    if (appDiv) {
+      if (fullpage.classList.contains("dark")) {
+        appDiv.style.color = 'var(--kg-text-light-mode)';
+      } else {
+        appDiv.style.color = 'var(--kg-text-dark-mode)';
+      }
+    }
   });
 
   // Cargar el tema guardado
   loadSavedTheme();
+
+  // Asegurarse de que el div app tenga el tema correcto al cargar
+  const body = document.querySelector("body");
+  const appDiv = document.querySelector("#app");
+  if (appDiv) {
+    if (body.classList.contains("dark")) {
+      appDiv.style.color = 'var(--kg-text-light-mode)';
+    } else {
+      appDiv.style.color = 'var(--kg-text-dark-mode)';
+    }
+  }
 
   // Mostramos el modal de bienvenida solo una vez por sesión
   showWelcomeModal();
@@ -67,6 +101,19 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       toggleAuthDisplay(false);
     }
+  }
+
+  // Añadir la clase app-element a todos los elementos dentro del div app
+  addAppElementClass();
+
+  // Observar cambios en el DOM para añadir la clase a nuevos elementos
+  const observer = new MutationObserver(() => {
+    addAppElementClass();
+  });
+
+  const appDiv = document.querySelector("#app");
+  if (appDiv) {
+    observer.observe(appDiv, { childList: true, subtree: true });
   }
 });
 

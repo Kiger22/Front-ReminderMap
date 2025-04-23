@@ -15,7 +15,7 @@ export const registering = async () => {
 
   try {
     const nameInput = document.getElementById('name');
-    const nicknameInput = document.getElementById('nickname');
+    const nicknameInput = document.getElementById('username'); // Cambiado de 'nickname' a 'username'
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
     const avatarInput = document.getElementById('avatar');

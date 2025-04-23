@@ -75,19 +75,26 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
       _id: place._id
     }));
 
-    // Verificamos si hay un lugar seleccionado previamente
-    const savedPlace = localStorage.getItem('selectedPlace');
-    if (savedPlace) {
-      const place = JSON.parse(savedPlace);
-      if (!placesOptions.find(p => p._id === place.id)) {
-        placesOptions.unshift({
-          value: place.location,
-          label: place.name,
-          _id: place.id
-        });
+    // Verificamos si hay un lugar recién creado
+    const newCreatedPlace = localStorage.getItem('newCreatedPlace');
+    const lastCreatedPlaceId = localStorage.getItem('lastCreatedPlaceId');
+
+    if (newCreatedPlace) {
+      try {
+        const place = JSON.parse(newCreatedPlace);
+        // Verificamos si el lugar ya está en la lista
+        if (!placesOptions.find(p => p._id === place._id)) {
+          // Añadimos el lugar al principio de la lista
+          placesOptions.unshift({
+            value: place.location,
+            label: place.name,
+            _id: place._id
+          });
+          console.log('Lugar recién creado añadido a las opciones:', place);
+        }
+      } catch (e) {
+        console.error('Error al procesar el lugar recién creado:', e);
       }
-      // Limpiamos el localStorage después de usar el lugar
-      localStorage.removeItem('selectedPlace');
     }
   } catch (error) {
     console.error('Error al obtener lugares:', error);
@@ -126,6 +133,27 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
 
   const locationField = createField('Donde', 'select', 'reminder-location', 'location', false, placesOptions);
   fieldsContainer.appendChild(locationField);
+
+  // Si hay un lugar recién creado, lo seleccionamos
+  setTimeout(() => {
+    const locationSelect = document.getElementById('reminder-location');
+    const lastCreatedPlaceId = localStorage.getItem('lastCreatedPlaceId');
+
+    if (locationSelect && lastCreatedPlaceId) {
+      // Buscamos la opción correspondiente al nuevo lugar
+      const options = locationSelect.options;
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].value === lastCreatedPlaceId ||
+          options[i].getAttribute('data-id') === lastCreatedPlaceId) {
+          locationSelect.selectedIndex = i;
+          console.log('Lugar recién creado seleccionado en el dropdown');
+          break;
+        }
+      }
+
+      // No limpiamos lastCreatedPlaceId aquí para permitir que se use en otras partes
+    }
+  }, 300);
 
   // Contenedor para los botones
   const buttonsContainer = document.createElement('div');
@@ -247,38 +275,41 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
 
   verifyLabels();
 
-  // Añadimos el event listener para detectar cuando se selecciona "Añadir nuevo lugar"
+  // Event listener para detectar cuando se selecciona "Añadir nuevo lugar"
   setTimeout(() => {
     const locationSelect = document.getElementById('reminder-location');
     if (locationSelect) {
       locationSelect.addEventListener('change', async (event) => {
         if (event.target.value === 'new') {
-          // Guardamos temporalmente los datos del formulario actual
+          // Guardamos todos los datos del formulario actual
           const nameInput = document.getElementById('reminder-name');
           const descriptionInput = document.getElementById('reminder-description');
           const dateInput = document.getElementById('reminder-date');
           const timeInput = document.getElementById('reminder-time');
 
           if (nameInput && descriptionInput && dateInput && timeInput) {
+            // Guardamos todos los campos del formulario
             localStorage.setItem('tempReminderData', JSON.stringify({
               name: nameInput.value,
               description: descriptionInput.value,
               date: dateInput.value,
-              time: timeInput.value
+              time: timeInput.value,
+              timestamp: new Date().getTime()
             }));
+
+            console.log('Datos de recordatorio guardados temporalmente');
           }
 
           // Redirigimos a la página de añadir lugar
           const heroContainer = document.querySelector('.hero-container');
           if (heroContainer) {
-            // Importamos dinámicamente el módulo de añadir lugar
-            const { placePage } = await import('../../pages/AddPlace/place.js');
-            placePage(heroContainer, true); // true indica que venimos de la página de recordatorio
+            const { placePage } = await import('../AddPlace/place.js');
+            await placePage(heroContainer, true); // true indica que venimos de la página de recordatorio
           }
         }
       });
     }
-  }, 100);
+  }, 300);
 };
 
 

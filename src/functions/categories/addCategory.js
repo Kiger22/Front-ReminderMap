@@ -11,6 +11,9 @@ export const addCategory = async () => {
 
     if (!categoryName || !userId || !authToken) {
       console.error('Faltan datos para crear la categoría');
+      AlertNotification('Error', 'Faltan datos para crear la categoría', null, {
+        showCancelButton: false
+      });
       return false;
     }
 
@@ -21,7 +24,7 @@ export const addCategory = async () => {
         'Authorization': `Bearer ${authToken}`
       },
       body: JSON.stringify({
-        name: categoryName,  // Cambiado de 'label' a 'name' para coincidir con el backend
+        name: categoryName,
         description: categoryDescription,
         userId
       })
@@ -40,9 +43,17 @@ export const addCategory = async () => {
       localStorage.setItem('lastCreatedCategoryName', categoryName);
     }
 
+    // Mostramos notificación de éxito
+    AlertNotification('Éxito', `Categoría "${categoryName}" creada correctamente`, null, {
+      showCancelButton: false
+    });
+
     return true;
   } catch (error) {
     console.error('Error al crear categoría:', error);
+    AlertNotification('Error', `No se pudo crear la categoría: ${error.message}`, null, {
+      showCancelButton: false
+    });
     return false;
   }
 };

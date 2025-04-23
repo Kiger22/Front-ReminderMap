@@ -60,7 +60,7 @@ export const heroPage = (node) => {
   // Creamos el botón de toggle con texto que cambia
   const arrow = document.createElement("div");
   arrow.classList.add("toggle-arrow");
-  arrow.innerHTML = "<span class='arrow-icon'>&gt;</span><span class='collapsed-title'>Favoritos</span>";
+  arrow.innerHTML = "<span class='arrow-icon'>&gt;</span><span class='collapsed-title'>Lugares <br> Favoritos</span>";
   favoritesDivs.appendChild(arrow);
 
   // Variable para controlar si ya se han cargado los favoritos

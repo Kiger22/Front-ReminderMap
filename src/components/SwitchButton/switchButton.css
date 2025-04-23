@@ -21,12 +21,19 @@
 
 #circle.on {
   transform: translateX(25px);
-  background-color: var(--kg-color-secondary);
+  background: var(--kg-color-dark);
+  border: 3px solid var(--kg-bg-dark);
 }
 
 .switched {
-  border-color: var(--kg-bg-darks) !important;
-  background: var(--kg-bg-secondary) !important;
+  border-color: var(--kg-bg-dark) !important;
+}
+
+/* Contenedor del switch */
+.switch-container {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 @media (max-width: 900px) {

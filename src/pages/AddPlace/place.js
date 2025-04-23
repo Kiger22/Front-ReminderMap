@@ -363,6 +363,14 @@ export const placePage = async (node, fromReminder = false) => {
     const success = await addPlace(fromReminder);
     if (!success) {
       console.error('Error al guardar el lugar');
+    } else if (fromReminder) {
+      // Si venimos del formulario de recordatorio y el lugar se guardó correctamente,
+      // volvemos al formulario de recordatorio
+      const { reminderPageForm } = await import('../AddReminder/reminder.js');
+      await reminderPageForm(node);
+
+      // Restauramos los datos temporales si existen
+      restoreReminderFormData();
     }
   });
 
@@ -376,25 +384,34 @@ export const placePage = async (node, fromReminder = false) => {
   createButton(divButtons, 'Cancelar', 'cancel-button', async () => {
     if (fromReminder) {
       // Si venimos del formulario de recordatorio, volvemos a él
-      const { reminderPageForm } = await import('../AddReminder/reminder.js');
-      await reminderPageForm(node);
+      const heroContainer = document.querySelector('.hero-container');
+      if (heroContainer) {
+        const { reminderPageForm } = await import('../AddReminder/reminder.js');
+        await reminderPageForm(heroContainer);
 
-      // Restauramos los datos temporales si existen
-      const tempData = localStorage.getItem('tempReminderData');
-      if (tempData) {
-        const data = JSON.parse(tempData);
-        const nameInput = document.getElementById('reminder-name');
-        const descriptionInput = document.getElementById('reminder-description');
-        const dateInput = document.getElementById('reminder-date');
-        const timeInput = document.getElementById('reminder-time');
+        // Restauramos los datos temporales
+        setTimeout(() => {
+          const tempData = localStorage.getItem('tempReminderData');
+          if (tempData) {
+            try {
+              const data = JSON.parse(tempData);
 
-        if (nameInput && data.name) nameInput.value = data.name;
-        if (descriptionInput && data.description) descriptionInput.value = data.description;
-        if (dateInput && data.date) dateInput.value = data.date;
-        if (timeInput && data.time) timeInput.value = data.time;
+              const nameInput = document.getElementById('reminder-name');
+              const descriptionInput = document.getElementById('reminder-description');
+              const dateInput = document.getElementById('reminder-date');
+              const timeInput = document.getElementById('reminder-time');
 
-        // Limpiamos los datos temporales
-        localStorage.removeItem('tempReminderData');
+              if (nameInput && data.name) nameInput.value = data.name;
+              if (descriptionInput && data.description) descriptionInput.value = data.description;
+              if (dateInput && data.date) dateInput.value = data.date;
+              if (timeInput && data.time) timeInput.value = data.time;
+
+              console.log('Datos de recordatorio restaurados correctamente');
+            } catch (error) {
+              console.error('Error al restaurar datos del recordatorio:', error);
+            }
+          }
+        }, 300);
       }
     } else {
       // Si no venimos del formulario de recordatorio, volvemos a la página principal
@@ -419,6 +436,65 @@ export const placePage = async (node, fromReminder = false) => {
   node.appendChild(placeForm);
 
   verifyLabels();
+
+  // Función para restaurar los datos del formulario de recordatorio
+  function restoreReminderFormData() {
+    // Esperamos un poco para asegurarnos de que el formulario esté renderizado
+    setTimeout(() => {
+      const tempData = localStorage.getItem('tempReminderData');
+      if (tempData) {
+        try {
+          const data = JSON.parse(tempData);
+          console.log('Restaurando datos de recordatorio:', data);
+
+          const nameInput = document.getElementById('reminder-name');
+          const descriptionInput = document.getElementById('reminder-description');
+          const dateInput = document.getElementById('reminder-date');
+          const timeInput = document.getElementById('reminder-time');
+          const locationSelect = document.getElementById('reminder-location');
+
+          // Verificamos si los datos tienen menos de 30 minutos (para evitar usar datos muy antiguos)
+          const now = new Date().getTime();
+          const dataAge = now - (data.timestamp || 0);
+          const maxAge = 30 * 60 * 1000; // 30 minutos en milisegundos
+
+          if (dataAge < maxAge) {
+            if (nameInput && data.name) nameInput.value = data.name;
+            if (descriptionInput && data.description) descriptionInput.value = data.description;
+            if (dateInput && data.date) dateInput.value = data.date;
+            if (timeInput && data.time) timeInput.value = data.time;
+
+            // Si hay un lugar recién creado, lo seleccionamos en el dropdown
+            const newCreatedPlace = localStorage.getItem('newCreatedPlace');
+            if (newCreatedPlace && locationSelect) {
+              try {
+                const placeData = JSON.parse(newCreatedPlace);
+                // Buscamos la opción correspondiente al nuevo lugar
+                const options = locationSelect.options;
+                for (let i = 0; i < options.length; i++) {
+                  if (options[i].value === placeData.location ||
+                    options[i]._id === placeData._id) {
+                    locationSelect.selectedIndex = i;
+                    break;
+                  }
+                }
+              } catch (e) {
+                console.error('Error al procesar el lugar recién creado:', e);
+              }
+            }
+
+            console.log('Datos de recordatorio restaurados correctamente');
+          } else {
+            console.log('Datos de recordatorio demasiado antiguos, no se restaurarán');
+          }
+        } catch (error) {
+          console.error('Error al restaurar datos del recordatorio:', error);
+        }
+      } else {
+        console.log('No hay datos temporales de recordatorio para restaurar');
+      }
+    }, 300); // Aumentamos el tiempo para asegurar que el DOM esté listo
+  }
 };
 
 
