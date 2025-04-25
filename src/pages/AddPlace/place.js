@@ -224,6 +224,7 @@ export const placePage = async (node, fromReminder = false) => {
     fields.forEach(field => {
       // Si es el campo de categoría, creamos un campo de texto deshabilitado con botón
       if (field.type === 'select' && field.name === 'category') {
+        // Creamos el campo de categoría con el mensaje de error
         const fieldElement = createField(
           field.label,
           'text',
@@ -232,7 +233,7 @@ export const placePage = async (node, fromReminder = false) => {
           field.required,
           null
         );
-
+        // Obtenemos el input y lo configuramos
         const input = fieldElement.querySelector('input');
         if (input) {
           input.value = 'Error al cargar categorías';
@@ -254,7 +255,6 @@ export const placePage = async (node, fromReminder = false) => {
           addCategoryButton.innerHTML = `
             <img src="/assets/add-svgrepo-com.svg" alt="Añadir" class="add-icon">
           `;
-
           // Añadimos el event listener al botón
           addCategoryButton.addEventListener('click', () => {
             import('../AddCategory/category.js').then(module => {
@@ -262,13 +262,13 @@ export const placePage = async (node, fromReminder = false) => {
               categoryPage(node);
             });
           });
-
           // Añadimos el botón al contenedor
           buttonContainer.appendChild(addCategoryButton);
         }
 
         fieldsWrapper.appendChild(fieldElement);
       } else {
+        // Para los demás campos, los creamos normalmente
         const fieldElement = createField(
           field.label,
           field.type,
@@ -368,7 +368,6 @@ export const placePage = async (node, fromReminder = false) => {
       // volvemos al formulario de recordatorio
       const { reminderPageForm } = await import('../AddReminder/reminder.js');
       await reminderPageForm(node);
-
       // Restauramos los datos temporales si existen
       restoreReminderFormData();
     }
@@ -458,6 +457,7 @@ export const placePage = async (node, fromReminder = false) => {
           const dataAge = now - (data.timestamp || 0);
           const maxAge = 30 * 60 * 1000; // 30 minutos en milisegundos
 
+          // Restauramos los valores si los datos son recientes
           if (dataAge < maxAge) {
             if (nameInput && data.name) nameInput.value = data.name;
             if (descriptionInput && data.description) descriptionInput.value = data.description;
@@ -493,7 +493,7 @@ export const placePage = async (node, fromReminder = false) => {
       } else {
         console.log('No hay datos temporales de recordatorio para restaurar');
       }
-    }, 300); // Aumentamos el tiempo para asegurar que el DOM esté listo
+    }, 300);
   }
 };
 

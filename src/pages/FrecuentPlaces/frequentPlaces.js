@@ -1,7 +1,8 @@
 import('./frequentPlaces.css');
-import { createPlacesHeader } from '../../components/PlacesHeader/placesHeader';
-import { createPlacesContainer } from '../../components/PlacesContainer/placesContainer';
+import { createPlacesHeader } from './PlacesHeader/placesHeader';
+import { createPlacesContainer } from './PlacesContainer/placesContainer';
 
+//* Función para mostrar la página de lugares frecuentes
 export const frequentPlacesPage = async (node) => {
   node.innerHTML = "";
 

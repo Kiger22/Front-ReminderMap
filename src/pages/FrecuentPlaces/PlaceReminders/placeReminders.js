@@ -1,11 +1,13 @@
-import { loadReminders } from '../../functions/reminders/loadReminders';
-import { AlertNotification } from '../AlertNotification/notification';
+import { loadReminders } from '../../../functions/reminders/loadReminders';
+import { AlertNotification } from '../../../components/AlertNotification/notification';
 
+//* Función para mostrar los recordatorios de un lugar
 export const showPlaceReminders = async (place) => {
   try {
     // Usamos loadReminders con render: false para obtener todos los recordatorios
     const reminders = await loadReminders({ render: false });
 
+    // Si se obtuvieron recordatorios, los procesamos
     if (reminders) {
       // Filtramos los recordatorios que corresponden a este lugar
       const placeReminders = reminders.filter(reminder =>
@@ -25,7 +27,7 @@ export const showPlaceReminders = async (place) => {
           <h3>Recordatorios en ${place.name}</h3>
           <div class="reminder-list">
             ${placeReminders.length > 0
-              ? placeReminders.map(reminder => `
+          ? placeReminders.map(reminder => `
                   <div class="reminder-notification-item">
                     <div class="reminder-header">
                       <h4>${reminder.name}</h4>
@@ -37,8 +39,8 @@ export const showPlaceReminders = async (place) => {
                     </div>
                   </div>
                 `).join('')
-              : '<p class="empty-message">No hay recordatorios registrados para este lugar</p>'
-            }
+          : '<p class="empty-message">No hay recordatorios registrados para este lugar</p>'
+        }
           </div>
         </div>
       `;

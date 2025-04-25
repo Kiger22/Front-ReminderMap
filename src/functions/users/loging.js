@@ -1,4 +1,3 @@
-
 import { api } from "../../api/api";
 import { AlertNotification } from "../../components/AlertNotification/notification";
 import { createLoader } from "../../components/Loader/loader";
@@ -8,7 +7,7 @@ import { createUserHeader } from "../../components/UserHeader/userHeader";
 import { openProfileSettings } from "../../components/SettingForm/settingsForm";
 import { divApp } from "../../../main";
 
-// Función principal de login
+//* Función principal de login
 export const loging = async () => {
 
   // Creamos y mostramos el loader
@@ -25,6 +24,7 @@ export const loging = async () => {
       password: document.getElementById('password')?.value?.trim()
     };
 
+    // Validamos que se proporcionen usuario y contraseña
     if (!userData.username || !userData.password) {
       throw new Error('Usuario y contraseña son requeridos');
     }
@@ -42,7 +42,7 @@ export const loging = async () => {
     });
 
     // Verificamos la respuesta del servidor
-    if (response && response.éxito) {
+    if (response && response.success) {
       // Guardamos el token en localStorage
       localStorage.setItem('authToken', response.token);
 
@@ -50,8 +50,10 @@ export const loging = async () => {
       const loader = divApp.querySelector('.loader');
       if (loader) loader.remove();
 
-      // Mostramos mensaje de bienvenida
+      // Creamos mensaje de bienvenida
       const welcomeMessage = `¡Bienvenido, ${response.user.username}!`;
+
+      // Mostramos notificación de éxito
       await new Promise((resolve) => {
         AlertNotification("Inicio de sesión exitoso", welcomeMessage, () => {
           closeLoginForm();
@@ -67,7 +69,7 @@ export const loging = async () => {
         localStorage.setItem('myHouseLocation', response.user.myHouseLocation || '');
         localStorage.setItem('myWorkLocation', response.user.myWorkLocation || '');
 
-        // Actualizamos la UI
+        // Actualizamos la UI del header
         const titleHeader = document.getElementById('title-header');
         if (titleHeader) {
           titleHeader.innerText = `Hola ${response.user.name}`;
@@ -79,6 +81,7 @@ export const loging = async () => {
         if (registerButton) registerButton.style.display = 'none';
         if (loginButton) loginButton.style.display = 'none';
 
+        // Mostramos datos del usuario
         const userHeader = document.getElementById('user-header');
         if (userHeader) {
           userHeader.style.display = 'flex';
@@ -87,6 +90,7 @@ export const loging = async () => {
         }
       });
 
+      // Actualizamos el estado de autenticación en el header
       toggleAuthDisplay(true);
     } else {
       throw new Error(response.mensaje || 'Error de autenticación');

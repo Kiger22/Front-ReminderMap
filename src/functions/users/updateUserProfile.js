@@ -3,13 +3,17 @@ import { AlertNotification } from '../../components/AlertNotification/notificati
 import { closeSettingsForm } from '../../components/SettingForm/settingsForm';
 import { createUserHeader } from '../../components/UserHeader/userHeader';
 
+//* Función para actualizar el perfil del usuario
 export const updateUserProfile = async (formData, openSettingsCallback) => {
+  // Definimos la ruta de la imagen por defecto
   const DEFAULT_AVATAR_PATH = './assets/user-circle-svgrepo-com.svg';
 
   try {
+    // Obtenemos el userId y el token de localStorage
     const userId = localStorage.getItem('userId');
     const token = localStorage.getItem('authToken');
 
+    // Verificamos si hay un token en localStorage
     if (!token) {
       AlertNotification('Error', 'Sesión expirada. Por favor, inicie sesión nuevamente');
       return false;
@@ -21,6 +25,7 @@ export const updateUserProfile = async (formData, openSettingsCallback) => {
       formData.append('avatar', currentAvatar);
     }
 
+    // Enviamos la solicitud para actualizar el perfil del usuario
     const response = await api({
       endpoint: `users/${userId}`,
       method: 'PUT',
@@ -29,6 +34,7 @@ export const updateUserProfile = async (formData, openSettingsCallback) => {
       isFormData: true
     });
 
+    // Verificamos si la respuesta es exitosa
     if (response.success) {
       // Actualizamos localStorage con los nuevos datos
       const userData = response.user;
@@ -47,7 +53,7 @@ export const updateUserProfile = async (formData, openSettingsCallback) => {
       // Actualizamos el header específicamente
       const userHeaderContainer = document.getElementById('user-header');
       if (userHeaderContainer) {
-        userHeaderContainer.innerHTML = ''; // Limpiamos el contenido actual
+        userHeaderContainer.innerHTML = '';
         createUserHeader(
           userHeaderContainer,
           userData.avatar || DEFAULT_AVATAR_PATH,
@@ -69,7 +75,7 @@ export const updateUserProfile = async (formData, openSettingsCallback) => {
   }
 };
 
-// Función auxiliar para actualizar elementos de la UI
+//* Función auxiliar para actualizar elementos de la UI
 const updateUIElements = (userData) => {
   // Actualizamos el título del header
   const titleHeader = document.getElementById('title-header');

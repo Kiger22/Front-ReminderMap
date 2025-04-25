@@ -1,12 +1,14 @@
 import('./placesContainer.css');
-import { api } from '../../api/api';
-import { createPlaceItem } from '../../functions/places/createPlaceItem';
+import { api } from '../../../api/api';
+import { createPlaceItem } from '../../../functions/places/createPlaceItem';
 
+//* Función para crear el contenedor de lugares
 export const createPlacesContainer = async () => {
-  // Contenedor scrolleable para los lugares
+  // Contenedor para los lugares
   const placesContainer = document.createElement('div');
   placesContainer.classList.add('places-container');
 
+  // Obtenemos los lugares y los agregamos al contenedor
   try {
     const response = await api({
       endpoint: 'places',

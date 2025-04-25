@@ -1,5 +1,5 @@
 .places-header {
-  padding: 1rem;
+  padding: var(--kg-padding-md) 0;
   background-color: var(--background-color);
   border-bottom: 1px solid var(--border-color);
   position: sticky;
@@ -8,11 +8,12 @@
 }
 
 .places-header h2 {
-  margin-bottom: 0.5rem;
-  color: var(--text-color);
+  font-size: var(--kg-font-size-h2);
+  margin-bottom: var(--kg-margin-sm);
 }
 
+
 .places-header p {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
+  color: var(--kg-text-secondary);
+  font-size: var(--kg-font-size-text);
 }

@@ -6,10 +6,10 @@ import { AlertNotification } from '../../components/AlertNotification/notificati
 import { goToHomePage } from '../../functions/navigation/goHomePage';
 import { Calendar } from '../../components/Calendar/calendar';
 import { createField } from "../../utils/formUtils";
-
+import { createButton } from '../../components/Button/button';
 import('./reminder.css');
 
-// Función para crear el formulario de recordatorio
+//* Función para crear el formulario de recordatorio */
 export const reminderPageForm = async (node, selectedDate = null, fromCalendar = false) => {
   node.innerHTML = '';
 
@@ -44,7 +44,7 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
 
       // Verificamos que sea una fecha válida
       if (isNaN(defaultDate.getTime())) {
-        console.warn('Fecha seleccionada inválida, usando fecha actual');
+        console.log('Fecha seleccionada inválida, usando fecha actual');
         defaultDate = now;
       }
     } catch (error) {
@@ -64,6 +64,7 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
   const minutes = defaultTime.getMinutes().toString().padStart(2, '0');
   const formattedTime = `${hours}:${minutes}`;
 
+  // Obtenemos los lugares
   let placesOptions = [];
   try {
     const placesData = await getPlaces();
@@ -79,6 +80,7 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
     const newCreatedPlace = localStorage.getItem('newCreatedPlace');
     const lastCreatedPlaceId = localStorage.getItem('lastCreatedPlaceId');
 
+    // Si hay un lugar recién creado, lo añadimos a las opciones
     if (newCreatedPlace) {
       try {
         const place = JSON.parse(newCreatedPlace);
@@ -108,10 +110,9 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
     _id: 'new'
   });
 
+  // Agregamos los campos al contenedor con valores predeterminados
   const fieldsContainer = document.createElement('div');
   fieldsContainer.classList.add('fields-container');
-
-  // Agregamos los campos al contenedor con valores predeterminados
   fieldsContainer.appendChild(createField('Recordatorio', 'text', 'reminder-name', 'name', true));
   fieldsContainer.appendChild(createField('Descripción', 'text', 'reminder-description', 'description', true));
 
@@ -131,6 +132,7 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
   }
   fieldsContainer.appendChild(timeField);
 
+  // Agregamos el campo de selección de lugar
   const locationField = createField('Donde', 'select', 'reminder-location', 'location', false, placesOptions);
   fieldsContainer.appendChild(locationField);
 
@@ -159,38 +161,15 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
   const buttonsContainer = document.createElement('div');
   buttonsContainer.classList.add('buttons-container');
 
-  const addButton = document.createElement('button');
-  addButton.type = 'submit';
-  addButton.className = 'button';
-  addButton.innerHTML = `
-      <span class="transition"></span>
-      <span class="gradient"></span>
-      <span class="label">Añadir</span>
-      `;
+  // Creamos los botones usando el componente createButton
+  createButton(buttonsContainer, 'Añadir', 'add-reminder-button', null);
 
-  const resetButton = document.createElement('button');
-  resetButton.type = 'reset';
-  resetButton.className = 'button';
-  resetButton.innerHTML = `
-      <span class="transition"></span>
-      <span class="gradient"></span>
-      <span class="label">Limpiar</span>
-      `
-  resetButton.addEventListener('click', (event) => {
+  createButton(buttonsContainer, 'Limpiar', 'reset-reminder-button', (event) => {
     event.preventDefault();
     formContainer.reset();
   });
 
-  const closeButton = document.createElement('button');
-  closeButton.type = 'button';
-  closeButton.className = 'button';
-  closeButton.innerHTML = `
-      <span class="transition"></span>
-      <span class="gradient"></span>
-      <span class="label">Cancelar</span>
-  `;
-
-  closeButton.addEventListener('click', async () => {
+  createButton(buttonsContainer, 'Cancelar', 'cancel-reminder-button', async () => {
     // Limpiamos los datos temporales
     localStorage.removeItem('tempReminderData');
     localStorage.removeItem('newCreatedPlace');
@@ -208,12 +187,7 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
     }
   });
 
-  // Agregamos los botones al contenedor de botones
-  buttonsContainer.appendChild(addButton);
-  buttonsContainer.appendChild(resetButton);
-  buttonsContainer.appendChild(closeButton);
-
-  // Estructura correcta del formulario
+  // Estructura del formulario
   formContainer.appendChild(fieldsContainer);
   formContainer.appendChild(buttonsContainer);
   reminderForm.appendChild(formContainer);
@@ -223,11 +197,13 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
   formContainer.addEventListener('submit', async (event) => {
     event.preventDefault();
 
+    // Verificamos que la fecha seleccionada no sea anterior a la actual
     const dateInput = document.getElementById('reminder-date');
     const timeInput = document.getElementById('reminder-time');
     const selectedDate = new Date(`${dateInput.value}T${timeInput.value}`);
     const now = new Date();
 
+    // Si la fecha seleccionada es anterior a la actual, mostramos un mensaje de error
     if (selectedDate < now) {
       AlertNotification(
         'Fecha inválida',
@@ -238,6 +214,7 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
       return;
     }
 
+    // Mostramos un mensaje de confirmación para crear el recordatorio
     AlertNotification(
       'Confirmar',
       '¿Deseas crear este recordatorio?',
@@ -267,6 +244,7 @@ export const reminderPageForm = async (node, selectedDate = null, fromCalendar =
     );
   });
 
+  // Limpiamos los datos temporales
   setTimeout(() => {
     localStorage.removeItem('tempReminderData');
     localStorage.removeItem('newCreatedPlace');

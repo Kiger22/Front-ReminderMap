@@ -1,14 +1,19 @@
 import { api } from '../../api/api';
 import { AlertNotification } from '../../components/AlertNotification/notification';
+import { updatePlacesList } from './updatePlacesList';
+import { createButton } from '../../components/Button/button';
 
-// Función para mostrar el formulario de actualización
+//* Función para mostrar el formulario de actualización
 export const showUpdateForm = (place) => {
+  // Creamos el contenedor del formulario de actualización
   const formContainer = document.createElement('div');
-  formContainer.classList.add('update-form-container');
+  formContainer.classList.add('update-form');
 
+  // Creamos el formulario de actualización
   const form = document.createElement('form');
   form.classList.add('update-place-form');
 
+  // Creamos el contenedor para los campos del formulario
   const fieldsContainer = document.createElement('div');
   fieldsContainer.classList.add('fields-container');
 
@@ -18,7 +23,6 @@ export const showUpdateForm = (place) => {
     { id: 'description', label: 'Descripción', value: place.description },
     { id: 'location', label: 'Ubicación', value: place.location }
   ];
-
   fields.forEach(field => {
     const inputSpan = document.createElement('span');
     inputSpan.classList.add('input-span');
@@ -38,31 +42,15 @@ export const showUpdateForm = (place) => {
     fieldsContainer.appendChild(inputSpan);
   });
 
+  // Creamos el contenedor para los botones del formulario
   const buttonsContainer = document.createElement('div');
   buttonsContainer.classList.add('buttons-container');
 
-  // Botón de actualizar
-  const updateButton = document.createElement('button');
-  updateButton.textContent = 'Actualizar';
-  updateButton.id = 'update-button';
-  updateButton.type = 'submit';
-
-  // Botón de cancelar
-  const cancelButton = document.createElement('button');
-  cancelButton.textContent = 'Cancelar';
-  cancelButton.id = 'cancel-button';
-  cancelButton.type = 'button';
-
-  buttonsContainer.appendChild(updateButton);
-  buttonsContainer.appendChild(cancelButton);
-
-  form.appendChild(fieldsContainer);
-  form.appendChild(buttonsContainer);
-  formContainer.appendChild(form);
-
-  // Manejador del formulario
-  form.onsubmit = async (e) => {
+  // Manejador para actualizar el lugar
+  const handleUpdate = async (e) => {
     e.preventDefault();
+
+    // Obtenemos los datos actualizados del formulario
     const updatedData = {
       name: document.getElementById('update-place-name').value,
       description: document.getElementById('update-place-description').value,
@@ -70,15 +58,18 @@ export const showUpdateForm = (place) => {
     };
 
     try {
+      // Enviamos la solicitud de actualización al API
       await api({
         endpoint: `/places/${place._id}`,
         method: 'PUT',
         body: updatedData
       });
 
+      // Eliminamos el formulario de actualización y mostramos una notificación de éxito
       formContainer.remove();
-      AlertNotification('Éxito', 'Lugar actualizado correctamente', () => {
-        location.reload();
+      AlertNotification('Éxito', 'Lugar actualizado correctamente', async () => {
+        // Actualizamos la lista de lugares en lugar de recargar la página
+        await updatePlacesList();
       });
     } catch (error) {
       console.error('Error al actualizar lugar:', error);
@@ -86,7 +77,20 @@ export const showUpdateForm = (place) => {
     }
   };
 
-  cancelButton.onclick = () => formContainer.remove();
+  // Creamos botones
+  createButton(buttonsContainer, "Actualizar", "update-button", (e) => {
+    handleUpdate(e);
+  });
+
+  createButton(buttonsContainer, "Cancelar", "cancel-button", () => {
+    formContainer.remove();
+  });
+
+  // Agregamos los campos y botones al formulario
+  form.appendChild(fieldsContainer);
+  form.appendChild(buttonsContainer);
+  formContainer.appendChild(form);
 
   document.body.appendChild(formContainer);
 };
+

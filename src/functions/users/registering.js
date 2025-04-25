@@ -10,9 +10,13 @@ import { toggleAuthDisplay } from '../../components/Header/header';
 
 const DEFAULT_AVATAR_PATH = '../assets/user-circle-svgrepo-com.svg';
 
+//* Función principal para registrar un nuevo usuario
 export const registering = async () => {
+
+  // Creamos y mostramos el loader
   createLoader(divApp);
 
+  // Realizamos el registro
   try {
     const nameInput = document.getElementById('name');
     const nicknameInput = document.getElementById('username'); // Cambiado de 'nickname' a 'username'
@@ -25,6 +29,7 @@ export const registering = async () => {
       throw new Error('Todos los campos son requeridos');
     }
 
+    // Preparamos los datos para enviar al servidor
     const formData = new FormData();
 
     // Añadimos datos básicos del usuario
@@ -48,6 +53,7 @@ export const registering = async () => {
       hasCustomAvatar: avatarInput?.files?.length > 0
     });
 
+    // Enviamos los datos al servidor y esperamos la respuesta
     const response = await api({
       endpoint: 'users/register',
       method: 'POST',
@@ -55,6 +61,7 @@ export const registering = async () => {
       isFormData: true
     });
 
+    // Verificamos si el registro fue exitoso
     if (response && response.success) {
       // Limpiamos el loader
       const loader = divApp.querySelector('.loader');

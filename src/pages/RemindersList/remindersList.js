@@ -1,8 +1,9 @@
 import { loadReminders } from '../../functions/reminders/loadReminders';
 import { createReminderElement } from '../../functions/reminders/renderReminder';
-
+import { AlertNotification } from '../../components/AlertNotification/notification';
 import('./remindersList.css');
 
+//* Función para mostrar la lista de recordatorios
 export const remindersPage = (node) => {
 
   // Limpiamos el contenido del nodo

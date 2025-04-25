@@ -1,23 +1,29 @@
-/**
- * Crea un campo de formulario con etiqueta y entrada
- * @param {string} labelText - Texto de la etiqueta
- * @param {string} inputType - Tipo de entrada (text, select, date, etc.)
- * @param {string} inputId - ID del elemento de entrada
- * @param {string} inputName - Nombre del elemento de entrada
- * @param {boolean} isRequired - Si el campo es obligatorio
- * @param {Array} options - Opciones para campos select
- * @param {string} defaultValue - Valor predeterminado para el campo
- * @returns {HTMLElement} - Elemento span que contiene la etiqueta y la entrada
+/*
+ * Función para crear un campo de formulario
+  *  labelText - Texto de la etiqueta
+  *  inputType - Tipo de entrada (text, select, date, etc.)
+  *  inputId - ID del elemento de entrada
+  *  inputName - Nombre del elemento de entrada
+  *  isRequired - Si el campo es obligatorio
+  *  options - Opciones para campos select
+  *  defaultValue - Valor predeterminado para el campo
+  *  Elemento span que contiene la etiqueta y la entrada
  */
+
+
 export const createField = (labelText, inputType, inputId, inputName, isRequired = false, options = null, defaultValue = '') => {
+
+  // Contenedor
   const span = document.createElement('span');
   span.classList.add('input-span');
 
+  // Etiqueta
   const label = document.createElement('label');
   label.setAttribute('for', inputId);
   label.textContent = labelText;
   span.appendChild(label);
 
+  // Entrada
   if (inputType === 'select') {
     const select = document.createElement('select');
     select.id = inputId;

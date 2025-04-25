@@ -1,11 +1,10 @@
 import { AlertNotification } from '../../components/AlertNotification/notification';
 import { loadReminders } from '../../functions/reminders/loadReminders';
 import { reminderPageForm } from '../../pages/AddReminder/reminder';
-import { createButton } from '../../components/Button/button';
 import { ButtonPlus } from '../../components/ButtonPlus/buttonPlus';
 import { renderCalendarGrid } from './components/CalendarGrid/calendarGrid';
 import { ReminderDetails } from '../ReminderDetails/reminderDetails';
-import { RemindersList } from '../RemindersList/remindersList';
+import { RemindersList } from '../../pages/RemindersList/RemindersList/remindersList';
 import { CalendarHeader } from './components/CalendarHeader/calendarHeader';
 import('./calendar.scss');
 
@@ -98,7 +97,6 @@ export const Calendar = async (node) => {
         if (container) {
           ButtonPlus(container, "AÑADIR RECORDATORIO");
 
-          // Añadimos el event listener al botón
           const button = container.querySelector('.button_plus');
           if (button) {
             button.addEventListener('click', () => {

@@ -1,5 +1,4 @@
 import { api } from '../../api/api';
-import { AlertNotification } from '../../components/AlertNotification/notification';
 
 export const getFavoritesByUser = async (userId) => {
   try {

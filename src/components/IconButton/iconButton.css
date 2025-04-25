@@ -1,8 +1,5 @@
 .svg-icon{
-  display: none;
-}
-
-.svg-icon{
+  display: block;
   width: 2rem;
 }
 
@@ -12,20 +9,17 @@
   cursor: pointer;
 }
 
-/* Estilo para iconos en modo oscuro (predeterminado) */
 .svg-icon {
-  filter: brightness(1); /* Normal en modo oscuro */
+  filter: brightness(1);
 }
 
-/* Estilo para iconos en modo light */
 body.dark .svg-icon {
-  filter: brightness(0.4); /* Oscurecer más en modo light para mejor contraste */
+  filter: brightness(0.4);
   background-color: transparent;
 }
 
-/* Estilos específicos para action-icon, setting-icon y otros iconos similares */
 .action-icon, .settings-icon, .edit-icon, .delete-icon, .back-icon {
-  filter: brightness(1); /* Normal en modo oscuro */
+  filter: brightness(1); 
 }
 
 body.dark .action-icon, 
@@ -33,12 +27,11 @@ body.dark .settings-icon,
 body.dark .edit-icon, 
 body.dark .delete-icon, 
 body.dark .back-icon {
-  filter: brightness(0.3) !important; /* Oscurecer más para mejor contraste en modo light */
+  filter: brightness(0.3) !important;
 }
 
-/* Elementos con color secundario en modo light */
 body.dark [class*="secondary"] {
-  filter: brightness(0.8); /* Ajustar brillo para elementos con color secundario */
+  filter: brightness(0.8); 
 }
 
 @media (max-width: 900px) {

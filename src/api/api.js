@@ -1,4 +1,4 @@
-// Función para interactuar con la API
+//* Función para interactuar con la API
 export const api = async ({ endpoint, method = 'GET', body, token, isFormData = false }) => {
   try {
 

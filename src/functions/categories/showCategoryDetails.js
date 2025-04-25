@@ -3,6 +3,8 @@ import { AlertNotification } from '../../components/AlertNotification/notificati
 
 export const showCategoryDetails = async (categoryId) => {
   try {
+
+    // Realizamos la solicitud a la API para obtener los detalles de la categoría
     const response = await api({
       endpoint: `/categories/${categoryId}`,
       method: 'GET'
@@ -29,6 +31,7 @@ export const showCategoryDetails = async (categoryId) => {
 
     const stats = document.createElement('div');
     stats.classList.add('category-stats');
+
     // Corregimos el acceso al array de places
     stats.textContent = `Lugares asociados: ${category.places?.length || 0}`;
     modalContent.appendChild(stats);

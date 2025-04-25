@@ -1,4 +1,4 @@
-//! Gestionamos las transiciones entre páginas
+//* Gestionamos las transiciones entre páginas
 
 export const pageTransition = async (currentPage, newPageFunction) => {
   // Añadimos animación de salida

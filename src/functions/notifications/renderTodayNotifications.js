@@ -5,7 +5,10 @@ import { createMapModal } from '../../components/MapModal/mapModal';
 
 export const renderTodayNotifications = async (container) => {
   try {
+    // Obtenemos el contenedor de recordatorios
     const remindersList = container.querySelector('.reminders-list');
+
+    // Verificamos si el contenedor existe
     if (!remindersList) {
       throw new Error('No se encontró el contenedor de recordatorios');
     }
@@ -17,14 +20,17 @@ export const renderTodayNotifications = async (container) => {
     // Obtenemos recordatorios usando la función existente
     const reminders = await loadReminders({ render: false });
 
+    // Si se obtuvieron recordatorios, los procesamos
     if (reminders) {
       // Filtramos recordatorios para hoy
       const todayReminders = reminders.filter(reminder =>
         reminder.date.split('T')[0] === formattedDate
       );
 
+      // Limpiamos el contenedor
       remindersList.innerHTML = '';
 
+      // Si no hay recordatorios para hoy, mostramos un mensaje
       if (todayReminders.length === 0) {
         const emptyMessage = document.createElement('p');
         emptyMessage.textContent = 'No tienes recordatorios para hoy';

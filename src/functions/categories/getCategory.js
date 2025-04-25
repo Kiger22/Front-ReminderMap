@@ -2,13 +2,11 @@ import { api } from "../../api/api";
 
 export const getCategories = async (userId = null) => {
   try {
+    // Construimos el endpoint basado en si se proporciona un userId
     const authToken = localStorage.getItem('authToken');
     const endpoint = userId ? `categories?userId=${userId}` : 'categories';
 
-    console.log('Obteniendo categorías con endpoint:', endpoint);
-    console.log('Token de autenticación presente:', !!authToken);
-    console.log('UserId:', userId);
-
+    // Realizamos la solicitud a la API
     const response = await api({
       endpoint,
       method: 'GET',
@@ -17,19 +15,19 @@ export const getCategories = async (userId = null) => {
 
     console.log('Respuesta completa de categorías:', response);
 
+    // Verificamos que la respuesta sea válida y contenga categorías
     if (!response || !response.categories) {
       console.error('Respuesta inválida de categorías:', response);
       return [];
     }
 
+    // Mapeamos las categorías para que coincidan con el formato esperado por el componente Select
     const mappedCategories = response.categories.map(category => ({
       value: category._id,
       label: category.name,
       description: category.description,
       placesCount: category.places?.length || 0
     }));
-
-    console.log('Categorías mapeadas:', mappedCategories);
     return mappedCategories;
   } catch (error) {
     console.error('Error al obtener categorías:', error);

@@ -4,9 +4,12 @@ import { exampleCategories } from "../../data/exampleCategories";
 
 export const loadExampleCategories = async () => {
   try {
+
+    // Obtenemos los datos del usuario y el token de autenticación
     const userId = localStorage.getItem('userId');
     const authToken = localStorage.getItem('authToken');
 
+    // Verificamos si el usuario está autenticado
     if (!userId || !authToken) {
       AlertNotification('Error', 'Debes iniciar sesión para cargar categorías de ejemplo', null, {
         showCancelButton: false
@@ -14,7 +17,7 @@ export const loadExampleCategories = async () => {
       return false;
     }
 
-    // Mostrar notificación de carga
+    // Mostramos notificación de carga
     AlertNotification(
       'Cargando categorías',
       'Se están cargando las categorías de ejemplo...',
@@ -25,7 +28,7 @@ export const loadExampleCategories = async () => {
       }
     );
 
-    // Crear cada categoría de ejemplo
+    // Creamos una promesa para cada categoría de ejemplo
     const creationPromises = exampleCategories.map(async (category) => {
       try {
         const response = await api({
@@ -38,7 +41,7 @@ export const loadExampleCategories = async () => {
           },
           token: authToken
         });
-        
+
         return response;
       } catch (error) {
         console.error(`Error al crear categoría ${category.name}:`, error);
@@ -46,11 +49,11 @@ export const loadExampleCategories = async () => {
       }
     });
 
-    // Esperar a que todas las categorías se creen
+    // Esperamos a que todas las categorías se creen
     const results = await Promise.all(creationPromises);
     const successCount = results.filter(result => result !== null).length;
 
-    // Mostrar notificación de éxito
+    // Mostramos notificación de éxito
     if (successCount > 0) {
       AlertNotification(
         'Éxito',

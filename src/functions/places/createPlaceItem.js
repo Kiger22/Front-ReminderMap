@@ -4,12 +4,12 @@ import { api } from '../../api/api';
 import { AlertNotification } from '../../components/AlertNotification/notification';
 import { frequentPlacesPage } from '../../pages/FrecuentPlaces/frequentPlaces';
 import { showUpdateForm } from './showUpdateForm';
-import { updatePlacesList } from './updatePlacesList';
 import { reminderPageForm } from '../../pages/AddReminder/reminder';
-import { showPlaceReminders } from '../../components/PlaceReminders/placeReminders';
+import { showPlaceReminders } from '../../pages/FrecuentPlaces/PlaceReminders/placeReminders';
 import { createMapModal } from '../../components/MapModal/mapModal';
+import { createIconButton } from '../../components/IconButton/iconButton';
 
-// Función para crear un elemento de lugar
+//* Función para crear un elemento de lugar
 export const createPlaceItem = (place) => {
   const placeItem = document.createElement('div');
   placeItem.classList.add('place-item');
@@ -17,6 +17,8 @@ export const createPlaceItem = (place) => {
   // Contenedor de información principal
   const placeInfo = document.createElement('div');
   placeInfo.classList.add('place-info');
+
+  // Elementos de información principal
 
   const placeName = document.createElement('h3');
   placeName.textContent = place.name;
@@ -32,6 +34,7 @@ export const createPlaceItem = (place) => {
   placeCategory.classList.add('place-category');
   placeCategory.innerHTML = place.category ? `<strong>Categoría:</strong> <em>${place.category.name}</em>` : '<strong>Categoría:</strong> <em>Sin categoría</em>';
 
+  // Agregamos un evento click al nombre de la categoría para mostrar detalles
   if (place.category) {
     placeCategory.style.cursor = 'pointer';
     placeCategory.onclick = (e) => {
@@ -50,6 +53,7 @@ export const createPlaceItem = (place) => {
   const placeActions = document.createElement('div');
   placeActions.classList.add('place-actions');
 
+  // Contador de uso
   const useCount = document.createElement('span');
   useCount.classList.add('use-count');
   const formatUseCount = (count) => {
@@ -75,51 +79,38 @@ export const createPlaceItem = (place) => {
   const actionIcons = document.createElement('div');
   actionIcons.classList.add('action-icons');
 
-  // Creamos y configuramos los botones
-  const favoriteButton = document.createElement('img');
-  favoriteButton.classList.add('action-icon', 'favorite-icon');
-  favoriteButton.src = place.isFavorite
-    ? '../assets/heart-svgrepo1-com.svg'
-    : '../assets/heart-svgrepo2-com.svg';
-
-  // Botón para agregar recordatorio
-  const reminderButton = document.createElement('img');
-  reminderButton.classList.add('action-icon', 'reminder-icon');
-  reminderButton.src = '../assets/add-svgrepo-com.svg';
-  reminderButton.title = 'Crear recordatorio para este lugar';
-
-  const editButton = document.createElement('img');
-  editButton.src = './assets/edit-svgrepo-com.svg';
-  editButton.classList.add('action-icon');
-
-  const deleteButton = document.createElement('img');
-  deleteButton.src = './assets/delette-svgrepo-com.svg';
-  deleteButton.classList.add('action-icon');
-
-  // Configuración de event listeners
-  favoriteButton.addEventListener('click', async (e) => {
+  // Manejador para el botón de favorito
+  const handleFavoriteClick = async (e) => {
     e.stopPropagation(); // Evitar que el clic se propague al elemento padre
     try {
       if (place.isFavorite) {
         const success = await removeFavorite(place._id);
         if (success) {
-          favoriteButton.src = '../assets/heart-svgrepo2-com.svg';
+          // Actualizamos el icono
+          const favoriteIcon = actionIcons.querySelector('.favorite-icon');
+          if (favoriteIcon) {
+            favoriteIcon.src = '../assets/heart-svgrepo2-com.svg';
+          }
           place.isFavorite = false;
         }
       } else {
         const success = await toggleFavorite(place._id);
         if (success) {
-          favoriteButton.src = '../assets/heart-svgrepo1-com.svg';
+          // Actualizamos el icono
+          const favoriteIcon = actionIcons.querySelector('.favorite-icon');
+          if (favoriteIcon) {
+            favoriteIcon.src = '../assets/heart-svgrepo1-com.svg';
+          }
           place.isFavorite = true;
         }
       }
     } catch (error) {
       console.error('Error al cambiar estado de favorito:', error);
     }
-  });
+  };
 
-  // Event listener para el botón de agregar recordatorio
-  reminderButton.addEventListener('click', async (e) => {
+  // Manejador para el botón de recordatorio
+  const handleReminderClick = async (e) => {
     e.stopPropagation(); // Evitar que el clic se propague al elemento padre
     try {
       // Guardamos temporalmente la información del lugar seleccionado
@@ -149,14 +140,16 @@ export const createPlaceItem = (place) => {
         showCancelButton: false
       });
     }
-  });
+  };
 
-  editButton.addEventListener('click', (e) => {
+  // Manejador para el botón de editar
+  const handleEditClick = (e) => {
     e.stopPropagation(); // Evitar que el clic se propague al elemento padre
     showUpdateForm(place);
-  });
+  };
 
-  deleteButton.addEventListener('click', (e) => {
+  // Manejador para el botón de eliminar
+  const handleDeleteClick = (e) => {
     e.stopPropagation(); // Evitar que el clic se propague al elemento padre
     AlertNotification(
       '¿Eliminar lugar?',
@@ -195,13 +188,40 @@ export const createPlaceItem = (place) => {
       },
       { showCancelButton: true }
     );
-  });
+  };
 
-  // Agregamos los botones al contenedor de iconos
-  actionIcons.appendChild(favoriteButton);
-  actionIcons.appendChild(reminderButton);
-  actionIcons.appendChild(editButton);
-  actionIcons.appendChild(deleteButton);
+  // Creamos el botón de favorito manualmente
+  const imgFavorite = document.createElement('img');
+  imgFavorite.src = place.isFavorite ? '../assets/heart-svgrepo1-com.svg' : '../assets/heart-svgrepo2-com.svg';
+  imgFavorite.alt = 'Favorito';
+  imgFavorite.title = 'Marcar/Desmarcar como favorito';
+  imgFavorite.classList.add('action-icon', 'favorite-icon');
+  imgFavorite.addEventListener('click', handleFavoriteClick);
+  actionIcons.appendChild(imgFavorite);
+
+  // Botón de recordatorio
+  createIconButton(
+    actionIcons,
+    '../assets/add-svgrepo-com.svg',
+    handleReminderClick,
+    'Crear recordatorio para este lugar'
+  );
+
+  // Botón de editar
+  createIconButton(
+    actionIcons,
+    './assets/edit-svgrepo-com.svg',
+    handleEditClick,
+    'Editar lugar'
+  );
+
+  // Botón de eliminar
+  createIconButton(
+    actionIcons,
+    './assets/delette-svgrepo-com.svg',
+    handleDeleteClick,
+    'Eliminar lugar'
+  );
 
   // Agregamos elementos al contenedor de acciones
   placeActions.appendChild(useCount);
@@ -218,6 +238,11 @@ export const createPlaceItem = (place) => {
 
   return placeItem;
 };
+
+
+
+
+
 
 
 

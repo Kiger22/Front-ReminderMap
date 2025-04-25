@@ -1,9 +1,10 @@
-import { AlertNotification } from '../AlertNotification/notification';
-import { reminderPageForm } from '../../pages/AddReminder/reminder';
-import { ReminderDetails } from '../ReminderDetails/reminderDetails';
-import { ButtonPlus } from '../ButtonPlus/buttonPlus';
+import { AlertNotification } from '../../../components/AlertNotification/notification';
+import { reminderPageForm } from '../../AddReminder/reminder';
+import { ReminderDetails } from '../../../components/ReminderDetails/reminderDetails';
+import { ButtonPlus } from '../../../components/ButtonPlus/buttonPlus';
 import('./remindersList.scss');
 
+//* Función para mostrar la lista de recordatorios en una notificación
 export const RemindersList = (day, monthName, year, dayReminders, allReminders, formattedDate, onCalendarUpdate) => {
   const content = document.createElement('div');
   content.classList.add('reminder-notification-content');
@@ -15,6 +16,7 @@ export const RemindersList = (day, monthName, year, dayReminders, allReminders, 
   const reminderList = document.createElement('div');
   reminderList.classList.add('reminder-list');
 
+  // Iteramos sobre los recordatorios del día
   dayReminders.forEach(reminder => {
     const reminderItem = document.createElement('div');
     reminderItem.classList.add('reminder-notification-item');
@@ -25,7 +27,7 @@ export const RemindersList = (day, monthName, year, dayReminders, allReminders, 
     const reminderSummary = document.createElement('div');
     reminderSummary.classList.add('reminder-summary');
 
-    // Formato: "Nombre | ⏰ Hora | 📍 Lugar"
+    // Mostramos el nombre, hora y ubicación en una sola línea
     reminderSummary.innerHTML = `
       <span class="reminder-name">${reminder.name}</span> | 
       <span class="reminder-time">⏰ ${reminder.time}</span> | 
@@ -34,7 +36,6 @@ export const RemindersList = (day, monthName, year, dayReminders, allReminders, 
         : reminder.location
       }</span>
     `;
-
     reminderItem.appendChild(reminderSummary);
 
     // Mantenemos el evento click para mostrar los detalles
@@ -62,7 +63,6 @@ export const RemindersList = (day, monthName, year, dayReminders, allReminders, 
 
     reminderList.appendChild(reminderItem);
   });
-
   content.appendChild(reminderList);
 
   // Añadimos el botón para agregar un nuevo recordatorio
@@ -76,7 +76,7 @@ export const RemindersList = (day, monthName, year, dayReminders, allReminders, 
     content,
     null,
     {
-      showCancelButton: false, // Quitamos el botón convencional "Añadir"
+      showCancelButton: false,
       confirmButtonText: 'Cerrar'
     }
   );

@@ -1,14 +1,15 @@
 import { api } from "../../api/api";
 import { AlertNotification } from "../../components/AlertNotification/notification";
-import { goToHomePage } from "../navigation/goHomePage";
 
 export const addCategory = async () => {
   try {
+    // Obtenemos los valores del formulario
     const categoryName = document.getElementById('category-name').value;
     const categoryDescription = document.getElementById('category-description').value;
     const userId = localStorage.getItem('userId');
     const authToken = localStorage.getItem('authToken');
 
+    // Validamos que se proporcionen los datos necesarios
     if (!categoryName || !userId || !authToken) {
       console.error('Faltan datos para crear la categoría');
       AlertNotification('Error', 'Faltan datos para crear la categoría', null, {
@@ -17,29 +18,23 @@ export const addCategory = async () => {
       return false;
     }
 
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/categories`, {
+    // Enviamos la solicitud para crear la categoría
+    const response = await api({
+      endpoint: 'categories',
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authToken}`
-      },
-      body: JSON.stringify({
+      body: {
         name: categoryName,
         description: categoryDescription,
         userId
-      })
+      },
+      token: authToken
     });
 
-    if (!response.ok) {
-      throw new Error(`Error al crear categoría: ${response.status}`);
-    }
-
-    const data = await response.json();
-    console.log('Categoría creada:', data);
+    console.log('Categoría creada:', response);
 
     // Guardamos el ID de la categoría recién creada para seleccionarla al volver
-    if (data && data.category && data.category._id) {
-      localStorage.setItem('lastCreatedCategoryId', data.category._id);
+    if (response && response.category && response.category._id) {
+      localStorage.setItem('lastCreatedCategoryId', response.category._id);
       localStorage.setItem('lastCreatedCategoryName', categoryName);
     }
 

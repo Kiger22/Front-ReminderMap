@@ -1,48 +1,52 @@
+//* Función para cambiar el tema de la página
 export const toggletheme = (node) => {
   try {
+
+    // Seleccionar elementos necesarios
     const switchButton = document.querySelector("#switch");
     const circle = document.querySelector("#circle");
     const appDiv = document.querySelector("#app");
     const headerLogo = document.querySelector(".header-logo img");
 
-    // Forzar actualización de estilos
+    // Forzamos actualización de estilos
     document.documentElement.style.setProperty('--force-repaint', 'true');
 
     if (node.classList.contains("dark")) {
-      // Cambiar a modo oscuro (quitando la clase dark)
+
+      // Cambiamos a modo oscuro 
       node.classList.remove("dark");
       if (switchButton) switchButton.classList.remove("switched");
       if (circle) circle.classList.remove("on");
 
-      // Quitar filtro para que el logo se vea normal (claro)
+      // Quitamos filtro para que el logo se vea normal
       if (headerLogo) headerLogo.style.filter = "none";
 
-      // Actualizar todos los elementos con clase app-element
+      // Actualizamos todos los elementos con clase app-element
       document.querySelectorAll('.app-element').forEach(el => {
         el.style.color = 'var(--kg-text-dark-mode)';
       });
 
-      // Guardar preferencia en localStorage
+      // Guardamos preferencia en localStorage
       localStorage.setItem("theme", "dark");
     } else {
-      // Cambiar a modo claro (añadiendo la clase dark)
+      // Cambiamos a modo claro (añadiendo la clase dark)
       node.classList.add("dark");
       if (switchButton) switchButton.classList.add("switched");
       if (circle) circle.classList.add("on");
 
-      // Aplicar filtro para que el logo se vea negro
+      // Aplicamos filtro para que el logo se vea negro
       if (headerLogo) headerLogo.style.filter = "brightness(0)";
 
-      // Actualizar todos los elementos con clase app-element
+      // Actualizamos todos los elementos con clase app-element
       document.querySelectorAll('.app-element').forEach(el => {
         el.style.color = 'var(--kg-text-light-mode)';
       });
 
-      // Guardar preferencia en localStorage
+      // Guardamos preferencia en localStorage
       localStorage.setItem("theme", "light");
     }
 
-    // Forzar repintado del div app
+    // Forzamos repintado del div app
     if (appDiv) {
       appDiv.style.display = 'none';
       setTimeout(() => {
@@ -57,15 +61,17 @@ export const toggletheme = (node) => {
   }
 }
 
-// Función para cargar el tema guardado
+//* Función para cargar el tema guardado
 export const loadSavedTheme = () => {
   try {
+    // Cargamos el tema guardado
     const savedTheme = localStorage.getItem("theme");
     const body = document.querySelector("body");
     const switchButton = document.querySelector("#switch");
     const circle = document.querySelector("#circle");
     const appDiv = document.querySelector("#app");
 
+    // Aplicamos el tema guardado
     if (savedTheme === "light") {
       if (body) body.classList.add("dark");
       if (switchButton) switchButton.classList.add("switched");

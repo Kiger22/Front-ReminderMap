@@ -65,7 +65,7 @@ const initializeApp = () => {
     }
   });
 
-  // Cargar el tema guardado
+  // Cargamos el tema guardado
   loadSavedTheme();
 
   // Asegurarse de que el div app tenga el tema correcto al cargar
@@ -103,10 +103,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Añadir la clase app-element a todos los elementos dentro del div app
+  // Añadimos la clase app-element a todos los elementos dentro del div app
   addAppElementClass();
 
-  // Observar cambios en el DOM para añadir la clase a nuevos elementos
+  // Observamos cambios en el DOM para añadir la clase a nuevos elementos
   const observer = new MutationObserver(() => {
     addAppElementClass();
   });
@@ -117,5 +117,5 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Inicializar la aplicación después de que se hayan cargado todos los módulos
+// Inicializamos la aplicación después de que se hayan cargado todos los módulos
 initializeApp();

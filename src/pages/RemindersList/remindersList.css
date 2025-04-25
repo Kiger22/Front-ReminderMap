@@ -7,24 +7,19 @@
   flex-direction: column;
   justify-content: start;
   gap: var(--kg-gap-md);
-  color: var(--kg-text-primary);
-  /* Añadimos transición suave al contenedor */
   transition: all 0.3s ease;
 }
 
 .reminders-list {
   counter-reset: reminder-counter;
   margin-left: var(--kg-margin-sm);
-  overflow-y: auto; /* cambiamos scroll por auto para mejor compatibilidad */
+  overflow-y: auto;
   overflow-x: hidden;
-  /* Añadimos scroll suave */
   scroll-behavior: smooth;
-  /* Mejoramos el scrollbar */
   scrollbar-width: thin;
   scrollbar-color: var(--kg-color-tertiary) transparent;
 }
 
-/* Estilizamos el scrollbar para navegadores webkit */
 .reminders-list::-webkit-scrollbar {
   width: 8px;
 }
@@ -45,11 +40,12 @@
   border-bottom: 3px solid var(--kg-color-tertiary);
   position: relative;
   padding-left: var(--kg-padding-md);
-  /* Añadimos transición suave */
+  padding-bottom: var(--kg-padding-sm);
   transition: transform 0.2s ease, opacity 0.2s ease;
+  display: flex;
+  align-items: flex-start;
 }
 
-/* Efecto hover suave */
 .reminder-item:hover {
   transform: translateX(5px);
 }
@@ -62,45 +58,46 @@
   color: var(--kg-color-tertiary);
 }
 
-.reminder-item > h4 {
-  margin-left: var(--kg-margin-md);
-  margin-top: var(--kg-margin-md);
-  /* Mejoramos la legibilidad */
-  font-weight: 600;
-  color: var(--kg-text-primary);
+.reminder-info-container {
+  flex: 1;
 }
 
-.reminder-item > p {
+.reminder-info-container > h3,
+.reminder-info-container > h4,
+.reminder-info-container > p {
+  margin-bottom: var(--kg-margin-sm);
+}
+
+.reminder-info-container > h4 {
+  margin-left: var(--kg-margin-md);
+  margin-top: var(--kg-margin-md);
+  font-weight: 600;
+}
+
+.reminder-info-container > p {
   margin-left: var(--kg-margin-xl);
   margin-bottom: var(--kg-margin-md);
   display: inline-block;
   width: 20%;
   text-align: start;
-  /* Mejoramos la legibilidad */
   line-height: 1.4;
 }
 
-.reminder-item > img {
-  width: 30px;
-  height: 30px;
-  margin: 0 var(--kg-margin-md);
-  cursor: pointer;
-  /* Añadimos transición suave al hover */
+.reminder-actions {
+  padding: var(--kg-padding-sm);
+  margin-left: var(--kg-margin-md);
+}
+
+.reminder-actions .svg-icon {
+  width: 1.8rem;
+  height: 1.8rem;
   transition: transform 0.2s ease;
 }
 
-/* Efecto hover para las imágenes */
-.reminder-item > img:hover {
-  transform: scale(1.1);
+.reminder-actions .svg-icon:hover {
+  transform: scale(1.2);
 }
 
-/* Añadimos clase para animación de eliminación */
-.reminder-item.deleting {
-  opacity: 0;
-  transform: translateX(-100%);
-}
-
-/* Clase para cuando no hay recordatorios */
 .no-reminders {
   text-align: center;
   padding: var(--kg-padding-lg);
@@ -108,13 +105,32 @@
   font-style: italic;
 }
 
-/* Optimización para dispositivos móviles */
+/* Estilos responsivos */
 @media (max-width: 768px) {
+  .reminder-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .reminder-actions {
+    flex-direction: row;
+    justify-content: center;
+    align-self: center;
+    margin-top: var(--kg-margin-md);
+    width: 100%;
+    margin-left: 0;
+  }
+  
+  .reminder-actions .svg-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  
   .reminders-container {
     width: 95%;
   }
 
-  .reminder-item > p {
+  .reminder-info-container > p {
     width: 100%;
     margin-left: var(--kg-margin-md);
   }

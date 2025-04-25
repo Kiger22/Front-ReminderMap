@@ -5,12 +5,15 @@ import { updateReminderForm } from "../../components/UpdateReminderForm/updateRe
 import { ReminderDetails } from "../../components/ReminderDetails/reminderDetails";
 import { updatePlacesList } from '../places/updatePlacesList';
 import { createMapModal } from '../../components/MapModal/mapModal';
+import { createIconButton } from '../../components/IconButton/iconButton';
 
+//* Función para crear un elemento de recordatorio
 export const createReminderElement = (reminder, remindersList, updatePlacesList) => {
 
   // Verificamos si el recordatorio ya existe en la lista
   if (document.getElementById(`reminder-${reminder._id}`)) return;
 
+  // Creamos el contenedor del recordatorio
   const reminderItem = document.createElement('div');
   reminderItem.classList.add('reminder-item');
   reminderItem.id = `reminder-${reminder._id}`;
@@ -22,20 +25,19 @@ export const createReminderElement = (reminder, remindersList, updatePlacesList)
     if (event.target === reminderItem ||
       event.target.tagName !== 'IMG') {
       try {
-        // Usamos await para asegurarnos de que la promesa se resuelva
+        // Esperamos a que ReminderDetails se complete antes de continuar
         await new Promise(resolve => {
           ReminderDetails(
             reminder,
-            null, null, null, // day, monthName, year
-            [], // dayReminders
-            [], // allReminders
-            null, // formattedDate
-            null, // onCalendarUpdate
+            null, null, null,   // day, monthName, year
+            [],                 // dayReminders
+            [],                 // allReminders
+            null,               // formattedDate
+            null,               // onCalendarUpdate
             () => {
-              resolve(); // Resolvemos la promesa cuando se complete
+              resolve();        // Resolvemos la promesa cuando se complete
             }
           );
-          // Si ReminderDetails no espera una función de callback, resolvemos inmediatamente
           resolve();
         });
       } catch (error) {
@@ -44,6 +46,11 @@ export const createReminderElement = (reminder, remindersList, updatePlacesList)
     }
   });
 
+  // Creamos un contenedor para la información del recordatorio
+  const reminderInfoContainer = document.createElement('div');
+  reminderInfoContainer.classList.add('reminder-info-container');
+
+  // Creamos los elementos para el recordatorio
   const name = document.createElement('h3');
   name.innerHTML = `<em>${reminder.name}</em>`;
 
@@ -58,11 +65,11 @@ export const createReminderElement = (reminder, remindersList, updatePlacesList)
 
   const location = document.createElement('p');
 
-  // Verificamos si location es un objeto (lugar completo) o un string (ID)
+  // Verificamos si location es un objeto o un string
   if (typeof reminder.location === 'object' && reminder.location !== null) {
     location.textContent = `${reminder.location.name} (${reminder.location.location})`;
   } else {
-    // Si es un string (ID), intentamos obtener el nombre del lugar del select
+    // Si es un string, intentamos obtener el nombre del lugar del select y sino usamos el string directamente
     const locationSelect = document.getElementById('reminder-location');
     if (locationSelect) {
       const selectedOption = Array.from(locationSelect.options).find(option => option.value === reminder.location);
@@ -72,11 +79,18 @@ export const createReminderElement = (reminder, remindersList, updatePlacesList)
     }
   }
 
-  // Botón para ver en el mapa
-  const mapButton = document.createElement('img');
-  mapButton.src = '../assets/eye-svgrepo-com.svg';
-  mapButton.title = 'Ver ubicación en mapa';
-  mapButton.addEventListener('click', (e) => {
+  // Añadimos los elementos al contenedor de información
+  reminderInfoContainer.appendChild(name);
+  reminderInfoContainer.appendChild(description);
+  reminderInfoContainer.appendChild(date);
+  reminderInfoContainer.appendChild(time);
+  reminderInfoContainer.appendChild(location);
+
+  // Añadimos el contenedor de información al contenedor principal
+  reminderItem.appendChild(reminderInfoContainer);
+
+  // Manejador para el botón de ver en mapa
+  const handleMapClick = (e) => {
     e.stopPropagation(); // Evitar que el clic se propague al elemento padre
 
     // Obtenemos la ubicación del recordatorio
@@ -91,20 +105,18 @@ export const createReminderElement = (reminder, remindersList, updatePlacesList)
 
     // Mostramos el mapa en un modal
     createMapModal(location, placeName);
-  });
+  };
 
-  // Botón de editar
-  const editButton = document.createElement('img');
-  editButton.src = './assets/edit-svgrepo-com.svg';
-  editButton.addEventListener('click', () => {
+  // Manejador para el botón de editar
+  const handleEditClick = (e) => {
+    e.stopPropagation(); // Evitar que el clic se propague al elemento padre
     console.log(`Editar recordatorio: ${reminder._id}`);
     updateReminderForm(reminder);
-  });
+  };
 
-  // Botón de eliminar
-  const deleteButton = document.createElement('img');
-  deleteButton.src = '../assets/delette-svgrepo-com.svg';
-  deleteButton.addEventListener('click', () => {
+  // Manejador para el botón de eliminar
+  const handleDeleteClick = (e) => {
+    e.stopPropagation(); // Evitar que el clic se propague al elemento padre
     // Mostramos una notificación de confirmación antes de eliminar
     AlertNotification(
       '¿Eliminar recordatorio?',
@@ -138,17 +150,40 @@ export const createReminderElement = (reminder, remindersList, updatePlacesList)
       },
       { showCancelButton: true }
     );
-  });
+  };
 
-  // Añadimos los elementos al contenedor
-  reminderItem.appendChild(name);
-  reminderItem.appendChild(description);
-  reminderItem.appendChild(date);
-  reminderItem.appendChild(time);
-  reminderItem.appendChild(location);
-  reminderItem.appendChild(mapButton);
-  reminderItem.appendChild(editButton);
-  reminderItem.appendChild(deleteButton);
+  // Creamos un contenedor para los botones de acción
+  const actionButtonsContainer = document.createElement('div');
+  actionButtonsContainer.classList.add('reminder-actions');
+
+  // Creamos los botones de acción
+
+  // Botón para ver en el mapa
+  createIconButton(
+    actionButtonsContainer,
+    '../assets/eye-svgrepo-com.svg',
+    handleMapClick,
+    'Ver ubicación en mapa'
+  );
+
+  // Botón para editar
+  createIconButton(
+    actionButtonsContainer,
+    './assets/edit-svgrepo-com.svg',
+    handleEditClick,
+    'Editar recordatorio'
+  );
+
+  // Botón para eliminar
+  createIconButton(
+    actionButtonsContainer,
+    '../assets/delette-svgrepo-com.svg',
+    handleDeleteClick,
+    'Eliminar recordatorio'
+  );
+
+  // Añadimos el contenedor de botones al elemento del recordatorio
+  reminderItem.appendChild(actionButtonsContainer);
 
   remindersList.appendChild(reminderItem);
 };

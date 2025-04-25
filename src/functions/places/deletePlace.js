@@ -9,6 +9,7 @@ export const deletePlace = async (placeId, categoryId) => {
       method: 'DELETE'
     });
 
+    // Verificamos si la eliminación del lugar fue exitosa
     if (!placeResponse) {
       throw new Error('Error al eliminar el lugar');
     }

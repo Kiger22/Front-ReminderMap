@@ -43,27 +43,35 @@ const restorePlaceFormData = () => {
   }
 };
 
+//* Función para agregar un lugar
 export const addPlace = async (fromReminder = false) => {
   try {
+
+    // Obtenemos los datos de usuario y token
     const userId = localStorage.getItem('userId');
     const authToken = localStorage.getItem('authToken');
 
+    // Verificamos si el usuario está autenticado
     if (!userId || !authToken) {
       throw new Error('No hay autorización');
     }
 
     // Obtenemos el formulario y sus campos
     const currentForm = document.querySelector('.place-form');
+
+    // Verificamos si el formulario y su contenedor existen
     if (!currentForm || !currentForm.parentNode) {
       throw new Error('No se encontró el contenedor del formulario');
     }
     const containerNode = currentForm.parentNode;
 
+    // Obtenemos los campos del formulario
     const placeNameInput = document.getElementById('place-name');
     const descriptionInput = document.getElementById('place-description');
     const locationInput = document.getElementById('location');
     const categoryInput = document.getElementById('place-category');
 
+    // Verificamos si todos los campos existen
     if (!placeNameInput || !descriptionInput || !locationInput || !categoryInput) {
       throw new Error('No se encontraron todos los campos del formulario');
     }
@@ -83,6 +91,8 @@ export const addPlace = async (fromReminder = false) => {
 
     // Verificamos si hay una categoría seleccionada
     let categoryId = null;
+
+    // Si hay una categoría seleccionada, usamos su ID
     if (categoryInput.value &&
       categoryInput.value.trim() !== '' &&
       categoryInput.value !== 'null' &&
@@ -95,6 +105,7 @@ export const addPlace = async (fromReminder = false) => {
         const categories = await getCategories(userId);
         const unknownCategory = categories.find(cat => cat.label === "Desconocida" || cat.name === "Desconocida");
 
+        // Si existe, usamos su ID
         if (unknownCategory) {
           categoryId = unknownCategory.value || unknownCategory._id;
         } else {
@@ -110,6 +121,7 @@ export const addPlace = async (fromReminder = false) => {
             token: authToken
           });
 
+          // Si la categoría se creó correctamente, usamos su ID
           if (categoryResponse && categoryResponse.category) {
             categoryId = categoryResponse.category._id;
           }
@@ -124,9 +136,9 @@ export const addPlace = async (fromReminder = false) => {
     if (categoryId) {
       placeData.category = categoryId;
     }
-
     console.log('Enviando datos de lugar:', placeData);
 
+    // Enviamos los datos del lugar al servidor
     try {
       const placeResponse = await api({
         endpoint: 'places',
@@ -134,9 +146,9 @@ export const addPlace = async (fromReminder = false) => {
         body: placeData,
         token: authToken
       });
-
       console.log('Respuesta del servidor:', placeResponse);
 
+      // Verificamos si la respuesta es válida
       if (placeResponse && placeResponse.lugar) {
         // Guardamos el ID y datos del lugar recién creado de manera más completa
         if (placeResponse.lugar && placeResponse.lugar._id) {
@@ -148,6 +160,7 @@ export const addPlace = async (fromReminder = false) => {
             value: placeResponse.lugar._id // Añadimos value para compatibilidad con el select
           };
 
+          // Guardamos el lugar recién creado en localStorage
           localStorage.setItem('newCreatedPlace', JSON.stringify(placeToStore));
           localStorage.setItem('lastCreatedPlaceId', placeResponse.lugar._id);
           console.log('Lugar guardado en localStorage:', placeToStore);
@@ -161,6 +174,7 @@ export const addPlace = async (fromReminder = false) => {
           categoryInput.value = '';
         };
 
+        // Si venimos del formulario de recordatorio, restauramos los datos temporales
         if (fromReminder) {
           // Capturamos los datos temporales al inicio de la función
           const tempReminderData = localStorage.getItem('tempReminderData');
@@ -174,19 +188,21 @@ export const addPlace = async (fromReminder = false) => {
             console.log('Copias de seguridad de datos creadas en localStorage y sessionStorage');
           }
 
+          // Mostramos una notificación de éxito
           AlertNotification('Éxito', 'Lugar agregado correctamente', async () => {
             clearForm();
+
+            // Intentamos restaurar los datos del formulario de recordatorio
             try {
               // Importamos dinámicamente el módulo de recordatorio
               const { reminderPageForm } = await import('../../pages/AddReminder/reminder.js');
 
               // Cargamos el formulario de recordatorio
               await reminderPageForm(containerNode);
-
-              // Implementamos un enfoque más agresivo para restaurar los datos
               const maxAttempts = 15; // Aumentamos aún más el número de intentos
               let attempts = 0;
 
+              // Función para restaurar los datos del formulario de recordatorio
               const restoreFormData = () => {
                 attempts++;
                 console.log(`Intento ${attempts} de restaurar datos del formulario`);
@@ -195,26 +211,26 @@ export const addPlace = async (fromReminder = false) => {
                 let tempData = localStorage.getItem('tempReminderData');
                 if (!tempData) {
                   tempData = localStorage.getItem('tempReminderDataBackup');
-                  console.log('Usando datos de respaldo de localStorage:', tempData);
                 }
                 if (!tempData) {
                   tempData = sessionStorage.getItem('tempReminderData');
-                  console.log('Usando datos de respaldo de sessionStorage:', tempData);
                 }
-
                 if (!tempData) {
-                  console.log('No hay datos temporales para restaurar en ninguna fuente');
                   if (attempts < maxAttempts) {
-                    setTimeout(restoreFormData, 700); // Aumentamos aún más el tiempo de espera
+                    setTimeout(restoreFormData, 700);
                     return;
                   }
                   return;
                 }
 
+                // Intentamos restaurar los datos
                 try {
+
+                  // Parseamos los datos
                   const data = JSON.parse(tempData);
                   console.log('Datos a restaurar:', data);
 
+                  // Obtenemos los elementos del formulario
                   const nameInput = document.getElementById('reminder-name');
                   const descriptionInput = document.getElementById('reminder-description');
                   const dateInput = document.getElementById('reminder-date');
@@ -248,12 +264,9 @@ export const addPlace = async (fromReminder = false) => {
                     console.log('Hora restaurada:', data.time);
                   }
 
-                  console.log('Datos básicos restaurados correctamente');
-
                   // Ahora intentamos seleccionar el lugar recién creado
                   if (locationSelect) {
-                    console.log('Opciones disponibles en locationSelect:', locationSelect.options.length);
-
+                    console.log('Intentando seleccionar lugar recién creado...');
                     // Esperamos a que las opciones estén cargadas
                     if (locationSelect.options.length <= 1) {
                       console.log('Opciones de ubicación no cargadas aún, esperando...');
@@ -334,9 +347,7 @@ export const addPlace = async (fromReminder = false) => {
                       return;
                     }
 
-                    // Si llegamos aquí, o bien encontramos el lugar o alcanzamos el máximo de intentos
                     // En cualquier caso, consideramos la restauración completa
-                    console.log('Restauración completa, eliminando datos temporales en 2 segundos');
                     setTimeout(() => {
                       localStorage.removeItem('tempReminderData');
                       localStorage.removeItem('tempReminderDataBackup');
@@ -371,6 +382,7 @@ export const addPlace = async (fromReminder = false) => {
             }
           });
         } else {
+          // Si no venimos del formulario de recordatorio, limpiamos el formulario
           AlertNotification('Éxito', 'Lugar agregado correctamente', () => {
             clearForm();
             currentForm.style.display = 'none';

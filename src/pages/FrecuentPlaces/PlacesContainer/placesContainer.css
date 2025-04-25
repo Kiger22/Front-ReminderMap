@@ -1,0 +1,36 @@
+.places-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kg-gap-md);
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--kg-padding-md);
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--kg-color-tertiary) transparent;
+}
+
+.places-container::-webkit-scrollbar {
+  width: 20px;
+}
+
+.places-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.places-container::-webkit-scrollbar-thumb {
+  background-color: var(--kg-color-tertiary);
+  border-radius: 4px;
+}
+
+.no-places-message, .error-message {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.error-message {
+  color: var(--error-color);
+}

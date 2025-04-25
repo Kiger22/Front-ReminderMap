@@ -3,11 +3,14 @@ import { AlertNotification } from '../../components/AlertNotification/notificati
 
 export const toggleFavorite = async (placeId) => {
   try {
+
+    // Obtenemos el ID del usuario
     const userId = localStorage.getItem('userId');
     if (!userId) {
       throw new Error('Usuario no autenticado');
     }
 
+    // Enviamos la solicitud para marcar como favorito
     const response = await api({
       endpoint: '/favorites',
       method: 'POST',
@@ -17,6 +20,7 @@ export const toggleFavorite = async (placeId) => {
       }
     });
 
+    // obtenemos la respuesta
     if (response) {
       return true;
     }
@@ -32,18 +36,22 @@ export const toggleFavorite = async (placeId) => {
 
 export const removeFavorite = async (placeId) => {
   try {
+    // Obtenemos el ID del usuario
     const userId = localStorage.getItem('userId');
     if (!userId) {
       throw new Error('Usuario no autenticado');
     }
 
+    // Construimos el endpoint basado en el userId y el placeId
     const endpoint = `favorites/${userId}/${placeId}`.replace(/\/+/g, '/');
 
+    // Enviamos la solicitud para quitar de favoritos
     const response = await api({
       endpoint,
       method: 'DELETE'
     });
 
+    // obtenemos la respuesta
     if (response) {
       return true;
     }

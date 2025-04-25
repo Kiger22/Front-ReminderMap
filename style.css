@@ -130,12 +130,10 @@ footer {
   width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  /* Añadir estilos para modo oscuro (predeterminado) */
   background-color: transparent;
   color: var(--kg-text-dark-mode);
 }
 
-/* Estilos para el modo claro */
 body.dark #app {
   color: var(--kg-text-light-mode);
 }
@@ -157,11 +155,6 @@ body.dark #app {
   opacity: 0.15;
 }
 
-.dark {
-  background-color: var(--kg-bg-dark-mode);
-  color: var(--kg-text-primary);
-}
-
 ul,ol {
   list-style: none;
 }
@@ -170,7 +163,6 @@ a {
   text-decoration: none;
 }
 
-/* Estilos basados en el atributo data-theme */
 #app[data-theme="dark"] {
   color: var(--kg-text-dark-mode);
 }
@@ -179,7 +171,6 @@ a {
   color: var(--kg-text-light-mode);
 }
 
-/* Asegurarse de que los elementos dentro del div app también respeten el tema */
 #app[data-theme="dark"] .app-element {
   color: var(--kg-text-dark-mode);
 }
@@ -188,22 +179,9 @@ a {
   color: var(--kg-text-light-mode);
 }
 
-/* Modo oscuro (predeterminado) */
-body {
-  background-color: var(--kg-bg-dark-mode);
-  color: var(--kg-text-dark-mode);
-}
-
-#app {
-  background-color: transparent;
-  color: var(--kg-text-dark-mode);
-}
-
-/* Modo claro (cuando body tiene clase .dark) */
 body.dark {
   background-color: var(--kg-bg-light-mode);
   color: var(--kg-text-light-mode);
-  /* Añadir un overlay para oscurecer ligeramente el fondo */
   position: relative;
 }
 
@@ -221,10 +199,9 @@ body.dark::after {
 
 body.dark #app {
   background-color: transparent;
-  color: var(--kg-text-light-mode) !important; /* Forzar el color */
+  color: var(--kg-text-light-mode) !important; 
 }
 
-/* Asegurarse de que todos los elementos dentro del app respeten el tema */
 body:not(.dark) .app-element {
   color: var(--kg-text-dark-mode);
 }

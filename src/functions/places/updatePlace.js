@@ -1,6 +1,7 @@
 import { api } from "../../api/api";
 import { AlertNotification } from "../../components/AlertNotification/notification";
 
+//* Función para actualizar un lugar
 export const updatePlace = async (placeId, oldCategoryId, newData) => {
   try {
     // Actualizamos el lugar
@@ -37,6 +38,7 @@ export const updatePlace = async (placeId, oldCategoryId, newData) => {
       });
     }
 
+    // Mostramos una notificación de éxito
     AlertNotification('Éxito', 'Lugar actualizado correctamente', () => { }, false);
     return placeResponse;
 

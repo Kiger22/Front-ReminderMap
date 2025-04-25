@@ -1,3 +1,11 @@
+
+/*
+ * Función para esperar a que un elemento aparezca en el DOM
+ * selector - Selector del elemento a esperar
+ * timeout - Tiempo máximo de espera en milisegundos
+ * Promesa que se resuelve con el elemento encontrado o se rechaza con un error
+ */
+
 const waitForElement = (selector, timeout = 5000) => {
   return new Promise((resolve, reject) => {
     const interval = 100;
@@ -19,12 +27,17 @@ const waitForElement = (selector, timeout = 5000) => {
   });
 };
 
+/*
+ * Función para ocultar un elemento en el DOM
+ * selector - Selector del elemento a ocultar
+ */
+
 export const hideElement = (selector) => {
   waitForElement(selector)
     .then((element) => {
       element.style.display = 'none';
     })
     .catch((error) => {
-      console.warn(error.message);
+      console.error(error.message);
     });
 };
